@@ -624,7 +624,7 @@ export const HoldingsEditMode = ({
                   <div className="flex items-center gap-2 py-2">
                     <div className="w-[160px]">
                       <CurrencyInput
-                        placeholder="Select currency"
+                        placeholder="选择币种"
                         valueDisplay="code"
                         autoFocusSearch={true}
                         open={isAddCurrencyPickerOpen}
@@ -644,7 +644,7 @@ export const HoldingsEditMode = ({
                       }}
                       className="h-8"
                     >
-                      Cancel
+                      取消
                     </Button>
                   </div>
                 )}
@@ -660,7 +660,7 @@ export const HoldingsEditMode = ({
                   className="border-muted-foreground/25 text-muted-foreground hover:border-muted-foreground/50 hover:text-foreground h-10 w-full border border-dashed"
                 >
                   <Icons.PlusCircle className="mr-2 h-4 w-4" />
-                  Add Cash Balance
+                  添加现金余额
                 </Button>
               )}
             </CardContent>
@@ -681,24 +681,24 @@ export const HoldingsEditMode = ({
                 className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
               >
                 <Icons.Trash className="mr-2 h-4 w-4" />
-                Delete Snapshot
+                删除快照
               </Button>
             )}
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" onClick={handleCancel} disabled={isSaving || isDeleting}>
-              Cancel
+              取消
             </Button>
             <Button onClick={handleSave} disabled={isSaving || isDeleting || !hasChanges}>
               {isSaving ? (
                 <>
                   <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  保存中…
                 </>
               ) : (
                 <>
                   <Icons.Check className="mr-2 h-4 w-4" />
-                  Save Changes
+                  保存修改
                 </>
               )}
             </Button>
@@ -710,14 +710,14 @@ export const HoldingsEditMode = ({
       <AlertDialog open={showDiscardDialog} onOpenChange={setShowDiscardDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Discard changes?</AlertDialogTitle>
+            <AlertDialogTitle>放弃修改？</AlertDialogTitle>
             <AlertDialogDescription>
-              You have unsaved changes. Are you sure you want to discard them?
+              你有未保存的修改，确定要放弃吗？
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Editing</AlertDialogCancel>
-            <AlertDialogAction onClick={onClose}>Discard</AlertDialogAction>
+            <AlertDialogCancel>继续编辑</AlertDialogCancel>
+            <AlertDialogAction onClick={onClose}>放弃</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -726,15 +726,13 @@ export const HoldingsEditMode = ({
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete snapshot?</AlertDialogTitle>
+            <AlertDialogTitle>删除快照？</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the holdings snapshot from{" "}
-              <strong>{existingSnapshotDate}</strong>. The portfolio valuations will be recalculated
-              without this data point. This action cannot be undone.
+              将永久删除 <strong>{existingSnapshotDate}</strong> 的持仓快照，组合估值会按不含此数据点重算，操作无法撤销。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>取消</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteSnapshot}
               disabled={isDeleting}
@@ -743,10 +741,10 @@ export const HoldingsEditMode = ({
               {isDeleting ? (
                 <>
                   <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  删除中…
                 </>
               ) : (
-                "Delete Snapshot"
+                "删除快照"
               )}
             </AlertDialogAction>
           </AlertDialogFooter>
