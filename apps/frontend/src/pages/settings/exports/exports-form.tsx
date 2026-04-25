@@ -5,97 +5,74 @@ import { Label } from "@wealthfolio/ui/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@wealthfolio/ui/components/ui/radio-group";
 import { ExportDataType, ExportedFileFormat } from "@/lib/types";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useExportData } from "./use-export-data";
 
-const dataFormats = [
+const dataFormatBlueprints = [
   {
     name: "CSV",
     icon: Icons.FileCsv,
-    description: "Simple, widely compatible spreadsheet format",
+    descriptionKey: "exports.formats.csv",
   },
   {
     name: "JSON",
     icon: Icons.FileJson,
-    description: "Structured data for easy programmatic access",
+    descriptionKey: "exports.formats.json",
   },
   {
     name: "SQLite",
     icon: Icons.Database,
-    description: "Compact, self-contained database file",
+    descriptionKey: "exports.formats.sqlite",
   },
-];
+] as const;
 
-const dataTypes = {
-  CSV: [
-    {
-      key: "accounts",
-      name: "Accounts",
-      icon: Icons.Holdings,
-      description: "Your financial accounts",
-    },
-    {
-      key: "activities",
-      name: "Activities",
-      icon: Icons.Activity,
-      description: "Detailed transaction history and logs",
-    },
-    {
-      key: "goals",
-      name: "Goals",
-      icon: Icons.Goals,
-      description: "Financial objectives and progress tracking",
-    },
-    {
-      key: "portfolio-history",
-      name: "Portfolio History",
-      icon: Icons.Files,
-      description:
-        "Your portfolio's performance over time, including valuations, gains, and cash flow activities.",
-    },
-  ],
-  JSON: [
-    {
-      key: "accounts",
-      name: "Accounts",
-      icon: Icons.Holdings,
-      description: "Your financial accounts",
-    },
-    {
-      key: "activities",
-      name: "Activities",
-      icon: Icons.Activity,
-      description: "Detailed transaction history and logs",
-    },
-    {
-      key: "goals",
-      name: "Goals",
-      icon: Icons.Goals,
-      description: "Financial objectives and progress tracking",
-    },
-    {
-      key: "portfolio-history",
-      name: "Portfolio History",
-      icon: Icons.Files,
-      description:
-        "Your portfolio's performance over time, including valuations, gains, and cash flow activities.",
-    },
-  ],
+const csvJsonItems = [
+  {
+    key: "accounts",
+    nameKey: "exports.dataTypes.accounts",
+    icon: Icons.Holdings,
+    descriptionKey: "exports.dataTypes.accountsDesc",
+  },
+  {
+    key: "activities",
+    nameKey: "exports.dataTypes.activities",
+    icon: Icons.Activity,
+    descriptionKey: "exports.dataTypes.activitiesDesc",
+  },
+  {
+    key: "goals",
+    nameKey: "exports.dataTypes.goals",
+    icon: Icons.Goals,
+    descriptionKey: "exports.dataTypes.goalsDesc",
+  },
+  {
+    key: "portfolio-history",
+    nameKey: "exports.dataTypes.portfolioHistory",
+    icon: Icons.Files,
+    descriptionKey: "exports.dataTypes.portfolioHistoryDesc",
+  },
+] as const;
+
+const dataTypeBlueprints = {
+  CSV: csvJsonItems,
+  JSON: csvJsonItems,
   SQLite: [
     {
       key: "full",
-      name: "Export the full SQLite Database",
+      nameKey: "exports.dataTypes.fullSqlite",
       icon: Icons.Database,
-      description: "Complete database backup with WAL/SHM files - choose your backup location",
+      descriptionKey: "exports.dataTypes.fullSqliteDesc",
     },
   ],
-};
+} as const;
 
 export const ExportForm = () => {
+  const { t } = useTranslation("settings");
   const [selectedFormat, setSelectedFormat] = useState<string | undefined>();
 
   const { exportData, isExporting, exportingFormat, exportingData } = useExportData();
 
-  const handleExport = (item: (typeof dataTypes)[ExportedFileFormat][number]) => {
+  const handleExport = (item: (typeof dataTypeBlueprints)[ExportedFileFormat][number]) => {
     if (!selectedFormat) return;
 
     exportData({
@@ -107,12 +84,12 @@ export const ExportForm = () => {
   return (
     <>
       <div className="mt-8 px-2">
-        <h3 className="pb-3 pt-5 font-semibold">Choose Your Preferred Format</h3>
+        <h3 className="pb-3 pt-5 font-semibold">{t("exports.exportTab.chooseFormat")}</h3>
         <RadioGroup
           onValueChange={setSelectedFormat}
           className="grid grid-cols-1 gap-4 md:grid-cols-3"
         >
-          {dataFormats.map((format) => (
+          {dataFormatBlueprints.map((format) => (
             <div key={format.name}>
               <RadioGroupItem value={format.name} id={format.name} className="peer sr-only" />
               <Label
@@ -122,7 +99,9 @@ export const ExportForm = () => {
                 <format.icon className="mb-3 h-6 w-6" />
                 <div className="text-center">
                   <h3 className="font-semibold">{format.name}</h3>
-                  <p className="text-muted-foreground text-sm font-light">{format.description}</p>
+                  <p className="text-muted-foreground text-sm font-light">
+                    {t(format.descriptionKey)}
+                  </p>
                 </div>
               </Label>
             </div>
@@ -132,40 +111,47 @@ export const ExportForm = () => {
 
       {selectedFormat && (
         <div className="px-2 pt-4">
-          <h3 className="pb-3 pt-5 font-semibold">Customize Your Export</h3>
-          {dataTypes[selectedFormat as keyof typeof dataTypes].map((item) => (
-            <Card key={item.key} className="mb-4">
-              <CardContent className="flex items-center justify-between p-4">
-                <div className="flex items-center">
-                  <item.icon className="mr-2 h-5 w-5" />
-                  <div>
-                    <span className="font-medium">{item.name}</span>
-                    <p className="text-muted-foreground text-sm">{item.description}</p>
+          <h3 className="pb-3 pt-5 font-semibold">{t("exports.exportTab.customize")}</h3>
+          {dataTypeBlueprints[selectedFormat as keyof typeof dataTypeBlueprints].map((item) => {
+            const itemName = t(item.nameKey);
+            return (
+              <Card key={item.key} className="mb-4">
+                <CardContent className="flex items-center justify-between p-4">
+                  <div className="flex items-center">
+                    <item.icon className="mr-2 h-5 w-5" />
+                    <div>
+                      <span className="font-medium">{itemName}</span>
+                      <p className="text-muted-foreground text-sm">{t(item.descriptionKey)}</p>
+                    </div>
                   </div>
-                </div>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleExport(item)}
-                  disabled={isExporting}
-                >
-                  {isExporting &&
-                  exportingFormat === selectedFormat &&
-                  exportingData === item.key ? (
-                    <>
-                      <Icons.Spinner className="h-4 w-4 animate-spin" />
-                      <span className="sr-only">Exporting {item.name}...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Icons.Download className="h-4 w-4" />
-                      <span className="sr-only">Export {item.name}</span>
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleExport(item)}
+                    disabled={isExporting}
+                  >
+                    {isExporting &&
+                    exportingFormat === selectedFormat &&
+                    exportingData === item.key ? (
+                      <>
+                        <Icons.Spinner className="h-4 w-4 animate-spin" />
+                        <span className="sr-only">
+                          {t("exports.exportTab.exporting", { name: itemName })}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Icons.Download className="h-4 w-4" />
+                        <span className="sr-only">
+                          {t("exports.exportTab.exportItem", { name: itemName })}
+                        </span>
+                      </>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
     </>

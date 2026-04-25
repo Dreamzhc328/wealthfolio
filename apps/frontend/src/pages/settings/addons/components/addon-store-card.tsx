@@ -18,6 +18,7 @@ import {
   StarRatingDisplay,
 } from "@wealthfolio/ui";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { RatingDialog } from "./rating-dialog";
 
 interface AddonStoreCardProps {
@@ -39,6 +40,7 @@ export function AddonStoreCard({
   onSubmitRating: _onSubmitRating,
   isRatingSubmitting: _isRatingSubmitting = false,
 }: AddonStoreCardProps) {
+  const { t } = useTranslation("settings");
   const [ratingDialogOpen, setRatingDialogOpen] = React.useState(false);
 
   const formatDownloads = (downloads: number) => {
@@ -62,7 +64,7 @@ export function AddonStoreCard({
         <div className="text-muted-foreground flex items-center justify-between text-sm">
           <div className="flex items-center gap-1">
             <Icons.Users className="h-3 w-3" />
-            <span>By {listing.author}</span>
+            <span>{t("addons.byAuthor", { author: listing.author })}</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
@@ -89,7 +91,7 @@ export function AddonStoreCard({
             <DialogTrigger asChild>
               <Button variant="outline" size="sm" className="flex-1">
                 <Icons.Eye className="mr-2 h-4 w-4" />
-                Details
+                {t("addons.storeCard.details")}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
@@ -105,7 +107,7 @@ export function AddonStoreCard({
                 {/* Screenshots */}
                 {listing.images && listing.images.length > 0 && (
                   <div className="space-y-3">
-                    <h4 className="font-medium">Screenshots</h4>
+                    <h4 className="font-medium">{t("addons.storeCard.screenshots")}</h4>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       {listing.images.map((image, index) => (
                         <div key={index} className="overflow-hidden rounded-lg border">
@@ -122,21 +124,21 @@ export function AddonStoreCard({
 
                 {/* Release Notes */}
                 <div className="space-y-3">
-                  <h4 className="font-medium">Latest Release Notes</h4>
+                  <h4 className="font-medium">{t("addons.storeCard.latestRelease")}</h4>
                   <p className="text-muted-foreground text-sm">{listing.releaseNotes}</p>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">Downloads</p>
+                    <p className="text-sm font-medium">{t("addons.storeCard.downloads")}</p>
                     <p className="text-primary text-2xl font-bold">
                       {formatDownloads(listing.downloads)}
                     </p>
                   </div>
 
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">Rating</p>
+                    <p className="text-sm font-medium">{t("addons.storeCard.rating")}</p>
                     <div className="flex flex-col gap-1">
                       <StarRatingDisplay
                         rating={listing.rating || 0}
@@ -147,7 +149,7 @@ export function AddonStoreCard({
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">Author</p>
+                    <p className="text-sm font-medium">{t("addons.storeCard.author")}</p>
                     <p className="text-muted-foreground text-sm">{listing.author}</p>
                   </div>
                 </div>
@@ -155,7 +157,7 @@ export function AddonStoreCard({
                 {/* Rate this addon section */}
                 {isInstalled && (
                   <div className="space-y-3">
-                    <h4 className="font-medium">Rate this Add-on</h4>
+                    <h4 className="font-medium">{t("addons.storeCard.rateThis")}</h4>
                     <div className="flex items-center gap-3">
                       <Button
                         variant="outline"
@@ -164,10 +166,10 @@ export function AddonStoreCard({
                         className="flex items-center gap-2"
                       >
                         <Icons.Star className="h-4 w-4" />
-                        Write a Review
+                        {t("addons.storeCard.writeReview")}
                       </Button>
                       <p className="text-muted-foreground text-sm">
-                        Share your experience with other users
+                        {t("addons.storeCard.shareExperience")}
                       </p>
                     </div>
                   </div>
@@ -176,7 +178,7 @@ export function AddonStoreCard({
                 {/* Tags */}
                 {listing.tags && listing.tags.length > 0 && (
                   <div className="space-y-3">
-                    <h4 className="font-medium">Categories</h4>
+                    <h4 className="font-medium">{t("addons.storeCard.categories")}</h4>
                     <div className="flex flex-wrap gap-2">
                       {listing.tags.map((tag) => (
                         <Badge
@@ -203,17 +205,17 @@ export function AddonStoreCard({
                     {isInstalling ? (
                       <>
                         <Icons.Loader className="mr-2 h-4 w-4 animate-spin" />
-                        Installing...
+                        {t("addons.actions.installing")}
                       </>
                     ) : isInstalled ? (
                       <>
                         <Icons.Check className="mr-2 h-4 w-4" />
-                        Installed
+                        {t("addons.actions.installed")}
                       </>
                     ) : (
                       <>
                         <Icons.Download className="mr-2 h-4 w-4" />
-                        Install
+                        {t("addons.actions.install")}
                       </>
                     )}
                   </Button>
@@ -222,7 +224,7 @@ export function AddonStoreCard({
                     <Button variant="outline" asChild>
                       <ExternalLink href={listing.changelogUrl}>
                         <Icons.ExternalLink className="mr-2 h-4 w-4" />
-                        Changelog
+                        {t("addons.storeCard.changelog")}
                       </ExternalLink>
                     </Button>
                   )}
@@ -241,24 +243,26 @@ export function AddonStoreCard({
               {isInstalling ? (
                 <>
                   <Icons.Loader className="mr-2 h-4 w-4 animate-spin" />
-                  Installing...
+                  {t("addons.actions.installing")}
                 </>
               ) : listing.status !== "active" ? (
                 listing.status === "coming-soon" ? (
                   <>
                     <Icons.Clock className="mr-2 h-4 w-4" />
-                    Coming Soon
+                    {t("addons.status.comingSoon")}
                   </>
                 ) : (
                   <>
                     <Icons.Close className="mr-2 h-4 w-4" />
-                    {listing.status === "deprecated" ? "Deprecated" : "Unavailable"}
+                    {listing.status === "deprecated"
+                      ? t("addons.status.deprecated")
+                      : t("addons.status.unavailable")}
                   </>
                 )
               ) : (
                 <>
                   <Icons.Download className="mr-2 h-4 w-4" />
-                  Install
+                  {t("addons.actions.install")}
                 </>
               )}
             </Button>
@@ -270,7 +274,7 @@ export function AddonStoreCard({
               onClick={() => setRatingDialogOpen(true)}
             >
               <Icons.Star className="mr-2 h-4 w-4" />
-              Rate
+              {t("addons.actions.rate")}
             </Button>
           )}
         </div>
@@ -283,7 +287,7 @@ export function AddonStoreCard({
           <DialogTrigger asChild>
             <Button variant="secondary" size="sm" className="bg-white/90 text-black hover:bg-white">
               <Icons.Eye className="mr-2 h-4 w-4" />
-              Details
+              {t("addons.storeCard.details")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
@@ -299,7 +303,7 @@ export function AddonStoreCard({
               {/* Screenshots */}
               {listing.images && listing.images.length > 0 && (
                 <div className="space-y-3">
-                  <h4 className="font-medium">Screenshots</h4>
+                  <h4 className="font-medium">{t("addons.storeCard.screenshots")}</h4>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {listing.images.map((image, index) => (
                       <div key={index} className="overflow-hidden rounded-lg border">
@@ -316,21 +320,21 @@ export function AddonStoreCard({
 
               {/* Release Notes */}
               <div className="space-y-3">
-                <h4 className="font-medium">Latest Release Notes</h4>
+                <h4 className="font-medium">{t("addons.storeCard.latestRelease")}</h4>
                 <p className="text-muted-foreground text-sm">{listing.releaseNotes}</p>
               </div>
 
               {/* Stats */}
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium">Downloads</p>
+                  <p className="text-sm font-medium">{t("addons.storeCard.downloads")}</p>
                   <p className="text-primary text-2xl font-bold">
                     {formatDownloads(listing.downloads)}
                   </p>
                 </div>
 
                 <div className="space-y-1">
-                  <p className="text-sm font-medium">Rating</p>
+                  <p className="text-sm font-medium">{t("addons.storeCard.rating")}</p>
                   <div className="flex flex-col gap-1">
                     <StarRatingDisplay
                       rating={listing.rating || 0}
@@ -341,7 +345,7 @@ export function AddonStoreCard({
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm font-medium">Author</p>
+                  <p className="text-sm font-medium">{t("addons.storeCard.author")}</p>
                   <p className="text-muted-foreground text-sm">{listing.author}</p>
                 </div>
               </div>
@@ -349,7 +353,7 @@ export function AddonStoreCard({
               {/* Rate this addon section */}
               {isInstalled && (
                 <div className="space-y-3">
-                  <h4 className="font-medium">Rate this Add-on</h4>
+                  <h4 className="font-medium">{t("addons.storeCard.rateThis")}</h4>
                   <div className="flex items-center gap-3">
                     <Button
                       variant="outline"
@@ -358,10 +362,10 @@ export function AddonStoreCard({
                       className="flex items-center gap-2"
                     >
                       <Icons.Star className="h-4 w-4" />
-                      Write a Review
+                      {t("addons.storeCard.writeReview")}
                     </Button>
                     <p className="text-muted-foreground text-sm">
-                      Share your experience with other users
+                      {t("addons.storeCard.shareExperience")}
                     </p>
                   </div>
                 </div>
@@ -370,7 +374,7 @@ export function AddonStoreCard({
               {/* Tags */}
               {listing.tags && listing.tags.length > 0 && (
                 <div className="space-y-3">
-                  <h4 className="font-medium">Categories</h4>
+                  <h4 className="font-medium">{t("addons.storeCard.categories")}</h4>
                   <div className="flex flex-wrap gap-2">
                     {listing.tags.map((tag) => (
                       <Badge
@@ -397,17 +401,17 @@ export function AddonStoreCard({
                   {isInstalling ? (
                     <>
                       <Icons.Loader className="mr-2 h-4 w-4 animate-spin" />
-                      Installing...
+                      {t("addons.actions.installing")}
                     </>
                   ) : isInstalled ? (
                     <>
                       <Icons.Check className="mr-2 h-4 w-4" />
-                      Installed
+                      {t("addons.actions.installed")}
                     </>
                   ) : (
                     <>
                       <Icons.Download className="mr-2 h-4 w-4" />
-                      Install
+                      {t("addons.actions.install")}
                     </>
                   )}
                 </Button>
@@ -416,7 +420,7 @@ export function AddonStoreCard({
                   <Button variant="outline" asChild>
                     <a href={listing.changelogUrl} target="_blank" rel="noopener noreferrer">
                       <Icons.ExternalLink className="mr-2 h-4 w-4" />
-                      Changelog
+                      {t("addons.storeCard.changelog")}
                     </a>
                   </Button>
                 )}
@@ -481,7 +485,7 @@ export function AddonStoreCard({
             className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
           >
             <Icons.Check className="mr-1 h-3 w-3" />
-            Installed
+            {t("addons.actions.installed")}
           </Badge>
         )}
         {listing.status &&
@@ -492,7 +496,7 @@ export function AddonStoreCard({
               className="bg-primary text-primary-foreground text-xs capitalize"
             >
               <Icons.Clock className="mr-1 h-3 w-3" />
-              Coming Soon
+              {t("addons.status.comingSoon")}
             </Badge>
           ) : (
             <Badge

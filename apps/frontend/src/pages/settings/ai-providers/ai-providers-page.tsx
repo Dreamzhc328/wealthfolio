@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Separator } from "@wealthfolio/ui/components/ui/separator";
 import { Skeleton } from "@wealthfolio/ui/components/ui/skeleton";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
@@ -19,6 +20,7 @@ import type { ModelCapabilityOverrides, ProviderTuningOverrides } from "@/lib/ty
  * AI Providers settings page - configure AI provider API keys and preferences.
  */
 export default function AiProvidersPage() {
+  const { t } = useTranslation("settings");
   const { data, isLoading, error, refetch } = useAiProviders();
   const { mutate: updateSettings } = useUpdateAiProviderSettings();
   const { mutate: setDefault } = useSetDefaultAiProvider();
@@ -65,10 +67,7 @@ export default function AiProvidersPage() {
   if (isLoading) {
     return (
       <div className="text-foreground space-y-6">
-        <SettingsHeader
-          heading="AI Providers"
-          text="Configure AI providers for portfolio insights."
-        />
+        <SettingsHeader heading={t("aiProviders.heading")} text={t("aiProviders.description")} />
         <Separator />
         <div className="overflow-hidden rounded-lg border">
           {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -95,20 +94,17 @@ export default function AiProvidersPage() {
   if (error) {
     return (
       <div className="text-foreground space-y-6">
-        <SettingsHeader
-          heading="AI Providers"
-          text="Configure AI providers for portfolio insights."
-        />
+        <SettingsHeader heading={t("aiProviders.heading")} text={t("aiProviders.description")} />
         <Separator />
         <div className="border-destructive/20 bg-destructive/5 rounded-lg border p-6">
           <div className="flex items-start gap-3">
             <Icons.XCircle className="text-destructive mt-0.5 h-5 w-5 shrink-0" />
             <div className="space-y-2">
-              <h3 className="text-destructive font-medium">Failed to load AI providers</h3>
+              <h3 className="text-destructive font-medium">{t("aiProviders.loadFailed")}</h3>
               <p className="text-muted-foreground text-sm">{error.message}</p>
               <Button variant="outline" size="sm" onClick={() => refetch()} className="mt-2">
                 <Icons.Refresh className="mr-2 h-4 w-4" />
-                Retry
+                {t("aiProviders.retry")}
               </Button>
             </div>
           </div>
@@ -121,18 +117,15 @@ export default function AiProvidersPage() {
 
   return (
     <div className="text-foreground space-y-6">
-      <SettingsHeader
-        heading="AI Providers"
-        text="Configure AI providers for portfolio insights."
-      />
+      <SettingsHeader heading={t("aiProviders.heading")} text={t("aiProviders.description")} />
       <Separator />
       <div>
         {sortedProviders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <Icons.Sparkles className="text-muted-foreground mb-4 h-12 w-12" />
-            <h3 className="text-lg font-semibold">No AI Providers Available</h3>
+            <h3 className="text-lg font-semibold">{t("aiProviders.empty.title")}</h3>
             <p className="text-muted-foreground mt-2 max-w-md text-sm">
-              AI providers will appear here once configured. Check back later or contact support.
+              {t("aiProviders.empty.description")}
             </p>
           </div>
         ) : (

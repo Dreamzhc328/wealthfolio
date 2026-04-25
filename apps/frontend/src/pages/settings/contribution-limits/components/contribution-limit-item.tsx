@@ -11,6 +11,7 @@ import {
   formatAmount,
 } from "@wealthfolio/ui";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useContributionLimitProgress } from "../use-contribution-limit-mutations";
 import { AccountSelection } from "./account-selection";
 import { ContributionLimitOperations } from "./contribution-limit-operations";
@@ -28,6 +29,7 @@ export function ContributionLimitItem({
   onEdit,
   onDelete,
 }: ContributionLimitItemProps) {
+  const { t } = useTranslation("settings");
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
@@ -96,15 +98,23 @@ export function ContributionLimitItem({
                   / {formatAmount(limit.limitAmount, baseCurrency)}
                 </span>
               </div>
-              {isComplete && <span className="text-success text-xs">✓ Limit reached</span>}
+              {isComplete && (
+                <span className="text-success text-xs">
+                  {t("contributionLimits.item.limitReached")}
+                </span>
+              )}
               {isOverLimit && (
                 <span className="text-destructive text-xs">
-                  +{formatAmount(overLimitAmount, baseCurrency)} over limit
+                  {t("contributionLimits.item.overLimit", {
+                    amount: formatAmount(overLimitAmount, baseCurrency),
+                  })}
                 </span>
               )}
               {!isComplete && !isOverLimit && (
                 <span className="text-muted-foreground text-xs">
-                  {formatAmount(remainingAmount, baseCurrency)} remaining
+                  {t("contributionLimits.item.remaining", {
+                    amount: formatAmount(remainingAmount, baseCurrency),
+                  })}
                 </span>
               )}
             </div>
@@ -132,7 +142,7 @@ export function ContributionLimitItem({
                     daysRemaining <= 30 ? "bg-amber-100 text-amber-800" : "bg-blue-50 text-blue-700"
                   }`}
                 >
-                  {daysRemaining}d left
+                  {t("contributionLimits.item.daysLeftShort", { days: daysRemaining })}
                 </span>
               )}
             </div>
@@ -163,7 +173,7 @@ export function ContributionLimitItem({
                         : "bg-blue-50 text-blue-700"
                     }`}
                   >
-                    {daysRemaining} days left
+                    {t("contributionLimits.item.daysLeft", { days: daysRemaining })}
                   </span>
                 )}
               </div>
@@ -191,9 +201,11 @@ export function ContributionLimitItem({
                 </div>
                 <span className="text-muted-foreground text-right text-xs">
                   {isComplete
-                    ? "completed"
+                    ? t("contributionLimits.item.completed")
                     : isOverLimit
-                      ? `+${formatAmount(overLimitAmount, baseCurrency)} over limit`
+                      ? t("contributionLimits.item.overLimit", {
+                          amount: formatAmount(overLimitAmount, baseCurrency),
+                        })
                       : `${limit.contributionYear}`}
                 </span>
               </div>

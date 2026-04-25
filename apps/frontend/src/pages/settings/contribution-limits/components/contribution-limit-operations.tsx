@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@wealthfolio/ui/components/ui/button";
 import {
@@ -32,6 +33,7 @@ export function ContributionLimitOperations({
   onEdit,
   onDelete,
 }: ContributionLimitOperationsProps) {
+  const { t } = useTranslation("settings");
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const isDeleting = false; // You can implement loading state if needed
 
@@ -45,16 +47,18 @@ export function ContributionLimitOperations({
       <DropdownMenu>
         <DropdownMenuTrigger className="hover:bg-muted flex h-8 w-8 items-center justify-center rounded-md border transition-colors">
           <Icons.MoreVertical className="h-4 w-4" />
-          <span className="sr-only">Open</span>
+          <span className="sr-only">{t("contributionLimits.operations.open")}</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => onEdit(limit)}>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onEdit(limit)}>
+            {t("contributionLimits.operations.edit")}
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="text-destructive focus:text-destructive flex cursor-pointer items-center"
             onSelect={() => setShowDeleteAlert(true)}
           >
-            Delete
+            {t("contributionLimits.operations.delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -62,13 +66,13 @@ export function ContributionLimitOperations({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Are you sure you want to delete this contribution limit?
+              {t("contributionLimits.operations.deleteTitle")}
             </AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogDescription>{t("common.actionCannotBeUndone")}</AlertDialogDescription>
           </AlertDialogHeader>
 
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
 
             <Button
               disabled={isDeleting}
@@ -80,7 +84,7 @@ export function ContributionLimitOperations({
               ) : (
                 <Icons.Trash className="mr-2 h-4 w-4" />
               )}
-              <span>Delete</span>
+              <span>{t("contributionLimits.operations.delete")}</span>
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

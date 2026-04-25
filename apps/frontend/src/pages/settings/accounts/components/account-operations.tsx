@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@wealthfolio/ui/components/ui/button";
 import {
@@ -36,6 +37,7 @@ export function AccountOperations({
   onArchive,
   onHide,
 }: AccountOperationsProps) {
+  const { t } = useTranslation("settings");
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showArchiveAlert, setShowArchiveAlert] = useState(false);
 
@@ -58,24 +60,30 @@ export function AccountOperations({
       <DropdownMenu>
         <DropdownMenuTrigger className="hover:bg-muted flex h-8 w-8 items-center justify-center rounded-md border transition-colors">
           <Icons.MoreVertical className="h-4 w-4" />
-          <span className="sr-only">Open</span>
+          <span className="sr-only">{t("accounts.operations.open")}</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => onEdit(account)}>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onEdit(account)}>
+            {t("accounts.operations.edit")}
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onHide(account, account.isActive)}>
-            {account.isActive ? "Hide" : "Show"}
+            {account.isActive ? t("accounts.operations.hide") : t("accounts.operations.show")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           {account.isArchived ? (
-            <DropdownMenuItem onClick={handleRestore}>Restore</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleRestore}>
+              {t("accounts.operations.restore")}
+            </DropdownMenuItem>
           ) : (
-            <DropdownMenuItem onSelect={() => setShowArchiveAlert(true)}>Archive</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => setShowArchiveAlert(true)}>
+              {t("accounts.operations.archive")}
+            </DropdownMenuItem>
           )}
           <DropdownMenuItem
             className="text-destructive focus:text-destructive flex cursor-pointer items-center"
             onSelect={() => setShowDeleteAlert(true)}
           >
-            Delete
+            {t("accounts.operations.delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -83,16 +91,14 @@ export function AccountOperations({
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you sure you want to delete this account and related activities?
-            </AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogTitle>{t("accounts.operations.deleteTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("common.actionCannotBeUndone")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <Button onClick={handleDelete} className="bg-red-600 focus:ring-red-600">
               <Icons.Trash className="mr-2 h-4 w-4" />
-              <span>Delete</span>
+              <span>{t("common.delete")}</span>
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -104,17 +110,15 @@ export function AccountOperations({
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
               <Icons.AlertTriangle className="h-5 w-5 text-amber-500" />
-              Archive this account?
+              {t("accounts.operations.archiveTitle")}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Archiving will remove this account from your Total Portfolio history and net worth
-              calculations. Historical charts will be recalculated without this account&apos;s data.
-              You can restore it later.
+              {t("accounts.operations.archiveDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <Button onClick={handleArchive}>Archive</Button>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <Button onClick={handleArchive}>{t("accounts.operations.archive")}</Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
