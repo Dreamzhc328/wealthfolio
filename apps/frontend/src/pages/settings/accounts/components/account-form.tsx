@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import * as z from "zod";
 
 import { Button } from "@wealthfolio/ui/components/ui/button";
@@ -44,12 +45,6 @@ import { Input } from "@wealthfolio/ui/components/ui/input";
 
 import { useAccountMutations } from "./use-account-mutations";
 
-const accountTypes: ResponsiveSelectOption[] = [
-  { label: "Securities", value: "SECURITIES" },
-  { label: "Cash", value: "CASH" },
-  { label: "Crypto", value: "CRYPTOCURRENCY" },
-];
-
 // Input type (what the form receives)
 type AccountFormInput = z.input<typeof newAccountSchema>;
 // Output type after zod parsing (with defaults applied)
@@ -61,6 +56,12 @@ interface AccountFormlProps {
 }
 
 export function AccountForm({ defaultValues, onSuccess = () => undefined }: AccountFormlProps) {
+  const { t } = useTranslation("settings");
+  const accountTypes: ResponsiveSelectOption[] = [
+    { label: t("accounts.form.types.securities"), value: "SECURITIES" },
+    { label: t("accounts.form.types.cash"), value: "CASH" },
+    { label: t("accounts.form.types.crypto"), value: "CRYPTOCURRENCY" },
+  ];
   const { createAccountMutation, updateAccountMutation } = useAccountMutations({ onSuccess });
 
   // Track initial tracking mode to detect changes
@@ -144,11 +145,14 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <DialogHeader>
-          <DialogTitle> {defaultValues?.id ? "Update Account" : "Add Account"}</DialogTitle>
+          <DialogTitle>
+            {" "}
+            {defaultValues?.id ? t("accounts.form.updateTitle") : t("accounts.form.addTitle")}
+          </DialogTitle>
           <DialogDescription>
             {defaultValues?.id
-              ? "Update account information"
-              : " Add an investment account to track."}
+              ? t("accounts.form.updateDescription")
+              : t("accounts.form.addDescription")}
           </DialogDescription>
         </DialogHeader>
 
@@ -159,9 +163,9 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Account Name</FormLabel>
+                <FormLabel>{t("accounts.form.name")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Account display name" {...field} />
+                  <Input placeholder={t("accounts.form.namePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -172,9 +176,9 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
             name="group"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Account Group</FormLabel>
+                <FormLabel>{t("accounts.form.group")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Retirement, 401K, RRSP, TFSA,..." {...field} />
+                  <Input placeholder={t("accounts.form.groupPlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -186,15 +190,15 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
             name="accountType"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Account Type</FormLabel>
+                <FormLabel>{t("accounts.form.type")}</FormLabel>
                 <FormControl>
                   <ResponsiveSelect
                     value={field.value}
                     onValueChange={field.onChange}
                     options={accountTypes}
-                    placeholder="Select an account type"
-                    sheetTitle="Select Account Type"
-                    sheetDescription="Choose the account type that best matches."
+                    placeholder={t("accounts.form.typePlaceholder")}
+                    sheetTitle={t("accounts.form.typeSheetTitle")}
+                    sheetDescription={t("accounts.form.typeSheetDescription")}
                     triggerClassName="h-11"
                   />
                 </FormControl>
@@ -208,7 +212,7 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
               name="currency"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Currency</FormLabel>
+                  <FormLabel>{t("accounts.form.currency")}</FormLabel>
                   <FormControl>
                     <CurrencyInput
                       value={field.value}
@@ -226,7 +230,7 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
             name="trackingMode"
             render={({ field }) => (
               <FormItem className="space-y-2">
-                <FormLabel>Tracking Mode</FormLabel>
+                <FormLabel>{t("accounts.form.trackingMode")}</FormLabel>
                 {needsSetup && !currentTrackingMode && (
                   <Alert
                     variant="warning"
@@ -234,15 +238,14 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
                   >
                     <Icons.AlertTriangle className="h-4 w-4" />
                     <AlertDescription className="text-xs">
-                      Choose how to track this account. This affects what data you enter and what
-                      metrics are available.{" "}
+                      {t("accounts.form.trackingHint")}{" "}
                       <a
                         href="https://wealthfolio.app/docs/concepts/activity-types"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hover:text-foreground underline"
                       >
-                        Learn more
+                        {t("accounts.form.learnMore")}
                       </a>
                     </AlertDescription>
                   </Alert>
@@ -262,9 +265,11 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
                     >
                       <RadioGroupItem value="TRANSACTIONS" className="mt-0.5" />
                       <div className="flex flex-col">
-                        <span className="text-sm font-medium">Transactions</span>
+                        <span className="text-sm font-medium">
+                          {t("accounts.form.transactions")}
+                        </span>
                         <span className="text-muted-foreground text-xs">
-                          Track every trade for performance analytics
+                          {t("accounts.form.transactionsDesc")}
                         </span>
                       </div>
                     </label>
@@ -275,9 +280,9 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
                     >
                       <RadioGroupItem value="HOLDINGS" className="mt-0.5" />
                       <div className="flex flex-col">
-                        <span className="text-sm font-medium">Holdings</span>
+                        <span className="text-sm font-medium">{t("accounts.form.holdings")}</span>
                         <span className="text-muted-foreground text-xs">
-                          Add holdings directly as snapshots
+                          {t("accounts.form.holdingsDesc")}
                         </span>
                       </div>
                     </label>
@@ -290,14 +295,14 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
                   >
                     <Icons.AlertTriangle className="h-4 w-4" />
                     <AlertDescription className="text-xs">
-                      Performance metrics will be limited without transaction history.{" "}
+                      {t("accounts.form.holdingsWarning")}{" "}
                       <a
                         href="https://wealthfolio.app/docs/concepts/activity-types"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hover:text-foreground underline"
                       >
-                        Learn more
+                        {t("accounts.form.learnMore")}
                       </a>
                     </AlertDescription>
                   </Alert>
@@ -319,9 +324,9 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
                   />
                 </FormControl>
                 <FormLabel className="text-sm font-normal">
-                  Hide this account
+                  {t("accounts.form.hideAccount")}
                   <span className="text-muted-foreground ml-1 text-xs font-normal">
-                    — keeps in Total & history
+                    {t("accounts.form.hideAccountHint")}
                   </span>
                 </FormLabel>
                 <FormMessage />
@@ -339,9 +344,9 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <FormLabel className="text-sm font-normal">
-                    Archive this account
+                    {t("accounts.form.archiveAccount")}
                     <span className="text-muted-foreground ml-1 text-xs font-normal">
-                      — removes from portfolio, can restore later
+                      {t("accounts.form.archiveAccountHint")}
                     </span>
                   </FormLabel>
                   <FormMessage />
@@ -352,7 +357,7 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
         </div>
         <DialogFooter className="gap-2">
           <DialogTrigger asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{t("common.cancel")}</Button>
           </DialogTrigger>
           <Button type="submit" disabled={needsSetup && !currentTrackingMode}>
             {defaultValues?.id ? (
@@ -360,7 +365,9 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
             ) : (
               <Icons.Plus className="h-4 w-4" />
             )}
-            <span>{defaultValues?.id ? "Update Account" : "Add Account"}</span>
+            <span>
+              {defaultValues?.id ? t("accounts.form.updateTitle") : t("accounts.form.addTitle")}
+            </span>
           </Button>
         </DialogFooter>
       </form>
@@ -375,37 +382,36 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
                   <Icons.ArrowRightLeft className="h-4 w-4 text-orange-500 dark:text-orange-300" />
                 </div>
                 <AlertDialogTitle className="text-base font-semibold">
-                  Switch to Transactions mode
+                  {t("accounts.modeSwitch.title")}
                 </AlertDialogTitle>
               </div>
               <AlertDialogDescription>
-                Your account value and performance history will be rebuilt entirely from
-                transactions. Holdings snapshots will no longer be used.
+                {t("accounts.modeSwitch.description")}
               </AlertDialogDescription>
             </AlertDialogHeader>
 
             {/* Checklist */}
             <div className="mt-4 rounded-lg border border-orange-100/40 bg-orange-100/30 p-3 dark:border-orange-100/20 dark:bg-orange-100/20">
               <p className="mb-2 text-xs font-medium text-orange-600 dark:text-orange-200">
-                Make sure your transactions are complete
+                {t("accounts.modeSwitch.checklistTitle")}
               </p>
               <ul className="space-y-2 text-[13px]">
                 <li className="flex items-start gap-2">
                   <Icons.Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-orange-500 dark:text-orange-300" />
                   <span className="text-orange-500 dark:text-orange-200">
-                    All buys, sells, deposits &amp; withdrawals are recorded
+                    {t("accounts.modeSwitch.checkBuysSells")}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Icons.Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-orange-500 dark:text-orange-300" />
                   <span className="text-orange-500 dark:text-orange-200">
-                    Dates, quantities &amp; prices are accurate
+                    {t("accounts.modeSwitch.checkAccuracy")}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Icons.AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-orange-600 dark:text-orange-300" />
                   <span className="text-orange-500 dark:text-orange-200">
-                    Gaps in history will lead to incorrect balances &amp; returns
+                    {t("accounts.modeSwitch.warningGaps")}
                   </span>
                 </li>
               </ul>
@@ -413,8 +419,10 @@ export function AccountForm({ defaultValues, onSuccess = () => undefined }: Acco
           </div>
 
           <AlertDialogFooter className="bg-muted/30 border-t px-5 py-3">
-            <AlertDialogCancel onClick={handleCancelModeSwitch}>Keep Holdings</AlertDialogCancel>
-            <Button onClick={handleConfirmModeSwitch}>Switch to Transactions</Button>
+            <AlertDialogCancel onClick={handleCancelModeSwitch}>
+              {t("accounts.modeSwitch.keepHoldings")}
+            </AlertDialogCancel>
+            <Button onClick={handleConfirmModeSwitch}>{t("accounts.modeSwitch.switchTo")}</Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

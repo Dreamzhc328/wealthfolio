@@ -9,17 +9,11 @@ import { Card, CardContent, CardHeader } from "@wealthfolio/ui/components/ui/car
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { QuoteImportForm } from "./quote-import-form";
 import { QuoteImportHelpPopover } from "./quote-import-help-popover";
 import { QuoteImportProgress } from "./quote-import-progress";
 import { QuotePreviewTable } from "./quote-preview-table";
-
-// Define the steps in the wizard
-const STEPS = [
-  { id: 1, title: "Upload & Validate" },
-  { id: 2, title: "Preview Data" },
-  { id: 3, title: "Import Results" },
-];
 
 interface ImportQuotesSectionProps {
   showTitle?: boolean;
@@ -35,6 +29,12 @@ export function ImportQuotesSection({
   currentStep: externalCurrentStep,
   onStepChange,
 }: ImportQuotesSectionProps) {
+  const { t } = useTranslation("settings");
+  const STEPS = [
+    { id: 1, title: t("marketData.quoteImport.steps.upload") },
+    { id: 2, title: t("marketData.quoteImport.steps.preview") },
+    { id: 3, title: t("marketData.quoteImport.steps.results") },
+  ];
   // Use internal hook if not provided externally
   const internalQuoteImport = useQuoteImport();
   const quoteImport = externalQuoteImport ?? internalQuoteImport;
@@ -103,20 +103,28 @@ export function ImportQuotesSection({
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-6 text-sm">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-muted-foreground">Total:</span>
+                        <span className="text-muted-foreground">
+                          {t("marketData.quoteImport.summary.total")}
+                        </span>
                         <span className="font-semibold">{preview.totalRows}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-muted-foreground">Valid:</span>
+                        <span className="text-muted-foreground">
+                          {t("marketData.quoteImport.summary.valid")}
+                        </span>
                         <span className="font-semibold text-green-600">{preview.validRows}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-muted-foreground">Invalid:</span>
+                        <span className="text-muted-foreground">
+                          {t("marketData.quoteImport.summary.invalid")}
+                        </span>
                         <span className="font-semibold text-red-600">{preview.invalidRows}</span>
                       </div>
                       {preview.duplicateCount > 0 && (
                         <div className="flex items-center gap-1.5">
-                          <span className="text-muted-foreground">Duplicates:</span>
+                          <span className="text-muted-foreground">
+                            {t("marketData.quoteImport.summary.duplicates")}
+                          </span>
                           <span className="font-semibold text-yellow-600">
                             {preview.duplicateCount}
                           </span>
@@ -127,7 +135,7 @@ export function ImportQuotesSection({
                     <div className="flex items-center gap-2">
                       <Button variant="outline" onClick={handleStartOver}>
                         <Icons.ArrowLeft className="mr-2 h-4 w-4" />
-                        Back
+                        {t("marketData.quoteImport.summary.back")}
                       </Button>
                       <Button
                         onClick={async () => {
@@ -139,7 +147,9 @@ export function ImportQuotesSection({
                         disabled={preview.validRows === 0 || isImporting}
                       >
                         <Icons.Import className="mr-2 h-4 w-4" />
-                        Import {preview.validRows} Quotes
+                        {t("marketData.quoteImport.summary.importNQuotes", {
+                          count: preview.validRows,
+                        })}
                       </Button>
                     </div>
                   </div>
@@ -174,9 +184,9 @@ export function ImportQuotesSection({
         >
           {showTitle && (
             <div>
-              <h3 className="text-lg font-semibold">Import Historical Quotes</h3>
+              <h3 className="text-lg font-semibold">{t("marketData.import_.heading")}</h3>
               <p className="text-muted-foreground text-sm">
-                Import historical market data from CSV files to fill gaps in your portfolio data
+                {t("marketData.quoteImport.sectionDescription")}
               </p>
             </div>
           )}
@@ -185,7 +195,7 @@ export function ImportQuotesSection({
               <QuoteImportHelpPopover />
               <Button variant="outline" size="sm" onClick={handleStartOver}>
                 <Icons.Refresh className="mr-2 h-4 w-4" />
-                Start Over
+                {t("marketData.import_.startOver")}
               </Button>
             </div>
           )}

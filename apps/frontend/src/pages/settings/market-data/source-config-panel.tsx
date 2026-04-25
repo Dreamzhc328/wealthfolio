@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { type UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import {
   FormControl,
@@ -47,14 +48,13 @@ const PLACEHOLDERS = [
 
 const SOURCE_TYPES: {
   value: "json" | "html" | "html_table" | "csv";
-  label: string;
-  desc: string;
+  i18nKey: "json" | "html" | "htmlTable" | "csv";
   icon: keyof typeof Icons;
 }[] = [
-  { value: "json", label: "JSON API", desc: "REST returning JSON", icon: "FileJson" },
-  { value: "html", label: "Web Page", desc: "CSS selector extraction", icon: "Globe" },
-  { value: "html_table", label: "HTML Table", desc: "Rows & columns", icon: "FileSpreadsheet" },
-  { value: "csv", label: "CSV", desc: "Comma/semi separated", icon: "FileText" },
+  { value: "json", i18nKey: "json", icon: "FileJson" },
+  { value: "html", i18nKey: "html", icon: "Globe" },
+  { value: "html_table", i18nKey: "htmlTable", icon: "FileSpreadsheet" },
+  { value: "csv", i18nKey: "csv", icon: "FileText" },
 ];
 
 function StepHeader({
@@ -105,22 +105,53 @@ function PlaceholderChip({
   );
 }
 
-function mapChipLabel(field: MappingField): { label: string; color: string; required: boolean } {
+function mapChipLabel(
+  field: MappingField,
+  t: (key: string) => string,
+): { label: string; color: string; required: boolean } {
   switch (field) {
     case "pricePath":
-      return { label: "Price", color: "bg-emerald-500", required: true };
+      return {
+        label: t("marketData.sourceConfig.mappingFields.price"),
+        color: "bg-emerald-500",
+        required: true,
+      };
     case "datePath":
-      return { label: "As of", color: "bg-sky-500", required: false };
+      return {
+        label: t("marketData.sourceConfig.mappingFields.asOf"),
+        color: "bg-sky-500",
+        required: false,
+      };
     case "currencyPath":
-      return { label: "Currency", color: "bg-amber-500", required: false };
+      return {
+        label: t("marketData.sourceConfig.mappingFields.currency"),
+        color: "bg-amber-500",
+        required: false,
+      };
     case "openPath":
-      return { label: "Open", color: "bg-yellow-500", required: false };
+      return {
+        label: t("marketData.sourceConfig.mappingFields.open"),
+        color: "bg-yellow-500",
+        required: false,
+      };
     case "highPath":
-      return { label: "High", color: "bg-orange-500", required: false };
+      return {
+        label: t("marketData.sourceConfig.mappingFields.high"),
+        color: "bg-orange-500",
+        required: false,
+      };
     case "lowPath":
-      return { label: "Low", color: "bg-rose-500", required: false };
+      return {
+        label: t("marketData.sourceConfig.mappingFields.low"),
+        color: "bg-rose-500",
+        required: false,
+      };
     case "volumePath":
-      return { label: "Volume", color: "bg-violet-500", required: false };
+      return {
+        label: t("marketData.sourceConfig.mappingFields.volume"),
+        color: "bg-violet-500",
+        required: false,
+      };
   }
 }
 
@@ -135,7 +166,8 @@ function MappingChip({
   armed: boolean;
   onClick: () => void;
 }) {
-  const { label, color, required } = mapChipLabel(field);
+  const { t } = useTranslation("settings");
+  const { label, color, required } = mapChipLabel(field, t);
   const assigned = !!value;
   return (
     <button
@@ -189,7 +221,8 @@ function MappingInputRow({
   onArm: () => void;
   placeholder: string;
 }) {
-  const { label, color, required } = mapChipLabel(field);
+  const { t } = useTranslation("settings");
+  const { label, color, required } = mapChipLabel(field, t);
   return (
     <FormField
       control={form.control}
@@ -207,7 +240,11 @@ function MappingInputRow({
             type="button"
             onClick={onArm}
             className="flex shrink-0 items-center gap-1.5"
-            title={armed ? "Click to unarm" : "Click to arm — then click a value in the response"}
+            title={
+              armed
+                ? t("marketData.sourceConfig.mappingRow.unarmTitle")
+                : t("marketData.sourceConfig.mappingRow.armTitle")
+            }
           >
             <span className={cn("h-2.5 w-2.5 rounded-sm", color)} />
             <span className="text-sm font-medium">{label}</span>
@@ -235,6 +272,7 @@ function truncate(s: string, n: number): string {
 }
 
 export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: SourceConfigPanelProps) {
+  const { t } = useTranslation("settings");
   const [headersOpen, setHeadersOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const urlInputRef = useRef<HTMLInputElement | null>(null);
@@ -267,19 +305,19 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
 
   const mapHint =
     format === "csv" || format === "html"
-      ? "AUTO"
+      ? t("marketData.sourceConfig.step2.hintAuto")
       : format === "html_table"
-        ? "CLICK A COLUMN"
-        : "CLICK A VALUE";
+        ? t("marketData.sourceConfig.step2.hintClickColumn")
+        : t("marketData.sourceConfig.step2.hintClickValue");
 
   const mapHelper =
     format === "html"
-      ? "Price comes directly from the selector — no field mapping needed."
+      ? t("marketData.sourceConfig.step2.helperHtml")
       : format === "csv"
-        ? "We'll auto-map CSV columns by header. Override in the right pane if needed."
+        ? t("marketData.sourceConfig.step2.helperCsv")
         : format === "html_table"
-          ? "After fetch, click a table column in the right pane to auto-map it."
-          : "Click a numeric value in the right pane to map it to a field below.";
+          ? t("marketData.sourceConfig.step2.helperHtmlTable")
+          : t("marketData.sourceConfig.step2.helperJson");
 
   const insertPlaceholder = (token: string) => {
     const input = urlInputRef.current;
@@ -310,11 +348,15 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
       <div className="bg-background rounded-xl border p-4">
         <StepHeader
           number={1}
-          title={`Configure ${isHistorical ? "Historical" : "Latest"} endpoint`}
+          title={
+            isHistorical
+              ? t("marketData.sourceConfig.step1.titleHistorical")
+              : t("marketData.sourceConfig.step1.titleLatest")
+          }
           done={endpointConfigured}
           badge={
             <span className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wide">
-              Required
+              {t("marketData.sourceConfig.step1.requiredBadge")}
             </span>
           }
         />
@@ -327,7 +369,7 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-                  Source type
+                  {t("marketData.sourceConfig.sourceType.label")}
                 </FormLabel>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {SOURCE_TYPES.map((opt) => {
@@ -350,9 +392,13 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                       >
                         <span className="flex items-center gap-1.5">
                           {Icon && <Icon className="text-muted-foreground h-3.5 w-3.5" />}
-                          <span className="text-sm font-medium">{opt.label}</span>
+                          <span className="text-sm font-medium">
+                            {t(`marketData.sourceConfig.sourceType.${opt.i18nKey}.label`)}
+                          </span>
                         </span>
-                        <span className="text-muted-foreground text-[11px]">{opt.desc}</span>
+                        <span className="text-muted-foreground text-[11px]">
+                          {t(`marketData.sourceConfig.sourceType.${opt.i18nKey}.desc`)}
+                        </span>
                       </button>
                     );
                   })}
@@ -366,7 +412,7 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
           {templates.length > 0 && (
             <div>
               <Label className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-                Quick start
+                {t("marketData.sourceConfig.quickStart")}
               </Label>
               <div className="mt-2 grid gap-2 sm:grid-cols-2">
                 {templates.map((t) => (
@@ -395,18 +441,18 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
               <FormItem>
                 <div className="flex items-center justify-between">
                   <FormLabel className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-                    URL template
+                    {t("marketData.sourceConfig.url.label")}
                   </FormLabel>
                   <span className="text-muted-foreground text-[11px]">
-                    · use placeholders for variable parts
+                    {t("marketData.sourceConfig.url.hint")}
                   </span>
                 </div>
                 <FormControl>
                   <Input
                     placeholder={
                       format === "json"
-                        ? "https://api.example.com/v1/price/{SYMBOL}"
-                        : "https://www.example.com/quote/{SYMBOL}"
+                        ? t("marketData.sourceConfig.url.placeholderJson")
+                        : t("marketData.sourceConfig.url.placeholderOther")
                     }
                     {...field}
                     ref={(el) => {
@@ -420,7 +466,7 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                   />
                 </FormControl>
                 <div className="text-muted-foreground mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px]">
-                  <span className="mr-1">Placeholders:</span>
+                  <span className="mr-1">{t("marketData.sourceConfig.url.placeholdersLabel")}</span>
                   {PLACEHOLDERS.map((p) => (
                     <PlaceholderChip key={p} token={p} onInsert={insertPlaceholder} />
                   ))}
@@ -438,17 +484,17 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-                    CSS Selector
+                    {t("marketData.sourceConfig.cssSelector.label")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder=".price-value, [data-field='last']"
+                      placeholder={t("marketData.sourceConfig.cssSelector.placeholder")}
                       className="font-mono text-xs"
                       {...field}
                     />
                   </FormControl>
                   <p className="text-muted-foreground text-[11px]">
-                    Target the element containing the price. Numbers are auto-parsed.
+                    {t("marketData.sourceConfig.cssSelector.hint")}
                   </p>
                   <FormMessage />
                 </FormItem>
@@ -466,7 +512,7 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                 <Icons.ChevronRight
                   className={cn("h-3 w-3 transition-transform", headersOpen && "rotate-90")}
                 />
-                Headers &amp; auth (optional)
+                {t("marketData.sourceConfig.headers.toggle")}
               </button>
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-2">
@@ -478,12 +524,12 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                     <FormControl>
                       <Textarea
                         rows={2}
-                        placeholder='{"Authorization": "Bearer token"}'
+                        placeholder={t("marketData.sourceConfig.headers.placeholder")}
                         {...field}
                       />
                     </FormControl>
                     <p className="text-muted-foreground text-[11px]">
-                      Prefix secret values with __SECRET__ to encrypt them.
+                      {t("marketData.sourceConfig.headers.secretHint")}
                     </p>
                     <FormMessage />
                   </FormItem>
@@ -498,7 +544,7 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
       <div className="bg-background rounded-xl border p-4">
         <StepHeader
           number={2}
-          title="Map response fields"
+          title={t("marketData.sourceConfig.step2.title")}
           done={mappingDone}
           badge={
             <span className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wide">
@@ -542,7 +588,7 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
               <Icons.ChevronRight
                 className={cn("h-3 w-3 transition-transform", advancedOpen && "rotate-90")}
               />
-              More mappings &amp; options
+              {t("marketData.sourceConfig.advanced.toggle")}
             </button>
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-3 space-y-3">
@@ -603,9 +649,15 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
               name={`${prefix}.dateFormat`}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-xs">Date format</FormLabel>
+                  <FormLabel className="text-xs">
+                    {t("marketData.sourceConfig.advanced.dateFormatLabel")}
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. %Y-%m-%d" className="font-mono text-xs" {...field} />
+                    <Input
+                      placeholder={t("marketData.sourceConfig.advanced.dateFormatPlaceholder")}
+                      className="font-mono text-xs"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -619,10 +671,16 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                   name={`${prefix}.openPath`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs">Open</FormLabel>
+                      <FormLabel className="text-xs">
+                        {t("marketData.sourceConfig.mappingFields.open")}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={format === "csv" ? "Open" : "$.open"}
+                          placeholder={
+                            format === "csv"
+                              ? t("marketData.sourceConfig.mappingFields.open")
+                              : "$.open"
+                          }
                           className="font-mono text-xs"
                           {...field}
                         />
@@ -636,10 +694,16 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                   name={`${prefix}.highPath`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs">High</FormLabel>
+                      <FormLabel className="text-xs">
+                        {t("marketData.sourceConfig.mappingFields.high")}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={format === "csv" ? "High" : "$.high"}
+                          placeholder={
+                            format === "csv"
+                              ? t("marketData.sourceConfig.mappingFields.high")
+                              : "$.high"
+                          }
                           className="font-mono text-xs"
                           {...field}
                         />
@@ -653,10 +717,16 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                   name={`${prefix}.lowPath`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs">Low</FormLabel>
+                      <FormLabel className="text-xs">
+                        {t("marketData.sourceConfig.mappingFields.low")}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={format === "csv" ? "Low" : "$.low"}
+                          placeholder={
+                            format === "csv"
+                              ? t("marketData.sourceConfig.mappingFields.low")
+                              : "$.low"
+                          }
                           className="font-mono text-xs"
                           {...field}
                         />
@@ -670,10 +740,16 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                   name={`${prefix}.volumePath`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs">Volume</FormLabel>
+                      <FormLabel className="text-xs">
+                        {t("marketData.sourceConfig.mappingFields.volume")}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={format === "csv" ? "Volume" : "$.volume"}
+                          placeholder={
+                            format === "csv"
+                              ? t("marketData.sourceConfig.mappingFields.volume")
+                              : "$.volume"
+                          }
                           className="font-mono text-xs"
                           {...field}
                         />
@@ -690,9 +766,15 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
               name={`${prefix}.currencyPath`}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-xs">Currency path</FormLabel>
+                  <FormLabel className="text-xs">
+                    {t("marketData.sourceConfig.advanced.currencyPathLabel")}
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. $.currency" className="font-mono text-xs" {...field} />
+                    <Input
+                      placeholder={t("marketData.sourceConfig.advanced.currencyPathPlaceholder")}
+                      className="font-mono text-xs"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -705,7 +787,9 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                 name={`${prefix}.factor`}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs">Factor</FormLabel>
+                    <FormLabel className="text-xs">
+                      {t("marketData.sourceConfig.advanced.factorLabel")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -727,7 +811,9 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                 name={`${prefix}.locale`}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs">Locale</FormLabel>
+                    <FormLabel className="text-xs">
+                      {t("marketData.sourceConfig.advanced.localeLabel")}
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="en-US" {...field} />
                     </FormControl>
@@ -747,7 +833,7 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                         id={`${prefix}-invert`}
                       />
                       <Label htmlFor={`${prefix}-invert`} className="text-xs">
-                        Invert
+                        {t("marketData.sourceConfig.advanced.invertLabel")}
                       </Label>
                     </div>
                     <FormMessage />
@@ -762,12 +848,14 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                 name={`${prefix}.defaultPrice`}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs">Default price</FormLabel>
+                    <FormLabel className="text-xs">
+                      {t("marketData.sourceConfig.advanced.defaultPriceLabel")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         step="any"
-                        placeholder="Static fallback"
+                        placeholder={t("marketData.sourceConfig.advanced.defaultPricePlaceholder")}
                         {...field}
                         value={field.value ?? ""}
                         onChange={(e) =>
@@ -776,7 +864,7 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                       />
                     </FormControl>
                     <p className="text-muted-foreground text-[11px]">
-                      Used when URL is empty or fetch fails.
+                      {t("marketData.sourceConfig.advanced.defaultPriceHint")}
                     </p>
                     <FormMessage />
                   </FormItem>
@@ -787,7 +875,9 @@ export function SourceConfigPanel({ form, prefix, runtime, onUrlChange }: Source
                 name={`${prefix}.dateTimezone`}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs">Date timezone</FormLabel>
+                    <FormLabel className="text-xs">
+                      {t("marketData.sourceConfig.advanced.dateTimezoneLabel")}
+                    </FormLabel>
                     <FormControl>
                       <TimezoneInput
                         value={field.value || ""}

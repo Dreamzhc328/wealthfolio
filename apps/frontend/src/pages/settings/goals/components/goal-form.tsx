@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import * as z from "zod";
 
 import { Button } from "@wealthfolio/ui/components/ui/button";
@@ -36,6 +37,7 @@ interface GoalFormlProps {
 }
 
 export function GoalForm({ defaultValues, onSuccess = () => undefined }: GoalFormlProps) {
+  const { t } = useTranslation("settings");
   const { addGoalMutation, updateGoalMutation } = useGoalMutations();
 
   const form = useForm<NewGoal>({
@@ -55,9 +57,12 @@ export function GoalForm({ defaultValues, onSuccess = () => undefined }: GoalFor
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <DialogHeader>
-          <DialogTitle> {defaultValues?.id ? "Update Goal" : "Add Goal"}</DialogTitle>
+          <DialogTitle>
+            {" "}
+            {defaultValues?.id ? t("goals.form.updateTitle") : t("goals.form.addTitle")}
+          </DialogTitle>
           <DialogDescription>
-            {defaultValues?.id ? "Update goal information" : " Add an investment goal to track."}
+            {defaultValues?.id ? t("goals.form.updateDescription") : t("goals.form.addDescription")}
           </DialogDescription>
         </DialogHeader>
 
@@ -70,9 +75,9 @@ export function GoalForm({ defaultValues, onSuccess = () => undefined }: GoalFor
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Goal Name</FormLabel>
+                <FormLabel>{t("goals.form.name")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Goal display title" {...field} />
+                  <Input placeholder={t("goals.form.namePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -83,9 +88,9 @@ export function GoalForm({ defaultValues, onSuccess = () => undefined }: GoalFor
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Goal description</FormLabel>
+                <FormLabel>{t("goals.form.description")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Goal short description" {...field} />
+                  <Input placeholder={t("goals.form.descriptionPlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -96,9 +101,9 @@ export function GoalForm({ defaultValues, onSuccess = () => undefined }: GoalFor
             name="targetAmount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Target amount</FormLabel>
+                <FormLabel>{t("goals.form.targetAmount")}</FormLabel>
                 <FormControl>
-                  <MoneyInput placeholder="Target amount" {...field} />
+                  <MoneyInput placeholder={t("goals.form.targetAmountPlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -113,7 +118,7 @@ export function GoalForm({ defaultValues, onSuccess = () => undefined }: GoalFor
                   <FormControl>
                     <Switch checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
-                  <FormLabel className="space-y-0 pl-2"> Goal Achieved</FormLabel>
+                  <FormLabel className="space-y-0 pl-2">{t("goals.form.achieved")}</FormLabel>
                   <FormMessage />
                 </FormItem>
               )}
@@ -122,11 +127,11 @@ export function GoalForm({ defaultValues, onSuccess = () => undefined }: GoalFor
         </div>
         <DialogFooter className="gap-2">
           <DialogTrigger asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{t("common.cancel")}</Button>
           </DialogTrigger>
           <Button type="submit">
             <Icons.Plus className="h-4 w-4" />
-            <span>{defaultValues?.id ? "Update Goal" : "Add Goal"}</span>
+            <span>{defaultValues?.id ? t("goals.form.updateTitle") : t("goals.form.addTitle")}</span>
           </Button>
         </DialogFooter>
       </form>

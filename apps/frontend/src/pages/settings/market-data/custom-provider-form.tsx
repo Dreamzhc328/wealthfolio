@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+
+type TFunction = ReturnType<typeof useTranslation>["t"];
 
 import { Button } from "@wealthfolio/ui/components/ui/button";
 import {
@@ -57,33 +60,36 @@ const sourceSchema = z.object({
   dateTimezone: z.string().optional(),
 });
 
-const formSchema = z
-  .object({
-    name: z.string().min(1, "Name is required"),
-    code: z
-      .string()
-      .min(1, "Code is required")
-      .regex(/^[a-z0-9-]+$/, "Lowercase alphanumeric and hyphens only"),
-    description: z.string().optional(),
-    priority: z.coerce.number().int().min(1).default(50),
-    latestEnabled: z.boolean(),
-    latestSource: sourceSchema,
-    historicalEnabled: z.boolean(),
-    historicalSource: sourceSchema,
-  })
-  .superRefine((values, ctx) => {
-    if (!values.latestEnabled && !values.historicalEnabled) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["latestEnabled"],
-        message: "Enable at least one price source",
-      });
-    }
-    if (values.latestEnabled) validateSource(ctx, "latestSource", values.latestSource);
-    if (values.historicalEnabled) validateSource(ctx, "historicalSource", values.historicalSource);
-  });
+function buildFormSchema(t: TFunction) {
+  return z
+    .object({
+      name: z.string().min(1, t("marketData.providerForm.validation.nameRequired")),
+      code: z
+        .string()
+        .min(1, t("marketData.providerForm.validation.codeRequired"))
+        .regex(/^[a-z0-9-]+$/, t("marketData.providerForm.validation.codeFormat")),
+      description: z.string().optional(),
+      priority: z.coerce.number().int().min(1).default(50),
+      latestEnabled: z.boolean(),
+      latestSource: sourceSchema,
+      historicalEnabled: z.boolean(),
+      historicalSource: sourceSchema,
+    })
+    .superRefine((values, ctx) => {
+      if (!values.latestEnabled && !values.historicalEnabled) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["latestEnabled"],
+          message: t("marketData.providerForm.validation.enableAtLeastOne"),
+        });
+      }
+      if (values.latestEnabled) validateSource(ctx, "latestSource", values.latestSource, t);
+      if (values.historicalEnabled)
+        validateSource(ctx, "historicalSource", values.historicalSource, t);
+    });
+}
 
-export type FormValues = z.infer<typeof formSchema>;
+export type FormValues = z.infer<ReturnType<typeof buildFormSchema>>;
 type SourceFormValues = z.infer<typeof sourceSchema>;
 export type SourceKey = "latestSource" | "historicalSource";
 type SourceMode = "historical" | "latest" | "both";
@@ -144,22 +150,37 @@ function addSourceIssue(
   ctx.addIssue({ code: z.ZodIssueCode.custom, path: [sourceKey, field], message });
 }
 
-function validateSource(ctx: z.RefinementCtx, sourceKey: SourceKey, source: SourceFormValues) {
+function validateSource(
+  ctx: z.RefinementCtx,
+  sourceKey: SourceKey,
+  source: SourceFormValues,
+  t: TFunction,
+) {
   const url = source.url.trim();
   if (!url) {
-    addSourceIssue(ctx, sourceKey, "url", "URL is required");
+    addSourceIssue(ctx, sourceKey, "url", t("marketData.providerForm.validation.urlRequired"));
   } else if (!URL_RE.test(url)) {
-    addSourceIssue(ctx, sourceKey, "url", "URL must start with http:// or https://");
+    addSourceIssue(ctx, sourceKey, "url", t("marketData.providerForm.validation.urlProtocol"));
   }
   if (!source.pricePath.trim()) {
-    addSourceIssue(ctx, sourceKey, "pricePath", "Price path is required");
+    addSourceIssue(
+      ctx,
+      sourceKey,
+      "pricePath",
+      t("marketData.providerForm.validation.pricePathRequired"),
+    );
   }
   const headers = source.headers?.trim();
   if (headers) {
     try {
       JSON.parse(headers);
     } catch {
-      addSourceIssue(ctx, sourceKey, "headers", "Headers must be valid JSON");
+      addSourceIssue(
+        ctx,
+        sourceKey,
+        "headers",
+        t("marketData.providerForm.validation.headersInvalidJson"),
+      );
     }
   }
 }
@@ -229,11 +250,13 @@ function CustomProviderFormContent({
   onOpenChange: (open: boolean) => void;
   onSavingChange: (saving: boolean) => void;
 }) {
+  const { t } = useTranslation("settings");
   const isEditing = !!provider;
   const { mutate: createProvider, isPending: isCreating } = useCreateCustomProvider();
   const { mutate: updateProvider, isPending: isUpdating } = useUpdateCustomProvider();
   const { settings } = useSettingsContext();
   const isSaving = isCreating || isUpdating;
+  const formSchema = useMemo(() => buildFormSchema(t), [t]);
 
   useEffect(() => {
     onSavingChange(isSaving);
@@ -436,11 +459,11 @@ function CustomProviderFormContent({
           console.warn("[CustomProviderForm] validation errors:", errors);
           const messages = collectErrorMessages(errors);
           toast({
-            title: "Form has errors",
+            title: t("marketData.providerForm.toast.errorTitle"),
             description:
               messages.length > 0
                 ? messages.slice(0, 4).join(" · ")
-                : "One or more fields are invalid.",
+                : t("marketData.providerForm.toast.errorFallback"),
             variant: "destructive",
           });
           if (errors.name || errors.code) {
@@ -456,10 +479,12 @@ function CustomProviderFormContent({
         <div className="bg-background flex shrink-0 items-start justify-between gap-4 border-b px-5 py-4">
           <div>
             <DialogTitle className="text-lg font-semibold">
-              {isEditing ? "Edit custom provider" : "Add custom provider"}
+              {isEditing
+                ? t("marketData.providerForm.editTitle")
+                : t("marketData.providerForm.addTitle")}
             </DialogTitle>
             <DialogDescription className="text-muted-foreground text-sm">
-              Configure a custom data source to fetch market prices.
+              {t("marketData.providerForm.dialogDescription")}
             </DialogDescription>
           </div>
           <div className="flex items-center gap-2">
@@ -468,7 +493,7 @@ function CustomProviderFormContent({
               className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs transition-colors"
             >
               <Icons.FileText className="h-3.5 w-3.5" />
-              Docs
+              {t("marketData.providerForm.docs")}
             </ExternalLink>
             <Button
               type="button"
@@ -477,7 +502,7 @@ function CustomProviderFormContent({
               onClick={() => onOpenChange(false)}
               disabled={isSaving}
               className="h-8 w-8"
-              aria-label="Close"
+              aria-label={t("marketData.providerForm.close")}
             >
               <Icons.Close className="h-4 w-4" />
             </Button>
@@ -491,28 +516,28 @@ function CustomProviderFormContent({
             {/* Provider Mode */}
             <div>
               <div className="text-muted-foreground mb-2 text-[11px] font-medium uppercase tracking-wide">
-                Provider mode
+                {t("marketData.providerForm.providerMode")}
               </div>
               <div className="grid gap-2 sm:grid-cols-3">
                 <ModeCard
                   selected={sourceMode === "historical"}
                   icon={<Icons.History className="h-4 w-4 shrink-0" />}
-                  title="Dated series"
-                  subtitle="newest row = latest"
+                  title={t("marketData.providerForm.modes.datedTitle")}
+                  subtitle={t("marketData.providerForm.modes.datedSubtitle")}
                   onClick={() => setSourceMode("historical")}
                 />
                 <ModeCard
                   selected={sourceMode === "latest"}
                   icon={<Icons.TrendingUp className="h-4 w-4 shrink-0" />}
-                  title="Latest only"
-                  subtitle="one endpoint"
+                  title={t("marketData.providerForm.modes.latestTitle")}
+                  subtitle={t("marketData.providerForm.modes.latestSubtitle")}
                   onClick={() => setSourceMode("latest")}
                 />
                 <ModeCard
                   selected={sourceMode === "both"}
                   icon={<Icons.BarChart className="h-4 w-4 shrink-0" />}
-                  title="Both"
-                  subtitle="series + override"
+                  title={t("marketData.providerForm.modes.bothTitle")}
+                  subtitle={t("marketData.providerForm.modes.bothSubtitle")}
                   onClick={() => setSourceMode("both")}
                 />
               </div>
@@ -521,13 +546,13 @@ function CustomProviderFormContent({
                 <div className="mt-2 grid gap-2 sm:grid-cols-2">
                   <SubPill
                     selected={subTab === "latest"}
-                    label="Latest price"
+                    label={t("marketData.providerForm.subPill.latest")}
                     configured={latestConfigured}
                     onClick={() => setSubTab("latest")}
                   />
                   <SubPill
                     selected={subTab === "historical"}
-                    label="Historical"
+                    label={t("marketData.providerForm.subPill.historical")}
                     configured={historicalConfigured}
                     onClick={() => setSubTab("historical")}
                   />
@@ -555,7 +580,9 @@ function CustomProviderFormContent({
                 <div className="bg-muted text-muted-foreground flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
                   3
                 </div>
-                <h3 className="text-sm font-semibold">Provider identity</h3>
+                <h3 className="text-sm font-semibold">
+                  {t("marketData.providerForm.identity.heading")}
+                </h3>
               </div>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_140px_80px]">
@@ -565,16 +592,16 @@ function CustomProviderFormContent({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-                        Provider name
+                        {t("marketData.providerForm.identity.name")}
                         {!nameManuallyEdited && !isEditing && form.getValues("name") && (
                           <span className="text-muted-foreground ml-1 font-normal normal-case tracking-normal">
-                            (from URL)
+                            {t("marketData.providerForm.identity.fromUrl")}
                           </span>
                         )}
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="e.g. My Provider"
+                          placeholder={t("marketData.providerForm.identity.namePlaceholder")}
                           {...field}
                           onChange={(e) => handleNameChange(e.target.value, field.onChange)}
                         />
@@ -589,11 +616,14 @@ function CustomProviderFormContent({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-                        Code <span className="font-normal normal-case tracking-normal">(auto)</span>
+                        {t("marketData.providerForm.identity.code")}{" "}
+                        <span className="font-normal normal-case tracking-normal">
+                          {t("marketData.providerForm.identity.auto")}
+                        </span>
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="my-provider"
+                          placeholder={t("marketData.providerForm.identity.codePlaceholder")}
                           disabled={isEditing}
                           {...field}
                           onChange={(e) => {
@@ -612,7 +642,7 @@ function CustomProviderFormContent({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-                        Priority
+                        {t("marketData.providerForm.identity.priority")}
                       </FormLabel>
                       <FormControl>
                         <Input type="number" min={1} {...field} />
@@ -629,13 +659,17 @@ function CustomProviderFormContent({
                 render={({ field }) => (
                   <FormItem className="mt-3">
                     <FormLabel className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-                      Description{" "}
-                      <span className="font-normal normal-case tracking-normal">· optional</span>
+                      {t("marketData.providerForm.identity.description")}{" "}
+                      <span className="font-normal normal-case tracking-normal">
+                        {t("marketData.providerForm.identity.optional")}
+                      </span>
                     </FormLabel>
                     <FormControl>
                       <Textarea
                         rows={2}
-                        placeholder="Short note — what this provider covers, caveats, etc."
+                        placeholder={t(
+                          "marketData.providerForm.identity.descriptionPlaceholder",
+                        )}
                         {...field}
                       />
                     </FormControl>
@@ -655,10 +689,22 @@ function CustomProviderFormContent({
         {/* ── Footer ── */}
         <div className="bg-background flex shrink-0 items-center justify-between gap-3 border-t px-5 py-3">
           <div className="flex flex-wrap items-center gap-2">
-            <ChecklistItem done={checklist.urlTemplate} label="URL template" />
-            <ChecklistItem done={checklist.fetchSucceeds} label="Fetch succeeds" />
-            <ChecklistItem done={checklist.requiredFieldsMapped} label="Required fields mapped" />
-            <ChecklistItem done={checklist.providerName} label="Provider name" />
+            <ChecklistItem
+              done={checklist.urlTemplate}
+              label={t("marketData.providerForm.checklist.urlTemplate")}
+            />
+            <ChecklistItem
+              done={checklist.fetchSucceeds}
+              label={t("marketData.providerForm.checklist.fetchSucceeds")}
+            />
+            <ChecklistItem
+              done={checklist.requiredFieldsMapped}
+              label={t("marketData.providerForm.checklist.requiredFieldsMapped")}
+            />
+            <ChecklistItem
+              done={checklist.providerName}
+              label={t("marketData.providerForm.checklist.providerName")}
+            />
           </div>
           <div className="flex gap-2">
             <Button
@@ -667,18 +713,20 @@ function CustomProviderFormContent({
               onClick={() => onOpenChange(false)}
               disabled={isSaving}
             >
-              Cancel
+              {t("marketData.providerForm.actions.cancel")}
             </Button>
             <Button type="submit" disabled={isSaving}>
               {isSaving ? (
                 <>
                   <Icons.Spinner className="mr-1.5 h-4 w-4 animate-spin" />
-                  Saving
+                  {t("marketData.providerForm.actions.saving")}
                 </>
               ) : (
                 <>
                   <Icons.Check className="mr-1.5 h-4 w-4" />
-                  {isEditing ? "Save changes" : "Create provider"}
+                  {isEditing
+                    ? t("marketData.providerForm.actions.saveChanges")
+                    : t("marketData.providerForm.actions.createProvider")}
                 </>
               )}
             </Button>

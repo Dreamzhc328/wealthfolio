@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import * as z from "zod";
 
 import { FontSelector } from "@/components/font-selector";
@@ -31,6 +32,7 @@ const appearanceFormSchema = z.object({
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
 export function AppearanceForm() {
+  const { t } = useTranslation("settings");
   const { settings, updateSettings } = useSettingsContext();
   const { isMobile } = usePlatform();
   const defaultValues: Partial<AppearanceFormValues> = {
@@ -58,9 +60,9 @@ export function AppearanceForm() {
           render={({ field }) => (
             <FormItem className="space-y-3">
               <div className="space-y-1">
-                <FormLabel className="text-base font-medium">Font Family</FormLabel>
+                <FormLabel className="text-base font-medium">{t("appearance.font.title")}</FormLabel>
                 <FormDescription className="text-sm">
-                  Choose the font family used throughout the interface.
+                  {t("appearance.font.description")}
                 </FormDescription>
               </div>
               <FormControl>
@@ -82,9 +84,9 @@ export function AppearanceForm() {
           render={({ field }) => (
             <FormItem className="space-y-3">
               <div className="space-y-1">
-                <FormLabel className="text-base font-medium">Theme</FormLabel>
+                <FormLabel className="text-base font-medium">{t("appearance.theme.title")}</FormLabel>
                 <FormDescription className="text-sm">
-                  Select your preferred theme for the application.
+                  {t("appearance.theme.description")}
                 </FormDescription>
               </div>
               <FormMessage />
@@ -109,8 +111,8 @@ export function AppearanceForm() {
             render={({ field }) => (
               <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
                 <div className="space-y-0.5">
-                  <FormLabel>Show menu bar</FormLabel>
-                  <FormDescription>Toggle to display the application menu bar.</FormDescription>
+                  <FormLabel>{t("appearance.menuBar.title")}</FormLabel>
+                  <FormDescription>{t("appearance.menuBar.description")}</FormDescription>
                 </div>
                 <FormControl>
                   <Switch

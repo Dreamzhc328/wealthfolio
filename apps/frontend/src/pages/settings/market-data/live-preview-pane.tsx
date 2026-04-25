@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { type UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@wealthfolio/ui/components/ui/button";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
@@ -26,21 +27,22 @@ interface LivePreviewPaneProps {
 
 const MAPPING_META: {
   field: MappingField;
-  label: string;
+  labelKey: string;
   color: string;
   required: boolean;
 }[] = [
-  { field: "pricePath", label: "Price", color: "bg-emerald-500", required: true },
-  { field: "datePath", label: "As of", color: "bg-sky-500", required: false },
-  { field: "currencyPath", label: "Currency", color: "bg-amber-500", required: false },
-  { field: "openPath", label: "Open", color: "bg-yellow-500", required: false },
-  { field: "highPath", label: "High", color: "bg-orange-500", required: false },
-  { field: "lowPath", label: "Low", color: "bg-rose-500", required: false },
-  { field: "volumePath", label: "Volume", color: "bg-violet-500", required: false },
+  { field: "pricePath", labelKey: "marketData.preview.mapping.fields.price", color: "bg-emerald-500", required: true },
+  { field: "datePath", labelKey: "marketData.preview.mapping.fields.asOf", color: "bg-sky-500", required: false },
+  { field: "currencyPath", labelKey: "marketData.preview.mapping.fields.currency", color: "bg-amber-500", required: false },
+  { field: "openPath", labelKey: "marketData.preview.mapping.fields.open", color: "bg-yellow-500", required: false },
+  { field: "highPath", labelKey: "marketData.preview.mapping.fields.high", color: "bg-orange-500", required: false },
+  { field: "lowPath", labelKey: "marketData.preview.mapping.fields.low", color: "bg-rose-500", required: false },
+  { field: "volumePath", labelKey: "marketData.preview.mapping.fields.volume", color: "bg-violet-500", required: false },
 ];
 
 /** Inline chips replacing placeholders in the preview URL. */
 function PreviewUrl({ template, values }: { template: string; values: Record<string, string> }) {
+  const { t } = useTranslation("settings");
   const segments = useMemo(() => {
     if (!template) return [];
     const re = /\{([A-Za-z:%\-_]+)\}/g;
@@ -61,7 +63,7 @@ function PreviewUrl({ template, values }: { template: string; values: Record<str
   if (!template) {
     return (
       <span className="text-muted-foreground/60 font-mono text-xs italic">
-        Enter a URL template to preview the request…
+        {t("marketData.preview.urlPlaceholder")}
       </span>
     );
   }
@@ -98,11 +100,12 @@ function StatusPill({
   status: { code: number; ok: boolean } | null;
   error: string | null;
 }) {
+  const { t } = useTranslation("settings");
   if (isFetching) {
     return (
       <span className="text-muted-foreground inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 text-xs">
         <Icons.Spinner className="h-3 w-3 animate-spin" />
-        Fetching
+        {t("marketData.preview.status.fetching")}
       </span>
     );
   }
@@ -110,7 +113,7 @@ function StatusPill({
     return (
       <span className="text-destructive border-destructive/40 bg-destructive/10 inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 text-xs">
         <span className="bg-destructive h-1.5 w-1.5 rounded-full" />
-        Error
+        {t("marketData.preview.status.error")}
       </span>
     );
   }
@@ -118,30 +121,33 @@ function StatusPill({
     return (
       <span className="text-success border-success/40 bg-success/10 inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 text-xs">
         <span className="bg-success h-1.5 w-1.5 rounded-full" />
-        {status.code} OK
+        {t("marketData.preview.status.ok", { code: status.code })}
       </span>
     );
   }
   return (
     <span className="text-muted-foreground inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1 text-xs">
       <span className="bg-muted-foreground/40 h-1.5 w-1.5 rounded-full" />
-      Idle
+      {t("marketData.preview.status.idle")}
     </span>
   );
 }
 
 function EmptyResponseState() {
+  const { t } = useTranslation("settings");
   return (
     <div className="flex min-h-[220px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed p-6 text-center">
       <Icons.Target className="text-muted-foreground/40 h-6 w-6" />
       <div className="space-y-1">
         <p className="text-muted-foreground text-sm">
-          Fill in the URL, then press{" "}
-          <span className="bg-muted rounded px-1.5 py-0.5 font-mono text-[11px]">Fetch</span> to
-          test.
+          {t("marketData.preview.empty.instructionPrefix")}{" "}
+          <span className="bg-muted rounded px-1.5 py-0.5 font-mono text-[11px]">
+            {t("marketData.preview.fetch")}
+          </span>{" "}
+          {t("marketData.preview.empty.instructionSuffix")}
         </p>
         <p className="text-muted-foreground/70 text-xs">
-          Response previews appear here, and you can click any value to map it.
+          {t("marketData.preview.empty.hint")}
         </p>
       </div>
     </div>
@@ -173,6 +179,7 @@ function HtmlTableResponse({
   tables: DetectedHtmlTable[];
   runtime: SourceRuntime;
 }) {
+  const { t } = useTranslation("settings");
   const [activeIndex, setActiveIndex] = useState(0);
   const table = tables[activeIndex] ?? tables[0];
   if (!table) return null;
@@ -201,16 +208,20 @@ function HtmlTableResponse({
     setActiveIndex(newIndex);
   };
 
+  const armedLabel = runtime.armedField
+    ? t(MAPPING_META.find((m) => m.field === runtime.armedField)?.labelKey ?? "")
+    : "";
+
   return (
     <div className="space-y-3">
       {/* Table selector — shown always when html_table, as a legend + switcher */}
       <div className="flex flex-wrap items-center gap-1">
         <span className="text-muted-foreground mr-1 text-[11px] font-medium uppercase tracking-wide">
-          Table
+          {t("marketData.preview.table.label")}
         </span>
-        {tables.map((t, i) => (
+        {tables.map((tbl, i) => (
           <button
-            key={t.index}
+            key={tbl.index}
             type="button"
             onClick={() => handleSwitchTable(i)}
             className={cn(
@@ -219,14 +230,21 @@ function HtmlTableResponse({
                 ? "bg-background border-foreground/30 shadow-sm"
                 : "bg-muted/30 text-muted-foreground hover:bg-muted/50 border-transparent",
             )}
-            title={`${t.columns.length} cols · ${t.rowCount} rows`}
+            title={t("marketData.preview.table.tabTitle", {
+              cols: tbl.columns.length,
+              rows: tbl.rowCount,
+            })}
           >
             {i + 1}
           </button>
         ))}
         <span className="text-muted-foreground ml-auto text-xs">
-          {table.rowCount} rows · click a column header to map
-          {runtime.armedField ? ` to ${labelForField(runtime.armedField)}` : ""}
+          {runtime.armedField
+            ? t("marketData.preview.table.headerHintArmed", {
+                count: table.rowCount,
+                field: armedLabel,
+              })
+            : t("marketData.preview.table.headerHint", { count: table.rowCount })}
         </span>
       </div>
 
@@ -242,7 +260,7 @@ function HtmlTableResponse({
                     className="hover:text-foreground group flex flex-col items-start gap-1 text-left"
                   >
                     <span className="text-foreground text-xs font-medium">
-                      {col.header || `Col ${col.index}`}
+                      {col.header || t("marketData.preview.table.columnFallback", { index: col.index })}
                     </span>
                     {col.role && (
                       <span
@@ -277,6 +295,7 @@ function HtmlTableResponse({
 }
 
 function CsvResponse({ raw, runtime }: { raw: string; runtime: SourceRuntime }) {
+  const { t } = useTranslation("settings");
   const { headers, rows } = useMemo(() => parseCsv(raw), [raw]);
   if (headers.length === 0) {
     return (
@@ -291,11 +310,16 @@ function CsvResponse({ raw, runtime }: { raw: string; runtime: SourceRuntime }) 
     runtime.handlePathSelect(name, field);
   };
 
+  const armedLabel = runtime.armedField
+    ? t(MAPPING_META.find((m) => m.field === runtime.armedField)?.labelKey ?? "")
+    : "";
+
   return (
     <div className="space-y-2">
       <p className="text-muted-foreground text-xs">
-        {rows.length} rows detected. Click a column header to map it
-        {runtime.armedField ? ` to ${labelForField(runtime.armedField)}` : ""}.
+        {runtime.armedField
+          ? t("marketData.preview.csv.hintArmed", { count: rows.length, field: armedLabel })
+          : t("marketData.preview.csv.hint", { count: rows.length })}
       </p>
       <div className="bg-background max-h-[420px] overflow-auto rounded-lg border">
         <table className="w-full text-xs">
@@ -362,21 +386,26 @@ function inferCsvFieldFromHeader(h: string): MappingField {
   return "pricePath";
 }
 
-function labelForField(f: MappingField): string {
-  return MAPPING_META.find((m) => m.field === f)?.label ?? f;
-}
-
 function HtmlElementsResponse({ runtime }: { runtime: SourceRuntime }) {
+  const { t } = useTranslation("settings");
   const [showAll, setShowAll] = useState(false);
   const max = 10;
   const list = showAll ? runtime.detectedElements : runtime.detectedElements.slice(0, max);
   const hasMore = runtime.detectedElements.length > max;
 
+  const armedLabel = runtime.armedField
+    ? t(MAPPING_META.find((m) => m.field === runtime.armedField)?.labelKey ?? "")
+    : "";
+
   return (
     <div className="space-y-2">
       <p className="text-muted-foreground text-xs">
-        {runtime.detectedElements.length} elements detected. Click one to assign its selector
-        {runtime.armedField ? ` to ${labelForField(runtime.armedField)}` : ""}.
+        {runtime.armedField
+          ? t("marketData.preview.elements.hintArmed", {
+              count: runtime.detectedElements.length,
+              field: armedLabel,
+            })
+          : t("marketData.preview.elements.hint", { count: runtime.detectedElements.length })}
       </p>
       <div className="max-h-[420px] space-y-2 overflow-y-auto">
         {list.map((el) => (
@@ -409,7 +438,9 @@ function HtmlElementsResponse({ runtime }: { runtime: SourceRuntime }) {
           onClick={() => setShowAll(true)}
           className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-2"
         >
-          Show {runtime.detectedElements.length - max} more elements
+          {t("marketData.preview.elements.showMore", {
+            count: runtime.detectedElements.length - max,
+          })}
         </button>
       )}
     </div>
@@ -423,6 +454,7 @@ function formatNumber(n: number): string {
 }
 
 function CopyButton({ text, disabled }: { text: string; disabled?: boolean }) {
+  const { t } = useTranslation("settings");
   const [copied, setCopied] = useState(false);
   const handleCopy = async () => {
     if (disabled || !text) return;
@@ -439,7 +471,7 @@ function CopyButton({ text, disabled }: { text: string; disabled?: boolean }) {
       type="button"
       onClick={handleCopy}
       disabled={disabled}
-      title={copied ? "Copied!" : "Copy URL"}
+      title={copied ? t("marketData.preview.copiedTitle") : t("marketData.preview.copyUrlTitle")}
       className="text-muted-foreground hover:text-foreground hover:bg-muted/50 absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-40"
     >
       {copied ? (
@@ -460,6 +492,7 @@ function ExtractedRow({
   label: string;
   display: React.ReactNode;
 }) {
+  const { t } = useTranslation("settings");
   return (
     <div className="flex items-center gap-3 px-3 py-2">
       <span className={cn("h-2 w-2 shrink-0 rounded-sm", color)} />
@@ -467,7 +500,11 @@ function ExtractedRow({
         {label}
       </span>
       <span className="text-foreground min-w-0 flex-1 truncate text-sm font-semibold">
-        {display ?? <span className="text-muted-foreground/60 italic">— not returned</span>}
+        {display ?? (
+          <span className="text-muted-foreground/60 italic">
+            {t("marketData.preview.extracted.notReturned")}
+          </span>
+        )}
       </span>
       {display && <Icons.CheckCircle className="text-success h-3.5 w-3.5 shrink-0" />}
     </div>
@@ -510,6 +547,7 @@ function FieldMappingRow({
   armed: boolean;
   onArm: () => void;
 }) {
+  const { t } = useTranslation("settings");
   const assigned = !!value;
   return (
     <button
@@ -537,7 +575,7 @@ function FieldMappingRow({
           assigned ? "text-foreground" : "text-muted-foreground/70 italic",
         )}
       >
-        {assigned ? value : "unassigned — click to pick"}
+        {assigned ? value : t("marketData.preview.mapping.unassigned")}
       </span>
       {required ? (
         <span
@@ -546,11 +584,11 @@ function FieldMappingRow({
             assigned ? "text-muted-foreground" : "text-destructive",
           )}
         >
-          Required
+          {t("marketData.preview.mapping.required")}
         </span>
       ) : (
         <span className="text-muted-foreground shrink-0 text-[10px] font-medium uppercase tracking-wide">
-          Optional
+          {t("marketData.preview.mapping.optional")}
         </span>
       )}
     </button>
@@ -558,6 +596,7 @@ function FieldMappingRow({
 }
 
 export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps) {
+  const { t } = useTranslation("settings");
   const [moreFieldsOpen, setMoreFieldsOpen] = useState(false);
   const format = form.watch(`${prefix}.format`) ?? "json";
   const pricePath = form.watch(`${prefix}.pricePath`);
@@ -603,9 +642,9 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-0.5">
-          <h3 className="text-base font-semibold">Live request &amp; response</h3>
+          <h3 className="text-base font-semibold">{t("marketData.preview.header")}</h3>
           <p className="text-muted-foreground text-xs">
-            Every change reflects here instantly. Click any value below to map it.
+            {t("marketData.preview.headerHint")}
           </p>
         </div>
         <StatusPill
@@ -619,10 +658,12 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
       <section className="space-y-2">
         <div className="flex items-center justify-between">
           <Label className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-            Request URL (preview)
+            {t("marketData.preview.urlLabel")}
           </Label>
           <span className="text-muted-foreground text-[11px]">
-            GET · {isHistorical ? "historical" : "latest"}
+            {isHistorical
+              ? t("marketData.preview.modeHistorical")
+              : t("marketData.preview.modeLatest")}
           </span>
         </div>
         <div className="bg-background relative min-h-[40px] rounded-lg border px-3 py-2 pr-10">
@@ -634,15 +675,15 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
       {/* Test inputs */}
       <section className="space-y-2">
         <div className="flex flex-wrap items-end gap-2">
-          <TestField label="Test symbol" className="min-w-[140px] flex-1">
+          <TestField label={t("marketData.preview.fields.testSymbol")} className="min-w-[140px] flex-1">
             <Input
-              placeholder="e.g. AAPL"
+              placeholder={t("marketData.preview.fields.testSymbolPlaceholder")}
               value={inputs.symbol}
               onChange={(e) => setInputs({ symbol: e.target.value })}
             />
           </TestField>
           {extraPlaceholders.isin && (
-            <TestField label="ISIN" className="w-28">
+            <TestField label={t("marketData.preview.fields.isin")} className="w-28">
               <Input
                 placeholder="US0378331005"
                 value={inputs.isin}
@@ -651,7 +692,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
             </TestField>
           )}
           {extraPlaceholders.mic && (
-            <TestField label="MIC" className="w-24">
+            <TestField label={t("marketData.preview.fields.mic")} className="w-24">
               <Input
                 placeholder="XLON"
                 value={inputs.mic}
@@ -660,7 +701,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
             </TestField>
           )}
           {extraPlaceholders.currency && (
-            <TestField label="Currency" className="w-20">
+            <TestField label={t("marketData.preview.fields.currency")} className="w-20">
               <Input
                 placeholder="USD"
                 value={inputs.currency}
@@ -670,14 +711,14 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
           )}
           {isHistorical && (
             <>
-              <TestField label="From" className="w-36">
+              <TestField label={t("marketData.preview.fields.from")} className="w-36">
                 <Input
                   type="date"
                   value={inputs.from}
                   onChange={(e) => setInputs({ from: e.target.value })}
                 />
               </TestField>
-              <TestField label="To" className="w-36">
+              <TestField label={t("marketData.preview.fields.to")} className="w-36">
                 <Input
                   type="date"
                   value={inputs.to}
@@ -698,7 +739,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
             ) : (
               <Icons.PlayCircle className="mr-1.5 h-3.5 w-3.5" />
             )}
-            Fetch
+            {t("marketData.preview.fetch")}
           </Button>
         </div>
       </section>
@@ -707,12 +748,14 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
       <section className="space-y-2">
         <div className="flex items-center justify-between">
           <Label className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-            Response · {formatLabel}
+            {t("marketData.preview.responseLabel", { format: formatLabel })}
           </Label>
           {runtime.detectedTables[0] && (
             <span className="text-muted-foreground text-[11px]">
-              {runtime.detectedTables[0].rowCount} rows · {runtime.detectedTables[0].columns.length}{" "}
-              cols
+              {t("marketData.preview.responseStats", {
+                count: runtime.detectedTables[0].rowCount,
+                cols: runtime.detectedTables[0].columns.length,
+              })}
             </span>
           )}
         </div>
@@ -725,7 +768,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
                 <p className="text-destructive text-sm">{runtime.fetchError}</p>
                 {/403|forbidden|denied/i.test(runtime.fetchError) && (
                   <p className="text-muted-foreground mt-1 text-xs">
-                    This site may block automated requests. Try adding custom headers.
+                    {t("marketData.preview.errorHintForbidden")}
                   </p>
                 )}
               </div>
@@ -760,13 +803,13 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
       {runtime.testResult && (
         <section className="space-y-2">
           <Label className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-            Extracted
+            {t("marketData.preview.extracted.title")}
           </Label>
           {runtime.testResult.success ? (
             <div className="border-success/30 bg-success/5 divide-success/20 divide-y rounded-lg border">
               <ExtractedRow
                 color="bg-emerald-500"
-                label="Price"
+                label={t("marketData.preview.mapping.fields.price")}
                 display={
                   runtime.testResult.price != null ? (
                     <span className="tabular-nums">
@@ -783,7 +826,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
               {values.datePath && (
                 <ExtractedRow
                   color="bg-sky-500"
-                  label="As of"
+                  label={t("marketData.preview.mapping.fields.asOf")}
                   display={
                     runtime.testResult.date ? (
                       <span className="font-mono text-xs">{runtime.testResult.date}</span>
@@ -794,7 +837,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
               {values.openPath && (
                 <ExtractedRow
                   color="bg-yellow-500"
-                  label="Open"
+                  label={t("marketData.preview.mapping.fields.open")}
                   display={
                     runtime.testResult.open != null ? (
                       <span className="tabular-nums">
@@ -807,7 +850,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
               {values.highPath && (
                 <ExtractedRow
                   color="bg-orange-500"
-                  label="High"
+                  label={t("marketData.preview.mapping.fields.high")}
                   display={
                     runtime.testResult.high != null ? (
                       <span className="tabular-nums">
@@ -820,7 +863,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
               {values.lowPath && (
                 <ExtractedRow
                   color="bg-rose-500"
-                  label="Low"
+                  label={t("marketData.preview.mapping.fields.low")}
                   display={
                     runtime.testResult.low != null ? (
                       <span className="tabular-nums">
@@ -833,7 +876,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
               {values.volumePath && (
                 <ExtractedRow
                   color="bg-violet-500"
-                  label="Volume"
+                  label={t("marketData.preview.mapping.fields.volume")}
                   display={
                     runtime.testResult.volume != null ? (
                       <span className="tabular-nums">
@@ -846,7 +889,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
               {values.currencyPath && (
                 <ExtractedRow
                   color="bg-amber-500"
-                  label="Currency"
+                  label={t("marketData.preview.mapping.fields.currency")}
                   display={
                     runtime.testResult.currency ? (
                       <span className="font-mono text-xs">{runtime.testResult.currency}</span>
@@ -859,7 +902,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
             <div className="border-destructive/30 bg-destructive/5 flex items-start gap-3 rounded-lg border p-3">
               <Icons.XCircle className="text-destructive mt-0.5 h-4 w-4 shrink-0" />
               <p className="text-muted-foreground min-w-0 flex-1 text-xs">
-                {runtime.testResult.error ?? "Could not extract a value with the current mapping."}
+                {runtime.testResult.error ?? t("marketData.preview.extracted.extractFailed")}
               </p>
             </div>
           )}
@@ -870,10 +913,12 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
       <section className="space-y-2">
         <div className="flex items-center justify-between">
           <Label className="text-muted-foreground text-[11px] font-medium uppercase tracking-wide">
-            Field mapping ({isHistorical ? "historical" : "latest"})
+            {isHistorical
+              ? t("marketData.preview.mapping.titleHistorical")
+              : t("marketData.preview.mapping.titleLatest")}
           </Label>
           <span className="text-muted-foreground text-[11px]">
-            click a row to arm it, then click a value in the response
+            {t("marketData.preview.mapping.hint")}
           </span>
         </div>
 
@@ -882,7 +927,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
             <FieldMappingRow
               key={m.field}
               field={m.field}
-              label={m.label}
+              label={t(m.labelKey)}
               color={m.color}
               required={m.required}
               value={values[m.field]}
@@ -901,7 +946,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
               <Icons.ChevronRight
                 className={cn("h-3 w-3 transition-transform", moreFieldsOpen && "rotate-90")}
               />
-              More mapping fields
+              {t("marketData.preview.mapping.moreFields")}
             </button>
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-2 space-y-1.5">
@@ -921,7 +966,7 @@ export function LivePreviewPane({ form, prefix, runtime }: LivePreviewPaneProps)
                 <FieldMappingRow
                   key={m.field}
                   field={m.field}
-                  label={m.label}
+                  label={t(m.labelKey)}
                   color={m.color}
                   required={m.required}
                   value={values[m.field]}

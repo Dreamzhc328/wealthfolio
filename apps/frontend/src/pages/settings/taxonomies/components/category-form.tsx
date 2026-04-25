@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
@@ -62,6 +63,7 @@ export function CategoryForm({
   onCreate,
   onDelete,
 }: CategoryFormProps) {
+  const { t } = useTranslation("settings");
   const isCreateMode = !category;
   const createMutation = useCreateCategory();
   const updateMutation = useUpdateCategory();
@@ -107,7 +109,7 @@ export function CategoryForm({
           description: values.description ?? null,
           sortOrder: 0,
         });
-        toast.success("Category created successfully");
+        toast.success(t("taxonomies.categoryForm.createSuccess"));
         onCreate?.();
       } else if (category) {
         await updateMutation.mutateAsync({
@@ -117,10 +119,14 @@ export function CategoryForm({
           color: values.color,
           description: values.description ?? null,
         });
-        toast.success("Category updated successfully");
+        toast.success(t("taxonomies.categoryForm.updateSuccess"));
       }
     } catch {
-      toast.error(isCreateMode ? "Failed to create category" : "Failed to update category");
+      toast.error(
+        isCreateMode
+          ? t("taxonomies.categoryForm.createFail")
+          : t("taxonomies.categoryForm.updateFail"),
+      );
     }
   };
 
@@ -131,10 +137,10 @@ export function CategoryForm({
         taxonomyId,
         categoryId: category.id,
       });
-      toast.success("Category deleted successfully");
+      toast.success(t("taxonomies.categoryForm.deleteSuccess"));
       onDelete?.();
     } catch {
-      toast.error("Failed to delete category");
+      toast.error(t("taxonomies.categoryForm.deleteFail"));
     }
   };
 
@@ -150,7 +156,7 @@ export function CategoryForm({
             style={{ backgroundColor: currentColor }}
           />
           <h3 className="text-lg font-semibold">
-            {isCreateMode ? "New Category" : category?.name}
+            {isCreateMode ? t("taxonomies.categoryForm.newCategory") : category?.name}
           </h3>
         </div>
         <Button variant="ghost" size="icon" onClick={onClose}>
@@ -165,9 +171,9 @@ export function CategoryForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>{t("taxonomies.categoryForm.name")}</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Category name" />
+                  <Input {...field} placeholder={t("taxonomies.categoryForm.namePlaceholder")} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -179,7 +185,7 @@ export function CategoryForm({
             name="color"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Color</FormLabel>
+                <FormLabel>{t("taxonomies.categoryForm.color")}</FormLabel>
                 <FormControl>
                   <div className="flex items-center gap-2">
                     <input
@@ -201,12 +207,12 @@ export function CategoryForm({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>{t("taxonomies.categoryForm.description")}</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
                     value={field.value ?? ""}
-                    placeholder="Optional description for this category"
+                    placeholder={t("taxonomies.categoryForm.descriptionPlaceholder")}
                     rows={3}
                   />
                 </FormControl>
@@ -224,12 +230,14 @@ export function CategoryForm({
                 {isPending ? (
                   <>
                     <Icons.Loader className="mr-2 h-4 w-4 animate-spin" />
-                    {isCreateMode ? "Creating..." : "Saving..."}
+                    {isCreateMode
+                      ? t("taxonomies.categoryForm.creating")
+                      : t("taxonomies.categoryForm.saving")}
                   </>
                 ) : isCreateMode ? (
-                  "Create Category"
+                  t("taxonomies.categoryForm.createCategory")
                 ) : (
-                  "Save Changes"
+                  t("taxonomies.categoryForm.saveChanges")
                 )}
               </Button>
               {!isCreateMode && (
@@ -239,7 +247,7 @@ export function CategoryForm({
                   onClick={() => form.reset()}
                   disabled={!form.formState.isDirty}
                 >
-                  Reset
+                  {t("taxonomies.categoryForm.reset")}
                 </Button>
               )}
             </div>
@@ -264,19 +272,20 @@ export function CategoryForm({
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Category</AlertDialogTitle>
+                    <AlertDialogTitle>{t("taxonomies.categoryForm.deleteTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete &quot;{category?.name}&quot;? This will remove
-                      all asset assignments to this category. This action cannot be undone.
+                      {t("taxonomies.categoryForm.deleteDescription", {
+                        name: category?.name ?? "",
+                      })}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDelete}
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
-                      Delete
+                      {t("common.delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>

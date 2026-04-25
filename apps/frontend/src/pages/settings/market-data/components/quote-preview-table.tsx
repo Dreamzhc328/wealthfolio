@@ -1,4 +1,5 @@
 import type { ImportValidationStatus, QuoteImport } from "@/lib/types/quote-import";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@wealthfolio/ui/components/ui/badge";
 import {
   Card,
@@ -23,17 +24,20 @@ import {
   TooltipTrigger,
 } from "@wealthfolio/ui/components/ui/tooltip";
 
-function formatValidationStatus(status: ImportValidationStatus): string {
-  switch (status) {
-    case "valid":
-      return "Valid";
-    case "warning":
-      return "Warning";
-    case "error":
-      return "Error";
-    default:
-      return status;
-  }
+function useFormatValidationStatus() {
+  const { t } = useTranslation("settings");
+  return (status: ImportValidationStatus): string => {
+    switch (status) {
+      case "valid":
+        return t("marketData.quoteImport.status.valid");
+      case "warning":
+        return t("marketData.quoteImport.status.warning");
+      case "error":
+        return t("marketData.quoteImport.status.error");
+      default:
+        return status;
+    }
+  };
 }
 
 function getStatusVariant(status: ImportValidationStatus): "success" | "destructive" | "warning" {
@@ -55,6 +59,8 @@ interface QuotePreviewTableProps {
 }
 
 export function QuotePreviewTable({ quotes, maxRows = 10 }: QuotePreviewTableProps) {
+  const { t } = useTranslation("settings");
+  const formatValidationStatus = useFormatValidationStatus();
   const displayQuotes = quotes.slice(0, maxRows);
 
   return (
@@ -62,24 +68,26 @@ export function QuotePreviewTable({ quotes, maxRows = 10 }: QuotePreviewTablePro
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Icons.FileText className="h-5 w-5" />
-          Preview Data ({quotes.length} rows)
+          {t("marketData.quoteImport.previewTitle", { count: quotes.length })}
         </CardTitle>
-        <CardDescription>Review the first {maxRows} rows of your CSV data</CardDescription>
+        <CardDescription>
+          {t("marketData.quoteImport.previewDescription", { count: maxRows })}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Symbol</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Open</TableHead>
-                <TableHead>High</TableHead>
-                <TableHead>Low</TableHead>
-                <TableHead>Close</TableHead>
-                <TableHead>Volume</TableHead>
-                <TableHead>Currency</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>{t("marketData.quoteImport.columns.symbol")}</TableHead>
+                <TableHead>{t("marketData.quoteImport.columns.date")}</TableHead>
+                <TableHead>{t("marketData.quoteImport.columns.open")}</TableHead>
+                <TableHead>{t("marketData.quoteImport.columns.high")}</TableHead>
+                <TableHead>{t("marketData.quoteImport.columns.low")}</TableHead>
+                <TableHead>{t("marketData.quoteImport.columns.close")}</TableHead>
+                <TableHead>{t("marketData.quoteImport.columns.volume")}</TableHead>
+                <TableHead>{t("marketData.quoteImport.columns.currency")}</TableHead>
+                <TableHead>{t("marketData.quoteImport.columns.status")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -142,7 +150,10 @@ export function QuotePreviewTable({ quotes, maxRows = 10 }: QuotePreviewTablePro
         </div>
         {quotes.length > maxRows && (
           <p className="text-muted-foreground mt-2 text-sm">
-            Showing first {maxRows} of {quotes.length} rows
+            {t("marketData.quoteImport.showingFirst", {
+              shown: maxRows,
+              total: quotes.length,
+            })}
           </p>
         )}
       </CardContent>
