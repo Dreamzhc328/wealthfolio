@@ -51,14 +51,14 @@ export function AccountBreakdown({
     return (
       <Card className="flex h-full flex-col">
         <CardHeader>
-          <CardTitle className="text-xl">Account Breakdown</CardTitle>
+          <CardTitle className="text-xl">账户费用拆解</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-1 items-center justify-center">
           <EmptyPlaceholder
             className="mx-auto flex h-[300px] max-w-[420px] items-center justify-center"
             icon={<Icons.CreditCard className="h-10 w-10" />}
-            title="No fee data available"
-            description="There are no recorded fees for the selected period. Try selecting a different time range or check back later."
+            title="暂无费用数据"
+            description="所选时间范围内没有费用记录。请尝试选择其他时间范围或稍后查看。"
           />
         </CardContent>
       </Card>
@@ -70,7 +70,7 @@ export function AccountBreakdown({
   return (
     <Card className="flex h-full flex-col">
       <CardHeader>
-        <CardTitle className="text-xl">Account Breakdown</CardTitle>
+        <CardTitle className="text-xl">账户分布</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col">
         <div className="space-y-6">
@@ -94,7 +94,7 @@ export function AccountBreakdown({
                 ...(otherTotal > 0
                   ? [
                       {
-                        name: `${otherAccounts.length} other accounts`,
+                        name: `其他 ${otherAccounts.length} 个账户`,
                         fees: otherTotal,
                         isOther: true,
                       },
@@ -135,7 +135,7 @@ export function AccountBreakdown({
                           />
                         </div>
                         <div className="text-muted-foreground text-xs">
-                          {percentage.toFixed(1)}% of total fees
+                          占总费用 {percentage.toFixed(1)}%
                         </div>
                         {/* Tooltip arrow */}
                         <div className="border-t-border absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 transform border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent"></div>
@@ -160,15 +160,15 @@ export function AccountBreakdown({
                     <div className="flex flex-col">
                       <span className="text-sm font-medium">{account.accountName}</span>
                       <div className="text-muted-foreground flex items-center space-x-2 text-xs">
-                        <span>{account.transactionCount} transactions</span>
+                        <span>{account.transactionCount} 笔交易</span>
                         <span>•</span>
                         <span>
+                          均费{" "}
                           <AmountDisplay
                             value={account.averageFeePerTransaction}
                             currency={currency}
                             isHidden={isBalanceHidden}
-                          />{" "}
-                          avg
+                          />
                         </span>
                       </div>
                     </div>

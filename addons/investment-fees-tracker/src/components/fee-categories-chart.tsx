@@ -84,7 +84,7 @@ export const FeeCategoriesChart = ({
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-muted-foreground text-sm font-medium uppercase tracking-wider">
-            Fee Categories
+            费用类别
           </CardTitle>
         </div>
       </CardHeader>
@@ -101,7 +101,7 @@ export const FeeCategoriesChart = ({
           />
         ) : (
           <EmptyPlaceholder
-            description="There is no fee category data available."
+            description="暂无费用类别数据。"
             className="max-h-[160px]"
           />
         )}

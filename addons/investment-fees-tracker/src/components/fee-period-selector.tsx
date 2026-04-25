@@ -1,15 +1,15 @@
 import { AnimatedToggleGroup } from "@wealthfolio/ui";
 
 const periods = [
-  { value: "YTD" as const, label: "Year to Date" },
-  { value: "LAST_YEAR" as const, label: "Last Year" },
-  { value: "TOTAL" as const, label: "All Time" },
+  { value: "YTD" as const, label: "今年至今" },
+  { value: "LAST_YEAR" as const, label: "去年" },
+  { value: "TOTAL" as const, label: "全部" },
 ];
 
 const mobilePeriods = [
-  { value: "YTD" as const, label: "YTD" },
-  { value: "LAST_YEAR" as const, label: "Last Yr" },
-  { value: "TOTAL" as const, label: "All" },
+  { value: "YTD" as const, label: "今年" },
+  { value: "LAST_YEAR" as const, label: "去年" },
+  { value: "TOTAL" as const, label: "全部" },
 ];
 
 interface FeePeriodSelectorProps {

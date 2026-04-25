@@ -59,10 +59,10 @@ export function FeeHistoryChart({
 
   const periodDescription =
     selectedPeriod === "TOTAL"
-      ? "All Time"
+      ? "全部"
       : selectedPeriod === "YTD"
-        ? "Year to Date"
-        : "Last Year";
+        ? "今年至今"
+        : "去年";
 
   const isCondensedXAxis = chartData.length > 6;
   const xAxisInterval = isCondensedXAxis ? Math.ceil(chartData.length / 6) - 1 : 0;
@@ -71,7 +71,7 @@ export function FeeHistoryChart({
   return (
     <Card className="flex h-full flex-col overflow-hidden">
       <CardHeader>
-        <CardTitle className="text-xl">Fee History</CardTitle>
+        <CardTitle className="text-xl">费用历史</CardTitle>
         <CardDescription>{periodDescription}</CardDescription>
       </CardHeader>
       <CardContent className="flex h-full flex-col px-4 pb-6 pt-0 sm:px-6">
@@ -79,23 +79,23 @@ export function FeeHistoryChart({
           <EmptyPlaceholder
             className="mx-auto flex h-[300px] max-w-[420px] items-center justify-center"
             icon={<Icons.ChartBar className="size-10" />}
-            title="No fee history available"
-            description="There is no fee history for the selected period. Try selecting a different time range or check back later."
+            title="暂无费用历史"
+            description="所选时间范围内没有费用历史记录。请尝试选择其他时间范围或稍后查看。"
           />
         ) : (
           <ChartContainer
             className="min-h-[280px] w-full max-w-full flex-1 sm:min-h-[320px] lg:min-h-[360px] xl:min-h-[420px]"
             config={{
               currentFees: {
-                label: "Monthly Fees",
+                label: "月度费用",
                 color: "var(--destructive)",
               },
               cumulative: {
-                label: "Cumulative Fees",
+                label: "累计费用",
                 color: "var(--chart-5)",
               },
               previousCumulative: {
-                label: "Previous Period Cumulative",
+                label: "上一周期累计",
                 color: "var(--chart-3)",
               },
             }}
@@ -138,11 +138,11 @@ export function FeeHistoryChart({
                           <div className="flex flex-1 items-center justify-between">
                             <span className="text-muted-foreground">
                               {name === "currentFees"
-                                ? "Monthly Fees"
+                                ? "月度费用"
                                 : name === "previousCumulative"
-                                  ? "Previous Period Cumulative"
+                                  ? "上一周期累计"
                                   : name === "cumulative"
-                                    ? "Cumulative Fees"
+                                    ? "累计费用"
                                     : name}
                             </span>
                             <span className="text-foreground ml-2 font-mono font-medium tabular-nums">

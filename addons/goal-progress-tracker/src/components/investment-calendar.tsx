@@ -94,10 +94,10 @@ function Tooltip({
   if (!isVisible || !data) return null;
 
   const statusText = data.filled
-    ? "Completed"
+    ? "已完成"
     : data.isPartial
-      ? `${data.partialPercent.toFixed(1)}% Progress`
-      : "Not Started";
+      ? `进度 ${data.partialPercent.toFixed(1)}%`
+      : "未开始";
 
   const statusColor = data.filled
     ? "text-green-600"
@@ -116,18 +116,18 @@ function Tooltip({
       <div className="bg-popover border-border w-64 rounded-md border p-3 text-sm shadow-md">
         <div className="space-y-3">
           <div className="space-y-1">
-            <h4 className="font-medium leading-none">Step {data.stepIndex + 1}</h4>
+            <h4 className="font-medium leading-none">第 {data.stepIndex + 1} 步</h4>
             <p className="text-muted-foreground">
-              Target: {formatCurrency(data.stepAmount, isBalanceHidden)}
+              目标：{formatCurrency(data.stepAmount, isBalanceHidden)}
             </p>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Status:</span>
+              <span className="text-muted-foreground">状态：</span>
               <span className={`font-medium ${statusColor}`}>{statusText}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Step Size:</span>
+              <span className="text-muted-foreground">步进金额：</span>
               <span className="text-xs font-medium">
                 {formatCurrency(data.stepSize, isBalanceHidden)}
               </span>
@@ -249,14 +249,14 @@ function InvestmentCalendar({
               {/* Key Metrics Row */}
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 <div className="text-center">
-                  <h4 className="text-muted-foreground mb-1 text-xs font-light">Current Amount</h4>
+                  <h4 className="text-muted-foreground mb-1 text-xs font-light">当前金额</h4>
                   <p className="text-foreground text-xs">
                     {formatCurrency(currentAmount, isBalanceHidden)}
                   </p>
                 </div>
 
                 <div className="text-center">
-                  <h4 className="text-muted-foreground mb-1 text-xs font-light">Target Amount</h4>
+                  <h4 className="text-muted-foreground mb-1 text-xs font-light">目标金额</h4>
                   {selectedGoal ? (
                     <p className="text-foreground text-xs">
                       {formatCurrency(targetAmount, isBalanceHidden)}
@@ -273,14 +273,14 @@ function InvestmentCalendar({
                 </div>
 
                 <div className="text-center">
-                  <h4 className="text-muted-foreground mb-1 text-xs font-light">Progress</h4>
+                  <h4 className="text-muted-foreground mb-1 text-xs font-light">进度</h4>
                   <p className="text-xs">
-                    {completedSteps}/{totalSteps} steps ({progressPercent.toFixed(1)}%)
+                    {completedSteps}/{totalSteps} 步 ({progressPercent.toFixed(1)}%)
                   </p>
                 </div>
 
                 <div className="text-center">
-                  <h4 className="text-muted-foreground mb-0 text-xs font-light">Step Size</h4>
+                  <h4 className="text-muted-foreground mb-0 text-xs font-light">步进金额</h4>
                   <EditableValue
                     value={stepSize}
                     onChange={onStepSizeChange}

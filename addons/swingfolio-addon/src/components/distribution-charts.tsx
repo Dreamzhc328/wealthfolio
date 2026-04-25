@@ -69,11 +69,11 @@ export function DistributionCharts({ distribution, currency }: DistributionChart
 
   const chartConfig = {
     pl: {
-      label: "P/L",
+      label: "盈亏",
       color: "var(--chart-1)",
     },
     count: {
-      label: "Trades",
+      label: "交易笔数",
       color: "var(--chart-2)",
     },
   };
@@ -89,7 +89,7 @@ export function DistributionCharts({ distribution, currency }: DistributionChart
       {/* P/L by Symbol */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm sm:text-lg">P/L by Symbol</CardTitle>
+          <CardTitle className="text-sm sm:text-lg">分品种盈亏</CardTitle>
         </CardHeader>
         <CardContent>
           {hasSymbolData ? (
@@ -125,7 +125,7 @@ export function DistributionCharts({ distribution, currency }: DistributionChart
                             />
                             <div className="flex flex-1 items-center justify-between gap-2">
                               <span className="text-muted-foreground">
-                                {name === "pl" ? "P/L" : name}
+                                {name === "pl" ? "盈亏" : name}
                               </span>
                               <span className="text-foreground font-mono font-medium tabular-nums">
                                 {formattedValue}
@@ -135,7 +135,7 @@ export function DistributionCharts({ distribution, currency }: DistributionChart
                         );
                       }}
                       labelFormatter={(label) =>
-                        typeof label === "string" ? `Symbol: ${label}` : ""
+                        typeof label === "string" ? `代码：${label}` : ""
                       }
                     />
                   }
@@ -156,8 +156,8 @@ export function DistributionCharts({ distribution, currency }: DistributionChart
               <EmptyPlaceholder
                 className="mx-auto flex max-w-[420px] items-center justify-center"
                 icon={<Icons.BarChart className="h-8 w-8" />}
-                title="No Symbol Data"
-                description="No completed trades in this period."
+                title="暂无品种数据"
+                description="此周期内没有已完成的交易。"
               />
             </div>
           )}
@@ -167,7 +167,7 @@ export function DistributionCharts({ distribution, currency }: DistributionChart
       {/* P/L by Holding Period */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm sm:text-lg">P/L by Holding Period</CardTitle>
+          <CardTitle className="text-sm sm:text-lg">分持仓周期盈亏</CardTitle>
         </CardHeader>
         <CardContent>
           {hasHoldingPeriodData ? (
@@ -206,7 +206,7 @@ export function DistributionCharts({ distribution, currency }: DistributionChart
                             />
                             <div className="flex flex-1 items-center justify-between gap-2">
                               <span className="text-muted-foreground">
-                                {name === "pl" ? "P/L" : name}
+                                {name === "pl" ? "盈亏" : name}
                               </span>
                               <span className="text-foreground font-mono font-medium tabular-nums">
                                 {formattedValue}
@@ -216,7 +216,7 @@ export function DistributionCharts({ distribution, currency }: DistributionChart
                         );
                       }}
                       labelFormatter={(label) =>
-                        typeof label === "string" ? `Period: ${label}` : ""
+                        typeof label === "string" ? `周期：${label}` : ""
                       }
                     />
                   }
@@ -237,8 +237,8 @@ export function DistributionCharts({ distribution, currency }: DistributionChart
               <EmptyPlaceholder
                 className="mx-auto flex max-w-[420px] items-center justify-center"
                 icon={<Icons.Clock className="h-8 w-8" />}
-                title="No Holding Period Data"
-                description="No completed trades in this period."
+                title="暂无持仓周期数据"
+                description="此周期内没有已完成的交易。"
               />
             </div>
           )}

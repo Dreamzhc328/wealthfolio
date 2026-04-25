@@ -42,12 +42,12 @@ export default function SettingsPage({ ctx }: SettingsPageProps) {
     updatePreferences({ includeDividends: checked });
   };
 
-  const pageDescription = "Configure your swing trading analysis preferences";
+  const pageDescription = "配置您的短线交易分析偏好";
 
   return (
     <Page>
       <PageHeader
-        heading="Swingfolio Settings"
+        heading="Swingfolio 设置"
         text={pageDescription}
         actions={
           <Button
@@ -55,7 +55,7 @@ export default function SettingsPage({ ctx }: SettingsPageProps) {
             onClick={() => ctx.api.navigation.navigate("/addons/swingfolio")}
           >
             <Icons.ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dashboard
+            返回仪表盘
           </Button>
         }
       />
@@ -63,28 +63,28 @@ export default function SettingsPage({ ctx }: SettingsPageProps) {
       <PageContent className="max-w-2xl">
         <Card>
           <CardHeader>
-            <CardTitle>Trade Matching</CardTitle>
+            <CardTitle>交易匹配</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="lot-method">Lot Matching Method</Label>
+              <Label htmlFor="lot-method">批次匹配方法</Label>
               <Select value={preferences.lotMatchingMethod} onValueChange={handleLotMethodChange}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="FIFO">FIFO (First In, First Out)</SelectItem>
-                  <SelectItem value="LIFO">LIFO (Last In, First Out)</SelectItem>
-                  <SelectItem value="AVERAGE">Average Cost</SelectItem>
+                  <SelectItem value="FIFO">FIFO（先进先出）</SelectItem>
+                  <SelectItem value="LIFO">LIFO（后进先出）</SelectItem>
+                  <SelectItem value="AVERAGE">移动平均成本</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-muted-foreground mt-1 text-xs">
-                Method used to match buy and sell orders for P/L calculation:
+                用于匹配买入与卖出订单以计算盈亏的方法：
                 <br />
-                • FIFO: Matches oldest purchases first
+                • FIFO：优先匹配最早买入的批次
                 <br />
-                • LIFO: Matches newest purchases first
-                <br />• Average Cost: Uses weighted average price of all purchases
+                • LIFO：优先匹配最近买入的批次
+                <br />• 移动平均成本：使用所有买入的加权平均价
               </p>
             </div>
           </CardContent>
@@ -92,11 +92,11 @@ export default function SettingsPage({ ctx }: SettingsPageProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Display Settings</CardTitle>
+            <CardTitle>显示设置</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="default-range">Default Date Range</Label>
+              <Label htmlFor="default-range">默认时间范围</Label>
               <Select
                 value={preferences.defaultDateRange}
                 onValueChange={handleDefaultDateRangeChange}
@@ -105,16 +105,16 @@ export default function SettingsPage({ ctx }: SettingsPageProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1M">1 Month</SelectItem>
-                  <SelectItem value="3M">3 Months</SelectItem>
-                  <SelectItem value="6M">6 Months</SelectItem>
-                  <SelectItem value="YTD">Year to Date</SelectItem>
-                  <SelectItem value="1Y">1 Year</SelectItem>
-                  <SelectItem value="ALL">All Time</SelectItem>
+                  <SelectItem value="1M">1 个月</SelectItem>
+                  <SelectItem value="3M">3 个月</SelectItem>
+                  <SelectItem value="6M">6 个月</SelectItem>
+                  <SelectItem value="YTD">今年至今</SelectItem>
+                  <SelectItem value="1Y">1 年</SelectItem>
+                  <SelectItem value="ALL">全部</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-muted-foreground mt-1 text-xs">
-                Default time period when opening the dashboard
+                打开仪表盘时默认显示的时间范围
               </p>
             </div>
           </CardContent>
@@ -122,7 +122,7 @@ export default function SettingsPage({ ctx }: SettingsPageProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Calculation Settings</CardTitle>
+            <CardTitle>计算设置</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -131,10 +131,10 @@ export default function SettingsPage({ ctx }: SettingsPageProps) {
                 checked={preferences.includeFees}
                 onCheckedChange={handleIncludeFeesChange}
               />
-              <Label htmlFor="include-fees">Include fees in P/L calculations</Label>
+              <Label htmlFor="include-fees">将费用计入盈亏</Label>
             </div>
             <p className="text-muted-foreground text-xs">
-              When enabled, trading fees will be subtracted from realized P/L
+              启用后，交易费用将从已实现盈亏中扣除
             </p>
 
             <div className="flex items-center space-x-2">
@@ -143,10 +143,10 @@ export default function SettingsPage({ ctx }: SettingsPageProps) {
                 checked={preferences.includeDividends}
                 onCheckedChange={handleIncludeDividendsChange}
               />
-              <Label htmlFor="include-dividends">Include dividends in performance</Label>
+              <Label htmlFor="include-dividends">将分红计入业绩</Label>
             </div>
             <p className="text-muted-foreground text-xs">
-              When enabled, dividend payments will be included in total returns
+              启用后，分红将计入总收益
             </p>
           </CardContent>
         </Card>
@@ -154,7 +154,7 @@ export default function SettingsPage({ ctx }: SettingsPageProps) {
         {isUpdating && (
           <div className="text-muted-foreground flex items-center gap-2 text-sm">
             <Icons.Spinner className="h-4 w-4 animate-spin" />
-            Saving settings...
+            正在保存设置...
           </div>
         )}
       </PageContent>

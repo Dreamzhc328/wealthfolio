@@ -31,10 +31,10 @@ export function FeeOverviewCards({
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
             {feeSummary.period === "TOTAL"
-              ? "All Time Fees"
+              ? "累计费用"
               : feeSummary.period === "LAST_YEAR"
-                ? "Last Year Fees"
-                : "This Year Fees"}
+                ? "去年费用"
+                : "今年费用"}
           </CardTitle>
           <Icons.CreditCard className="text-muted-foreground h-4 w-4" />
         </CardHeader>
@@ -49,10 +49,10 @@ export function FeeOverviewCards({
                 {yoyGrowth !== null ? (
                   <div className="flex items-center">
                     <GainPercent value={yoyGrowth} className="text-left text-xs" animated={true} />
-                    <span className="ml-2">Year-over-year change</span>
+                    <span className="ml-2">同比变化</span>
                   </div>
                 ) : (
-                  <span>Cumulative fees since inception</span>
+                  <span>自开户以来累计费用</span>
                 )}
               </div>
             </div>
@@ -67,11 +67,11 @@ export function FeeOverviewCards({
                     isHidden={isBalanceHidden}
                   />
                 </div>
-                <div className="text-muted-foreground text-xs">Avg/Transaction</div>
+                <div className="text-muted-foreground text-xs">每笔均费</div>
               </div>
               <div>
                 <div className="text-sm font-medium">{feeAsPercentageOfPortfolio.toFixed(2)}%</div>
-                <div className="text-muted-foreground text-xs">vs Portfolio</div>
+                <div className="text-muted-foreground text-xs">占组合比</div>
               </div>
             </div>
           </div>
@@ -81,7 +81,7 @@ export function FeeOverviewCards({
       {/* Fee Analytics Card 2 - Impact & Projections */}
       <Card className="border-warning/10 bg-warning/10">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Fee Impact Analysis</CardTitle>
+          <CardTitle className="text-sm font-medium">费用影响分析</CardTitle>
           <Icons.ArrowDown className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
@@ -98,10 +98,10 @@ export function FeeOverviewCards({
               <div className="text-muted-foreground text-xs">
                 {yoyGrowth !== null ? (
                   <div className="flex items-center">
-                    <span>Estimated Annual Fees</span>
+                    <span>预计年度费用</span>
                   </div>
                 ) : (
-                  <span>Projected annual impact</span>
+                  <span>预计全年影响</span>
                 )}
               </div>
             </div>
@@ -116,7 +116,7 @@ export function FeeOverviewCards({
                     isHidden={isBalanceHidden}
                   />
                 </div>
-                <div className="text-muted-foreground text-xs">Return Impact</div>
+                <div className="text-muted-foreground text-xs">收益影响</div>
               </div>
               <div>
                 <div className="text-sm font-medium">
@@ -126,7 +126,7 @@ export function FeeOverviewCards({
                     isHidden={isBalanceHidden}
                   />
                 </div>
-                <div className="text-muted-foreground text-xs">Monthly Avg</div>
+                <div className="text-muted-foreground text-xs">月均</div>
               </div>
             </div>
           </div>
