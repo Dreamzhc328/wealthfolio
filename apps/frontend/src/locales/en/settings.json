@@ -74,6 +74,14 @@
       "title": "Timezone",
       "description": "Choose the timezone used for dates, daily buckets, and yearly contribution boundaries.",
       "save": "Save Timezone"
+    },
+    "language": {
+      "title": "Language",
+      "description": "Choose the interface language. Changes apply immediately.",
+      "options": {
+        "en": "English",
+        "zhCN": "简体中文"
+      }
     }
   },
   "appearance": {
