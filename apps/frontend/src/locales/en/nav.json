@@ -1,0 +1,29 @@
+{
+  "primary": {
+    "dashboard": {
+      "title": "Dashboard",
+      "label": "View Dashboard"
+    },
+    "insights": {
+      "title": "Insights",
+      "label": "View Insights"
+    },
+    "holdings": {
+      "title": "Holdings",
+      "label": "View Holdings"
+    },
+    "activities": {
+      "title": "Activities",
+      "label": "View Activities"
+    },
+    "assistant": {
+      "title": "Assistant",
+      "label": "AI Assistant"
+    }
+  },
+  "secondary": {
+    "settings": {
+      "title": "Settings"
+    }
+  }
+}

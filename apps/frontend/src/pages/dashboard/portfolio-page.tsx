@@ -8,6 +8,7 @@ import { Button, Icons } from "@wealthfolio/ui";
 import { Card, CardContent, CardHeader } from "@wealthfolio/ui/components/ui/card";
 import { Skeleton } from "@wealthfolio/ui/components/ui/skeleton";
 import { Suspense, useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NetWorthContent } from "../net-worth/net-worth-content";
 import { DashboardActions } from "./dashboard-actions";
 import { DashboardContent } from "./dashboard-content";
@@ -34,6 +35,7 @@ const PageLoader = () => (
 
 export default function PortfolioPage() {
   const { isFocusMode, toggleFocusMode } = useNavigationMode();
+  const { t } = useTranslation("dashboard");
 
   // Alternative asset quick-add modal state
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
@@ -98,7 +100,7 @@ export default function PortfolioPage() {
     () => [
       {
         value: "investments",
-        label: "Investments",
+        label: t("views.investments"),
         icon: Icons.TrendingUp,
         content: (
           <Suspense fallback={<PageLoader />}>
@@ -109,7 +111,7 @@ export default function PortfolioPage() {
       },
       {
         value: "net-worth",
-        label: "Net Worth",
+        label: t("views.netWorth"),
         icon: Icons.Wallet,
         content: (
           <Suspense fallback={<PageLoader />}>
@@ -119,7 +121,7 @@ export default function PortfolioPage() {
         actions: netWorthActions,
       },
     ],
-    [investmentActions, netWorthActions, handleAddAsset, handleAddLiability],
+    [investmentActions, netWorthActions, handleAddAsset, handleAddLiability, t],
   );
 
   return (

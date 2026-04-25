@@ -13,6 +13,7 @@ import {
 import type { ActivityDetails } from "@/lib/types";
 import { restrictionAllowsType } from "@/lib/activity-restrictions";
 import { useState, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { ActivityTypePicker } from "./activity-type-picker";
 import { ActivityFormRenderer } from "./activity-form-renderer";
 import type { AccountSelectOption } from "./forms/fields";
@@ -31,6 +32,8 @@ interface ActivityFormProps {
 }
 
 export function ActivityForm({ accounts, activity, open, onClose }: ActivityFormProps) {
+  const { t } = useTranslation("assets");
+  const { t: tCommon } = useTranslation("common");
   // Derive the editing state and initial type from activity prop
   const isEditing = !!activity?.id;
   const initialType = mapActivityTypeToPicker(activity?.activityType);
@@ -73,16 +76,14 @@ export function ActivityForm({ accounts, activity, open, onClose }: ActivityForm
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent className="flex w-full flex-col overflow-hidden sm:max-w-[625px]">
         <SheetHeader>
-          <SheetTitle>{isEditing ? "Update Activity" : "Add Activity"}</SheetTitle>
+          <SheetTitle>{isEditing ? t("form.updateActivity") : t("form.addActivity")}</SheetTitle>
           <SheetDescription>
-            {isEditing
-              ? "Update the details of your transaction"
-              : "Record a new transaction in your account."}{" "}
+            {isEditing ? t("form.updateDescription") : t("form.addDescription")}{" "}
             <ExternalLink
               href="https://wealthfolio.app/docs/concepts/activity-types"
               className="underline"
             >
-              Learn more
+              {tCommon("buttons.learnMore")}
             </ExternalLink>
           </SheetDescription>
         </SheetHeader>
@@ -96,7 +97,7 @@ export function ActivityForm({ accounts, activity, open, onClose }: ActivityForm
           {/* When editing, show the activity type as a badge */}
           {isEditing && effectiveSelectedType && (
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">Activity Type:</span>
+              <span className="text-muted-foreground">{t("form.activityType")}</span>
               <span className="bg-primary/10 text-primary rounded-md px-2 py-1 font-medium">
                 {effectiveSelectedType}
               </span>
@@ -118,7 +119,7 @@ export function ActivityForm({ accounts, activity, open, onClose }: ActivityForm
           {isError && (
             <Alert variant="destructive">
               <Icons.AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{tCommon("states.error")}</AlertTitle>
               <AlertDescription>{String(error)}</AlertDescription>
             </Alert>
           )}
@@ -128,7 +129,7 @@ export function ActivityForm({ accounts, activity, open, onClose }: ActivityForm
         {!effectiveSelectedType && (
           <SheetFooter>
             <Button variant="outline" onClick={onClose}>
-              Cancel
+              {tCommon("buttons.cancel")}
             </Button>
           </SheetFooter>
         )}

@@ -1,6 +1,7 @@
 import { getDynamicNavItems, subscribeToNavigationUpdates } from "@/addons/addons-runtime-context";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface NavLink {
   title: string;
@@ -16,62 +17,8 @@ export interface NavigationProps {
   addons?: NavLink[];
 }
 
-const staticNavigation: NavigationProps = {
-  primary: [
-    {
-      icon: <Icons.Dashboard className="size-6" />,
-      title: "Dashboard",
-      href: "/dashboard",
-      keywords: ["home", "overview", "summary"],
-      label: "View Dashboard",
-    },
-    {
-      icon: <Icons.Insight className="size-6" />,
-      title: "Insights",
-      href: "/insights",
-      keywords: ["insights", "Analytics"],
-      label: "View Insights",
-    },
-    {
-      icon: <Icons.Holdings className="size-6" />,
-      title: "Holdings",
-      href: "/holdings",
-      keywords: ["Holdings", "portfolio", "assets", "positions", "stocks"],
-      label: "View Holdings",
-    },
-    {
-      icon: <Icons.Activity className="size-6" />,
-      title: "Activities",
-      href: "/activities",
-      keywords: ["transactions", "trades", "history"],
-      label: "View Activities",
-    },
-    // {
-    //   icon: <Icons.Target className="size-6" />,
-    //   title: "FIRE Planner",
-    //   href: "/fire-planner",
-    //   keywords: ["fire", "retire", "retirement", "financial independence", "planner"],
-    //   label: "FIRE Planner",
-    // },
-    {
-      icon: <Icons.Sparkles className="size-6" />,
-      title: "Assistant",
-      href: "/assistant",
-      keywords: ["ai", "assistant", "chat", "help", "ask"],
-      label: "AI Assistant",
-    },
-  ],
-  secondary: [
-    {
-      icon: <Icons.Settings className="size-6" />,
-      title: "Settings",
-      href: "/settings",
-      keywords: ["preferences", "config", "configuration"],
-    },
-  ],
-};
-
 export function useNavigation() {
+  const { t } = useTranslation("nav");
   const [dynamicItems, setDynamicItems] = useState<NavigationProps["addons"]>([]);
 
   // Subscribe to navigation updates from addons
@@ -91,6 +38,57 @@ export function useNavigation() {
       unsubscribe();
     };
   }, []);
+
+  const staticNavigation = useMemo<NavigationProps>(
+    () => ({
+      primary: [
+        {
+          icon: <Icons.Dashboard className="size-6" />,
+          title: t("primary.dashboard.title"),
+          href: "/dashboard",
+          keywords: ["home", "overview", "summary"],
+          label: t("primary.dashboard.label"),
+        },
+        {
+          icon: <Icons.Insight className="size-6" />,
+          title: t("primary.insights.title"),
+          href: "/insights",
+          keywords: ["insights", "Analytics"],
+          label: t("primary.insights.label"),
+        },
+        {
+          icon: <Icons.Holdings className="size-6" />,
+          title: t("primary.holdings.title"),
+          href: "/holdings",
+          keywords: ["Holdings", "portfolio", "assets", "positions", "stocks"],
+          label: t("primary.holdings.label"),
+        },
+        {
+          icon: <Icons.Activity className="size-6" />,
+          title: t("primary.activities.title"),
+          href: "/activities",
+          keywords: ["transactions", "trades", "history"],
+          label: t("primary.activities.label"),
+        },
+        {
+          icon: <Icons.Sparkles className="size-6" />,
+          title: t("primary.assistant.title"),
+          href: "/assistant",
+          keywords: ["ai", "assistant", "chat", "help", "ask"],
+          label: t("primary.assistant.label"),
+        },
+      ],
+      secondary: [
+        {
+          icon: <Icons.Settings className="size-6" />,
+          title: t("secondary.settings.title"),
+          href: "/settings",
+          keywords: ["preferences", "config", "configuration"],
+        },
+      ],
+    }),
+    [t],
+  );
 
   // Combine static navigation items with addons grouped separately
   const navigation: NavigationProps = {

@@ -1,0 +1,29 @@
+{
+  "primary": {
+    "dashboard": {
+      "title": "总览",
+      "label": "查看总览"
+    },
+    "insights": {
+      "title": "洞察",
+      "label": "查看洞察"
+    },
+    "holdings": {
+      "title": "持仓",
+      "label": "查看持仓"
+    },
+    "activities": {
+      "title": "交易记录",
+      "label": "查看交易记录"
+    },
+    "assistant": {
+      "title": "AI 助手",
+      "label": "AI 助手"
+    }
+  },
+  "secondary": {
+    "settings": {
+      "title": "设置"
+    }
+  }
+}

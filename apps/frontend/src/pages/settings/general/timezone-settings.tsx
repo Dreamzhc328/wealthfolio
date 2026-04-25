@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import * as z from "zod";
 
 import { Button } from "@wealthfolio/ui/components/ui/button";
@@ -81,6 +82,7 @@ export function resolveInitialTimezone(configuredTimezone: string | null | undef
 
 export function TimezoneSettings() {
   const { settings, updateSettings } = useSettingsContext();
+  const { t } = useTranslation("settings");
   const browserTimezone = useMemo(() => detectBrowserTimezone(), []);
   const initialTimezone = resolveInitialTimezone(settings?.timezone);
   const timezones = useMemo(() => {
@@ -108,10 +110,8 @@ export function TimezoneSettings() {
     <Card>
       <CardHeader>
         <div>
-          <CardTitle className="text-lg">Timezone</CardTitle>
-          <CardDescription>
-            Choose the timezone used for dates, daily buckets, and yearly contribution boundaries.
-          </CardDescription>
+          <CardTitle className="text-lg">{t("general.timezone.title")}</CardTitle>
+          <CardDescription>{t("general.timezone.description")}</CardDescription>
         </div>
       </CardHeader>
       <CardContent>
@@ -133,7 +133,7 @@ export function TimezoneSettings() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Save Timezone</Button>
+            <Button type="submit">{t("general.timezone.save")}</Button>
           </form>
         </Form>
       </CardContent>

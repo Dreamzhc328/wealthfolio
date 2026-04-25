@@ -1,0 +1,41 @@
+{
+  "page": {
+    "title": "交易记录",
+    "addActivities": "添加交易",
+    "import": "导入",
+    "addAction": "添加"
+  },
+  "actions": {
+    "addTransaction": "添加交易",
+    "importCsv": "从 CSV 导入",
+    "transferHoldings": "持仓转移",
+    "addPersonalAsset": "添加个人资产"
+  },
+  "form": {
+    "addActivity": "添加交易",
+    "updateActivity": "更新交易",
+    "addDescription": "在你的账户中录入一笔新交易。",
+    "updateDescription": "更新这笔交易的详细信息",
+    "activityType": "交易类型：",
+    "fields": {
+      "date": "日期",
+      "symbol": "代码",
+      "quantity": "数量",
+      "contracts": "合约数",
+      "bonds": "债券数",
+      "price": "价格",
+      "premiumPerShare": "权利金/股",
+      "fee": "手续费",
+      "notes": "备注",
+      "notesPlaceholder": "添加备注（可选）...",
+      "totalDebit": "合计支出",
+      "tradeDetails": "交易明细"
+    },
+    "buttons": {
+      "buy": "添加买入",
+      "buyToOpen": "买入开仓",
+      "update": "更新",
+      "cancel": "取消"
+    }
+  }
+}

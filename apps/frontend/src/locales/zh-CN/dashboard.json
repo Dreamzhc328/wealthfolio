@@ -1,0 +1,39 @@
+{
+  "views": {
+    "investments": "投资",
+    "netWorth": "净资产"
+  },
+  "accounts": {
+    "title": "账户",
+    "switchToList": "切换为列表视图",
+    "switchToGroup": "切换为分组视图",
+    "viewListLabel": "列表视图",
+    "viewGroupLabel": "分组视图",
+    "loadFailed": "账户加载失败",
+    "loadFailedHint": "请尝试重启应用。如果问题仍在，可能需要重置数据库。",
+    "loadFailedFallback": "出现了意料之外的错误",
+    "empty": "暂无账户。",
+    "emptyAction": "添加你的第一个账户",
+    "accountSingular": "个账户",
+    "accountPlural": "个账户",
+    "uncategorized": "未分组",
+    "returnUnavailable": "无法计算收益率 —— 交易记录可能不完整（如买入但无入金记录）"
+  },
+  "topHoldings": {
+    "title": "持仓 Top",
+    "titleShort": "持仓",
+    "empty": "暂无持仓。",
+    "emptyAction": "添加你的第一笔交易",
+    "moreHoldings": "还有 {{count}} 项持仓",
+    "more": "还有 {{count}} 项",
+    "filter": {
+      "show": "显示",
+      "totalReturn": "总收益",
+      "dailyChange": "当日涨跌",
+      "sortBy": "排序",
+      "totalValue": "市值",
+      "gain": "收益"
+    },
+    "shares": "{{count}} 股"
+  }
+}

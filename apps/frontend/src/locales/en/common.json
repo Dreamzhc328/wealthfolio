@@ -1,0 +1,36 @@
+{
+  "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "update": "Update",
+    "close": "Close",
+    "back": "Back",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "viewAll": "View All",
+    "learnMore": "Learn more",
+    "loading": "Loading..."
+  },
+  "labels": {
+    "date": "Date",
+    "symbol": "Symbol",
+    "quantity": "Quantity",
+    "price": "Price",
+    "amount": "Amount",
+    "currency": "Currency",
+    "fee": "Fee",
+    "notes": "Notes",
+    "name": "Name",
+    "type": "Type",
+    "account": "Account",
+    "total": "Total"
+  },
+  "states": {
+    "error": "Error",
+    "noData": "No data",
+    "empty": "Nothing here yet"
+  }
+}

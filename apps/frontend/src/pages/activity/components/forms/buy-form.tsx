@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { normalizeCurrency } from "@/lib/utils";
 import { useForm, FormProvider, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@wealthfolio/ui/components/ui/button";
@@ -146,6 +147,8 @@ export function BuyForm({
   isEditing = false,
   assetCurrency,
 }: BuyFormProps) {
+  const { t } = useTranslation("assets");
+  const { t: tCommon } = useTranslation("common");
   const { data: settings } = useSettings();
   const baseCurrency = settings?.baseCurrency;
 
@@ -234,8 +237,12 @@ export function BuyForm({
     setValue("assetId", "");
   };
 
-  const quantityLabel = isOption ? "Contracts" : assetType === "bond" ? "Bonds" : "Quantity";
-  const priceLabel = isOption ? "Premium/Share" : "Price";
+  const quantityLabel = isOption
+    ? t("form.fields.contracts")
+    : assetType === "bond"
+      ? t("form.fields.bonds")
+      : t("form.fields.quantity");
+  const priceLabel = isOption ? t("form.fields.premiumPerShare") : t("form.fields.price");
   // Get account currency from selected account
   const selectedAccount = useMemo(
     () => accounts.find((a) => a.value === accountId),
@@ -300,7 +307,7 @@ export function BuyForm({
             <AccountSelect name="accountId" accounts={accounts} currencyName="currency" />
 
             {/* Date Picker */}
-            <DatePicker name="activityDate" label="Date" enableTime={true} />
+            <DatePicker name="activityDate" label={t("form.fields.date")} enableTime={true} />
 
             {/* Symbol / Option Contract Fields */}
             {isOption ? (
@@ -336,7 +343,9 @@ export function BuyForm({
 
             {/* Quantity, Price, Fee Row */}
             {isOption && (
-              <h4 className="text-muted-foreground text-sm font-medium">Trade Details</h4>
+              <h4 className="text-muted-foreground text-sm font-medium">
+                {t("form.fields.tradeDetails")}
+              </h4>
             )}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
@@ -362,7 +371,7 @@ export function BuyForm({
                 maxDecimalPlaces={4}
                 currency={currency}
               />
-              <AmountInput name="fee" label="Fee" currency={currency} />
+              <AmountInput name="fee" label={t("form.fields.fee")} currency={currency} />
             </div>
 
             {/* Option Total Premium with formula breakdown */}
@@ -371,7 +380,7 @@ export function BuyForm({
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-muted-foreground text-xs font-medium uppercase">
-                      Total Debit
+                      {t("form.fields.totalDebit")}
                     </span>
                     <p className="text-muted-foreground mt-0.5 text-xs tabular-nums">
                       {Number(optQuantity)} ×{" "}
@@ -419,7 +428,11 @@ export function BuyForm({
             />
 
             {/* Notes */}
-            <NotesInput name="comment" label="Notes" placeholder="Add an optional note..." />
+            <NotesInput
+              name="comment"
+              label={t("form.fields.notes")}
+              placeholder={t("form.fields.notesPlaceholder")}
+            />
           </CardContent>
         </Card>
 
@@ -427,7 +440,7 @@ export function BuyForm({
         <div className="flex justify-end gap-2">
           {onCancel && (
             <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-              Cancel
+              {tCommon("buttons.cancel")}
             </Button>
           )}
           <Button type="submit" disabled={isLoading}>
@@ -437,7 +450,11 @@ export function BuyForm({
             ) : (
               <Icons.Plus className="mr-2 h-4 w-4" />
             )}
-            {isEditing ? "Update" : isOption ? "Buy to Open" : "Add Buy"}
+            {isEditing
+              ? t("form.buttons.update")
+              : isOption
+                ? t("form.buttons.buyToOpen")
+                : t("form.buttons.buy")}
           </Button>
         </div>
       </form>

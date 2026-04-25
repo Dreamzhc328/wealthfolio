@@ -15,6 +15,7 @@ import { Skeleton } from "@wealthfolio/ui/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@wealthfolio/ui/components/ui/tooltip";
 import { format } from "date-fns";
 import React, { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 interface AccountSummaryDisplayData {
@@ -69,6 +70,7 @@ const AccountSummaryComponent = React.memo(
     displayInAccountCurrency?: boolean;
     isNested?: boolean;
   }) => {
+    const { t } = useTranslation("dashboard");
     const isGroup = item.isGroup ?? false;
     const useAccountCurrency =
       displayInAccountCurrency || (item.displayInAccountCurrency && Boolean(item.accountCurrency));
@@ -93,7 +95,11 @@ const AccountSummaryComponent = React.memo(
     const accountId = item.accountId;
 
     const subText = isGroup
-      ? `${item.accountCount} ${item.accountCount === 1 ? "account" : "accounts"}`
+      ? `${item.accountCount} ${
+          item.accountCount === 1
+            ? t("accounts.accountSingular")
+            : t("accounts.accountPlural")
+        }`
       : useAccountCurrency
         ? (item.accountCurrency ?? item.baseCurrency)
         : item.baseCurrency;
@@ -172,10 +178,7 @@ const AccountSummaryComponent = React.memo(
                 <TooltipTrigger asChild>
                   <span className="inline-block h-2 w-2 shrink-0 cursor-help rounded-full bg-amber-500" />
                 </TooltipTrigger>
-                <TooltipContent>
-                  Return % unavailable — activity history may be inconsistent (e.g. buys without
-                  deposits)
-                </TooltipContent>
+                <TooltipContent>{t("accounts.returnUnavailable")}</TooltipContent>
               </Tooltip>
             )}
           </h3>
@@ -258,6 +261,7 @@ AccountSummaryComponent.displayName = "AccountSummaryComponent";
 
 export const AccountsSummary = React.memo(
   ({ dateRange, isAllTime }: { dateRange?: DateRange; isAllTime?: boolean }) => {
+    const { t } = useTranslation("dashboard");
     const { accountsGrouped, setAccountsGrouped, settings } = useSettingsContext();
     const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 
@@ -387,12 +391,12 @@ export const AccountsSummary = React.memo(
                 <Icons.AlertTriangle className="text-destructive h-4 w-4" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-destructive text-sm font-medium">Failed to load accounts</p>
+                <p className="text-destructive text-sm font-medium">{t("accounts.loadFailed")}</p>
                 <p className="text-muted-foreground mt-1 break-words text-xs">
-                  {errorAccounts?.message || "An unexpected error occurred"}
+                  {errorAccounts?.message || t("accounts.loadFailedFallback")}
                 </p>
                 <p className="text-muted-foreground mt-2 text-xs">
-                  Try restarting the app. If this persists, your database may need to be reset.
+                  {t("accounts.loadFailedHint")}
                 </p>
               </div>
             </div>
@@ -403,12 +407,12 @@ export const AccountsSummary = React.memo(
       if (!combinedAccountViews || combinedAccountViews.length === 0) {
         return (
           <div className="border-border/50 bg-success/10 rounded-lg border p-6 text-center md:p-8">
-            <p className="text-sm">No accounts found.</p>
+            <p className="text-sm">{t("accounts.empty")}</p>
             <Link
               to="/settings/accounts"
               className="text-muted-foreground hover:text-foreground mt-2 inline-flex items-center gap-1 text-xs underline-offset-4 hover:underline"
             >
-              Add your first account
+              {t("accounts.emptyAction")}
               <Icons.ChevronRight className="h-3 w-3" />
             </Link>
           </div>
@@ -421,9 +425,10 @@ export const AccountsSummary = React.memo(
         const groups: Record<string, AccountSummaryDisplayData[]> = {};
         const standaloneAccounts: AccountSummaryDisplayData[] = [];
 
+        const uncategorizedKey = "__uncategorized__";
         combinedAccountViews.forEach((account) => {
-          const groupName = account.accountGroup ?? "Uncategorized";
-          if (groupName === "Uncategorized") {
+          const groupName = account.accountGroup ?? uncategorizedKey;
+          if (groupName === uncategorizedKey) {
             standaloneAccounts.push(account);
           } else {
             if (!groups[groupName]) {
@@ -601,14 +606,16 @@ export const AccountsSummary = React.memo(
     return (
       <div className="mb-4 w-full space-y-0">
         <div className="flex flex-row items-center justify-between gap-2 pb-2">
-          <h2 className="text-md font-semibold tracking-tight">Accounts</h2>
+          <h2 className="text-md font-semibold tracking-tight">{t("accounts.title")}</h2>
           <Button
             variant="ghost"
             className="text-muted-foreground hover:bg-success/10"
             size="sm"
             onClick={() => setAccountsGrouped(!accountsGrouped)}
-            aria-label={accountsGrouped ? "List view" : "Group view"}
-            title={accountsGrouped ? "Switch to list view" : "Switch to group view"}
+            aria-label={
+              accountsGrouped ? t("accounts.viewListLabel") : t("accounts.viewGroupLabel")
+            }
+            title={accountsGrouped ? t("accounts.switchToList") : t("accounts.switchToGroup")}
             disabled={isLoadingAccounts || combinedAccountViews.length === 0}
           >
             {accountsGrouped ? (

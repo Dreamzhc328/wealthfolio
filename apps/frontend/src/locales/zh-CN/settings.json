@@ -1,0 +1,83 @@
+{
+  "title": "设置",
+  "sections": {
+    "preferences": "偏好",
+    "portfolio": "投资组合",
+    "data": "数据",
+    "connections": "连接",
+    "extensions": "扩展",
+    "about": "关于"
+  },
+  "items": {
+    "general": {
+      "title": "通用",
+      "subtitle": "币种、汇率和更新"
+    },
+    "appearance": {
+      "title": "外观",
+      "subtitle": "主题、字体和菜单栏"
+    },
+    "accounts": {
+      "title": "账户",
+      "subtitle": "投资和储蓄账户"
+    },
+    "goals": {
+      "title": "目标与分配",
+      "subtitle": "目标设定和资产分配规则"
+    },
+    "contributionLimits": {
+      "title": "缴款上限",
+      "subtitle": "按年度和账户的上限"
+    },
+    "securities": {
+      "title": "证券",
+      "subtitle": "管理证券定义"
+    },
+    "classifications": {
+      "title": "分类",
+      "subtitle": "资产分类层级"
+    },
+    "exports": {
+      "title": "备份与导出",
+      "subtitle": "数据备份和导出"
+    },
+    "connect": {
+      "title": "Wealthfolio Connect",
+      "subtitle": "券商和设备关联"
+    },
+    "marketData": {
+      "title": "行情数据",
+      "subtitle": "数据源、同步与导入"
+    },
+    "aiProviders": {
+      "title": "AI 服务商",
+      "subtitle": "配置用于组合洞察的 AI"
+    },
+    "addons": {
+      "title": "插件",
+      "subtitle": "通过插件扩展 Wealthfolio"
+    },
+    "about": {
+      "title": "关于",
+      "subtitle": "应用信息"
+    }
+  },
+  "general": {
+    "heading": "通用",
+    "description": "管理应用的通用设置和偏好。",
+    "baseCurrency": {
+      "title": "本位币",
+      "description": "选择投资组合的本位币。",
+      "save": "保存本位币"
+    },
+    "timezone": {
+      "title": "时区",
+      "description": "选择用于日期、日级别统计和年度缴款额度计算的时区。",
+      "save": "保存时区"
+    }
+  },
+  "appearance": {
+    "heading": "外观",
+    "description": "自定义应用的外观。"
+  }
+}

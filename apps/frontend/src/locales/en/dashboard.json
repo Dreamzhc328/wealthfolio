@@ -1,0 +1,39 @@
+{
+  "views": {
+    "investments": "Investments",
+    "netWorth": "Net Worth"
+  },
+  "accounts": {
+    "title": "Accounts",
+    "switchToList": "Switch to list view",
+    "switchToGroup": "Switch to group view",
+    "viewListLabel": "List view",
+    "viewGroupLabel": "Group view",
+    "loadFailed": "Failed to load accounts",
+    "loadFailedHint": "Try restarting the app. If this persists, your database may need to be reset.",
+    "loadFailedFallback": "An unexpected error occurred",
+    "empty": "No accounts found.",
+    "emptyAction": "Add your first account",
+    "accountSingular": "account",
+    "accountPlural": "accounts",
+    "uncategorized": "Uncategorized",
+    "returnUnavailable": "Return % unavailable — activity history may be inconsistent (e.g. buys without deposits)"
+  },
+  "topHoldings": {
+    "title": "Top Holdings",
+    "titleShort": "Holdings",
+    "empty": "No holdings yet.",
+    "emptyAction": "Add your first transaction",
+    "moreHoldings": "+{{count}} more holdings",
+    "more": "+{{count}} more",
+    "filter": {
+      "show": "Show",
+      "totalReturn": "Total Return",
+      "dailyChange": "Daily Change",
+      "sortBy": "Sort by",
+      "totalValue": "Total Value",
+      "gain": "Gain"
+    },
+    "shares": "{{count}} shares"
+  }
+}

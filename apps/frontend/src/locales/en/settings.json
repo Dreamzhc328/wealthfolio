@@ -1,0 +1,83 @@
+{
+  "title": "Settings",
+  "sections": {
+    "preferences": "Preferences",
+    "portfolio": "Portfolio",
+    "data": "Data",
+    "connections": "Connections",
+    "extensions": "Extensions",
+    "about": "About"
+  },
+  "items": {
+    "general": {
+      "title": "General",
+      "subtitle": "Currency, exchange rates, and updates"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "subtitle": "Theme, font, and menu bar"
+    },
+    "accounts": {
+      "title": "Accounts",
+      "subtitle": "Investment and savings accounts"
+    },
+    "goals": {
+      "title": "Goals & Allocations",
+      "subtitle": "Targets and allocation rules"
+    },
+    "contributionLimits": {
+      "title": "Contribution Limits",
+      "subtitle": "Limits by year and account"
+    },
+    "securities": {
+      "title": "Securities",
+      "subtitle": "Manage security definitions"
+    },
+    "classifications": {
+      "title": "Classifications",
+      "subtitle": "Asset classification hierarchies"
+    },
+    "exports": {
+      "title": "Backup & Export",
+      "subtitle": "Backups and data exports"
+    },
+    "connect": {
+      "title": "Wealthfolio Connect",
+      "subtitle": "Broker and device linking"
+    },
+    "marketData": {
+      "title": "Market Data",
+      "subtitle": "Providers, sync, and imports"
+    },
+    "aiProviders": {
+      "title": "AI Providers",
+      "subtitle": "Configure AI for portfolio insights"
+    },
+    "addons": {
+      "title": "Add-ons",
+      "subtitle": "Extend Wealthfolio with features"
+    },
+    "about": {
+      "title": "About",
+      "subtitle": "Application information"
+    }
+  },
+  "general": {
+    "heading": "General",
+    "description": "Manage the general application settings and preferences.",
+    "baseCurrency": {
+      "title": "Base Currency",
+      "description": "Select your portfolio base currency.",
+      "save": "Save Currency"
+    },
+    "timezone": {
+      "title": "Timezone",
+      "description": "Choose the timezone used for dates, daily buckets, and yearly contribution boundaries.",
+      "save": "Save Timezone"
+    }
+  },
+  "appearance": {
+    "heading": "Appearance",
+    "description": "Customize the appearance of the application."
+  }
+}

@@ -6,6 +6,7 @@ import { debugAddonState, isAddonDevModeEnabled, loadAllAddons } from "./addons/
 import "./addons/addons-runtime-context";
 import App from "./App";
 import "./globals.css";
+import "./lib/i18n";
 
 if (isAddonDevModeEnabled) {
   void import("./addons/addons-dev-mode");

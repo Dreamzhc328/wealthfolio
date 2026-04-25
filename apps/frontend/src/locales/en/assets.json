@@ -1,0 +1,41 @@
+{
+  "page": {
+    "title": "Activity",
+    "addActivities": "Add Activities",
+    "import": "Import",
+    "addAction": "Add"
+  },
+  "actions": {
+    "addTransaction": "Add Transaction",
+    "importCsv": "Import from CSV",
+    "transferHoldings": "Transfer Holdings",
+    "addPersonalAsset": "Add Personal Asset"
+  },
+  "form": {
+    "addActivity": "Add Activity",
+    "updateActivity": "Update Activity",
+    "addDescription": "Record a new transaction in your account.",
+    "updateDescription": "Update the details of your transaction",
+    "activityType": "Activity Type:",
+    "fields": {
+      "date": "Date",
+      "symbol": "Symbol",
+      "quantity": "Quantity",
+      "contracts": "Contracts",
+      "bonds": "Bonds",
+      "price": "Price",
+      "premiumPerShare": "Premium/Share",
+      "fee": "Fee",
+      "notes": "Notes",
+      "notesPlaceholder": "Add an optional note...",
+      "totalDebit": "Total Debit",
+      "tradeDetails": "Trade Details"
+    },
+    "buttons": {
+      "buy": "Add Buy",
+      "buyToOpen": "Buy to Open",
+      "update": "Update",
+      "cancel": "Cancel"
+    }
+  }
+}

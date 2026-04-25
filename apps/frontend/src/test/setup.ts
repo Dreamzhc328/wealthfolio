@@ -3,6 +3,9 @@ import { cleanup } from "@testing-library/react";
 import { vi, afterEach } from "vitest";
 import * as matchers from "@testing-library/jest-dom/matchers";
 
+// Initialize i18n for tests so components using useTranslation render real text
+import "../lib/i18n";
+
 // Extend Vitest's expect method with methods from react-testing-library
 expect.extend(matchers);
 

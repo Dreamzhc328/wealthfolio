@@ -1,0 +1,36 @@
+{
+  "buttons": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "add": "添加",
+    "update": "更新",
+    "close": "关闭",
+    "back": "返回",
+    "submit": "提交",
+    "confirm": "确认",
+    "viewAll": "查看全部",
+    "learnMore": "了解更多",
+    "loading": "加载中..."
+  },
+  "labels": {
+    "date": "日期",
+    "symbol": "代码",
+    "quantity": "数量",
+    "price": "价格",
+    "amount": "金额",
+    "currency": "币种",
+    "fee": "手续费",
+    "notes": "备注",
+    "name": "名称",
+    "type": "类型",
+    "account": "账户",
+    "total": "合计"
+  },
+  "states": {
+    "error": "出错了",
+    "noData": "暂无数据",
+    "empty": "这里还是空的"
+  }
+}
