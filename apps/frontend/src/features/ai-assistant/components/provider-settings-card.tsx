@@ -306,7 +306,9 @@ export function ProviderSettingsCard({
                 </Badge>
               )}
             </div>
-            <p className="text-muted-foreground mt-0.5 text-xs">{provider.description}</p>
+            <p className="text-muted-foreground mt-0.5 text-xs">
+              {t(`providerSettings.descriptions.${provider.id}`, { defaultValue: provider.description })}
+            </p>
           </div>
 
           {/* Controls */}

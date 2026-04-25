@@ -132,6 +132,14 @@
     "copy": "复制"
   },
   "providerSettings": {
+    "descriptions": {
+      "ollama": "在本机运行的本地 AI 模型",
+      "groq": "高速推理云端 API",
+      "google": "Google 生成式 AI 模型",
+      "anthropic": "Anthropic 的 Claude 模型",
+      "openai": "OpenAI 的 ChatGPT 与 GPT 系列",
+      "openrouter": "通过 OpenRouter 接入多家 AI 模型"
+    },
     "default": "默认",
     "apiKeyRequired": "需要 API 密钥",
     "apiKeyLabel": "API 密钥",

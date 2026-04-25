@@ -132,6 +132,14 @@
     "copy": "Copy"
   },
   "providerSettings": {
+    "descriptions": {
+      "ollama": "Local AI models on your machine",
+      "groq": "Fast inference cloud API",
+      "google": "Google Generative AI models",
+      "anthropic": "Claude AI models from Anthropic",
+      "openai": "ChatGPT and GPT models from OpenAI",
+      "openrouter": "Access to multiple AI models via OpenRouter"
+    },
     "default": "Default",
     "apiKeyRequired": "API Key Required",
     "apiKeyLabel": "API Key",
