@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useSettingsContext } from "@/lib/settings-provider";
 import { ScrollArea } from "@wealthfolio/ui";
 import { useAccounts } from "@/hooks/use-accounts";
+import { useTranslation } from "react-i18next";
 
 interface IncomeMobileFilterSheetProps {
   open: boolean;
@@ -28,6 +29,7 @@ export const IncomeMobileFilterSheet = ({
   selectedAccount,
   onAccountChange,
 }: IncomeMobileFilterSheetProps) => {
+  const { t } = useTranslation("dashboard");
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
   const { accounts } = useAccounts();
@@ -39,12 +41,12 @@ export const IncomeMobileFilterSheet = ({
         className="flex h-[70vh] flex-col rounded-t-xl pb-[max(env(safe-area-inset-bottom),0.75rem)]"
       >
         <SheetHeader className="text-left">
-          <SheetTitle>Filter Options</SheetTitle>
+          <SheetTitle>{t("income.filterSheet.title")}</SheetTitle>
         </SheetHeader>
         <ScrollArea className="flex-1 py-4">
           <div className="space-y-3">
             <h4 className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
-              Account
+              {t("income.filterSheet.account")}
             </h4>
             <div className="overflow-hidden rounded-lg border">
               <div
@@ -61,7 +63,7 @@ export const IncomeMobileFilterSheet = ({
               >
                 <span className="flex items-center gap-2">
                   <Icons.LayoutDashboard className="text-muted-foreground h-4 w-4" />
-                  All Portfolio
+                  {t("income.filterSheet.allPortfolio")}
                 </span>
                 {selectedAccount?.id === PORTFOLIO_ACCOUNT_ID && (
                   <Icons.Check className="text-primary h-4 w-4" />
@@ -95,7 +97,7 @@ export const IncomeMobileFilterSheet = ({
         </ScrollArea>
         <SheetFooter className="mt-auto">
           <SheetClose asChild>
-            <Button className="w-full">Done</Button>
+            <Button className="w-full">{t("income.filterSheet.done")}</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

@@ -35,5 +35,308 @@
       "gain": "Gain"
     },
     "shares": "{{count}} shares"
+  },
+  "holdings": {
+    "tabs": {
+      "investments": "Investments",
+      "assets": "Assets",
+      "liabilities": "Liabilities"
+    },
+    "allPortfolio": "All Portfolio",
+    "summary": {
+      "assets": "Assets",
+      "debts": "Debts",
+      "netWorth": "Net Worth"
+    },
+    "actions": {
+      "addAsset": "Add Asset",
+      "addLiability": "Add Liability",
+      "addActivity": "Add Activity",
+      "updatePrices": "Update Prices",
+      "updateHoldings": "Update Holdings",
+      "importFromCSV": "Import from CSV",
+      "addTransaction": "Add Transaction",
+      "update": "Update",
+      "openFilters": "Open holdings filters"
+    },
+    "empty": {
+      "investmentsTitle": "No holdings yet",
+      "investmentsDescriptionEditable": "Get started by updating your holdings or importing from a CSV file.",
+      "investmentsDescription": "Get started by adding your first transaction or quickly import your existing holdings from a CSV file.",
+      "assetsTitle": "No assets yet",
+      "assetsDescription": "Add your first property, vehicle, collectible, or other asset.",
+      "liabilitiesTitle": "No liabilities yet",
+      "liabilitiesDescription": "Track your mortgages, loans, and other debts."
+    },
+    "table": {
+      "position": "Position",
+      "symbolName": "Symbol Name",
+      "quantity": "Qty",
+      "quantityFull": "Quantity",
+      "todayPrice": "Today's Price",
+      "bookCost": "Book Cost",
+      "totalValue": "Total Value",
+      "unrealizedGain": "Unrealized Gain",
+      "dayChange": "Day Change",
+      "assetType": "Asset Type",
+      "currency": "Currency",
+      "type": "Type",
+      "expired": "Expired",
+      "manual": "Manual",
+      "contracts": "contracts",
+      "bonds": "bonds",
+      "shares": "shares",
+      "showInBaseCurrency": "Show values in Base Currency",
+      "showInAssetCurrency": "Show values in Asset Currency",
+      "totalShort": "Total",
+      "dailyShort": "Daily",
+      "actions": {
+        "classify": "Classify",
+        "viewDetails": "View Details"
+      }
+    },
+    "alternative": {
+      "asset": "Asset",
+      "value": "Value",
+      "gain": "Gain",
+      "lastValued": "Last Valued",
+      "noAssetsTitle": "No assets",
+      "noAssetsDescription": "Add your first asset using the button above.",
+      "noLiabilitiesTitle": "No liabilities",
+      "noLiabilitiesDescription": "Add your first liability using the button above.",
+      "openActions": "Open actions",
+      "actions": {
+        "updateValue": "Update Value",
+        "valueHistory": "Value History",
+        "editDetails": "Edit Details",
+        "delete": "Delete"
+      },
+      "deleteDialog": {
+        "title": "Delete Asset",
+        "description": "Are you sure you want to delete <bold>{{name}}</bold>? This will remove all valuation history and cannot be undone.",
+        "cancel": "Cancel",
+        "deleting": "Deleting...",
+        "delete": "Delete"
+      }
+    },
+    "filterSheet": {
+      "title": "Display Options",
+      "sortBy": "Sort By",
+      "returnView": "Return View",
+      "category": "Category",
+      "account": "Account",
+      "assetType": "Asset Type",
+      "marketValue": "Market Value",
+      "symbol": "Symbol",
+      "totalReturn": "Total Return",
+      "dailyReturn": "Daily Return",
+      "allTypes": "All Types",
+      "allPortfolio": "All Portfolio",
+      "done": "Done"
+    },
+    "insights": {
+      "loading": "Loading dashboard...",
+      "tabs": {
+        "holdings": "Holdings",
+        "performance": "Performance",
+        "income": "Income"
+      },
+      "cards": {
+        "classes": "Classes",
+        "regions": "Regions",
+        "securityTypes": "Security Types",
+        "riskComposition": "Risk Composition",
+        "composition": "Composition",
+        "currency": "Currency",
+        "accounts": "Accounts",
+        "sectors": "Sectors"
+      },
+      "section": {
+        "holdingsIn": "Holdings in {{name}}",
+        "assetClass": "Asset Class: {{name}}",
+        "riskCategory": "Risk Category: {{name}}",
+        "type": "Type: {{name}}",
+        "holdingsInSector": "Holdings in Sector: {{name}}"
+      },
+      "noHoldingsTitle": "No holdings yet",
+      "noHoldingsDescription": "Get started by adding your first transaction or quickly import your existing holdings from a CSV file.",
+      "noHoldingsDataTitle": "No holdings data",
+      "noHoldingsDataDescription": "There is no holdings data available for your portfolio.",
+      "showFullNames": "Show full names",
+      "showSymbols": "Show symbols",
+      "marketValue": "Market Value",
+      "return": "Return",
+      "daily": "Daily",
+      "total": "Total",
+      "cashBalance": "Cash Balance"
+    }
+  },
+  "performance": {
+    "title": "Performance",
+    "calculating": "Calculating...",
+    "noDataTitle": "No performance data",
+    "noDataDescription": "Select accounts to compare their performance over time.",
+    "errorTitle": "Error calculating performance data",
+    "retry": "Retry",
+    "addAccount": "Add account",
+    "addBenchmark": "Add Benchmark",
+    "addAccountMobile": "Add Account",
+    "addItem": "Add item",
+    "removeItem": "Remove {{name}}",
+    "metrics": {
+      "totalReturn": "Total Return",
+      "annualizedReturn": "Annualized Return",
+      "annualized": "Annualized",
+      "volatility": "Volatility",
+      "maxDrawdown": "Max Drawdown"
+    }
+  },
+  "income": {
+    "periods": {
+      "ytd": "Year to Date",
+      "lastYear": "Last Year",
+      "allTime": "All Time",
+      "ytdShort": "YTD",
+      "lastYearShort": "Last Yr",
+      "allShort": "All"
+    },
+    "loadFailed": "Failed to load income summary: {{error}}",
+    "unknownError": "Unknown error",
+    "empty": {
+      "title": "No income data available",
+      "description": "There is no income data for the selected period. Try selecting a different time range or check back later."
+    },
+    "cards": {
+      "allTimeIncome": "All Time Income",
+      "lastYearIncome": "Last Year Income",
+      "thisYearIncome": "This Year Income",
+      "yoyGrowth": "Year-over-year growth",
+      "cumulative": "Cumulative income since inception",
+      "monthlyAverage": "Monthly Average",
+      "sinceLastPeriod": "Since last period",
+      "incomeSources": "Income Sources",
+      "dividends": "Dividends",
+      "interest": "Interest",
+      "topDividends": "Top 10 Dividend Sources",
+      "noDividendTitle": "No dividend income recorded",
+      "noDividendDescription": "There are no dividend sources for the selected period. Try selecting a different time range or check back later.",
+      "otherSources": "{{count}} other sources",
+      "percentOfTotal": "{{value}}% of total",
+      "other": "Other"
+    },
+    "history": {
+      "title": "Income History",
+      "combined": "Combined",
+      "byAccount": "By Account",
+      "monthlyIncome": "Monthly Income",
+      "cumulativeIncome": "Cumulative Income",
+      "previousPeriodIncome": "Previous Period Income",
+      "monthly": "Monthly",
+      "monthlyShort": "Monthly",
+      "cumulativeShort": "Cumulative",
+      "previousShort": "Previous",
+      "emptyTitle": "No income history available",
+      "emptyDescription": "There is no income history for the selected period. Try selecting a different time range or check back later."
+    },
+    "filterSheet": {
+      "title": "Filter Options",
+      "account": "Account",
+      "allPortfolio": "All Portfolio",
+      "done": "Done"
+    },
+    "allPortfolio": "All Portfolio"
+  },
+  "netWorth": {
+    "title": "Net Worth",
+    "breakdown": "Breakdown",
+    "composition": "Composition",
+    "assets": "Assets",
+    "liabilities": "Liabilities",
+    "netWorthLabel": "Net Worth",
+    "loadFailed": "Failed to load net worth",
+    "noHistoryData": "No history data available",
+    "noAssets": "No assets found.",
+    "addFirstAsset": "Add your first asset",
+    "manageAssets": "Manage your assets",
+    "viewAllHoldings": "View all holdings",
+    "manageAccounts": "Manage accounts",
+    "addAsset": "Add asset",
+    "addLiability": "Add liability",
+    "stale": {
+      "title": "Update your valuations",
+      "tooltipTitle": "Stale valuations (90+ days):",
+      "daysAgo": "{{days}}d ago",
+      "descriptionSingular": "{{count}} asset has not been updated in over 90 days.",
+      "descriptionPlural": "{{count}} assets have not been updated in over 90 days."
+    },
+    "chart": {
+      "netWorth": "Net Worth",
+      "netWorthLabel": "Net Worth:",
+      "assetsLabel": "Assets:",
+      "liabilitiesLabel": "Liabilities:"
+    }
+  },
+  "account": {
+    "fallbackName": "Account",
+    "switchAccount": "Switch Account",
+    "switchAccountDescription": "Choose an account to view",
+    "switchAccountAria": "Switch account",
+    "searchAccounts": "Search accounts...",
+    "noAccountsFound": "No accounts found.",
+    "showSnapshotMarkers": "Show snapshot markers",
+    "hideSnapshotMarkers": "Hide snapshot markers",
+    "showMarkersTooltip": "Show snapshot markers",
+    "hideMarkersTooltip": "Hide snapshot markers",
+    "holdingsTitle": "Holdings",
+    "updateHoldingsTooltip": "Update holdings",
+    "actionPalette": {
+      "holdings": "Holdings",
+      "manage": "Manage",
+      "transactions": "Transactions",
+      "updateHoldings": "Update Holdings",
+      "importCSV": "Import CSV",
+      "recalculate": "Recalculate History",
+      "recordTransaction": "Record Transaction",
+      "transferHoldings": "Transfer Holdings"
+    },
+    "editHoldings": {
+      "title": "Update Holdings",
+      "description": "Edit positions and cash balances for {{accountName}}"
+    },
+    "activitiesSheet": {
+      "title": "Activities on {{date}}",
+      "description": "{{count}} activities recorded on this date"
+    },
+    "empty": {
+      "holdingsTitle": "No holdings yet",
+      "holdingsManualDescription": "Add your current holdings snapshot or import from a CSV file to get started.",
+      "holdingsConnectedDescription": "Holdings will be synced from your connected account.",
+      "transactionsDescription": "Get started by adding your first transaction or quickly import your existing holdings from a CSV file.",
+      "addHoldings": "Add Holdings",
+      "addTransaction": "Add Transaction",
+      "importFromCSV": "Import from CSV"
+    },
+    "metrics": {
+      "cashBalance": "Cash Balance",
+      "investments": "Investments",
+      "netContribution": "Net Contribution",
+      "costBasis": "Cost Basis",
+      "unrealizedPnl": "Unrealized P&L",
+      "cashBalanceEditTooltip": "Click to update the cash balance",
+      "holdingsModeNote": "TWR/MWR not available. Requires transaction tracking.",
+      "lastUpdated": "Last updated: {{date}}",
+      "dateRange": "From {{start}} to {{end}}",
+      "timeWeightedReturn": "Time Weighted Return",
+      "moneyWeightedReturn": "Money Weighted Return",
+      "volatility": "Volatility",
+      "maxDrawdown": "Max Drawdown"
+    },
+    "contributionLimit": {
+      "notSet": "No contribution limit set for this account.",
+      "setLimit": "Set limit",
+      "contributedOver": "You've contributed <contributed/> to this account in {{year}}. Your total is <total/> which is over the <limit/> limit.",
+      "contributedTowards": "You've contributed <contributed/> to this account in {{year}}. Your total contribution towards the <limit/> {{groupName}} limit is <total/>."
+    }
   }
 }
+
