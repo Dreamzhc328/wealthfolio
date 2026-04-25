@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { Alert, AlertDescription, AlertTitle } from "@wealthfolio/ui/components/ui/alert";
 import { Button } from "@wealthfolio/ui/components/ui/button";
@@ -21,6 +22,7 @@ const ValidationAlert: React.FC<ValidationAlertProps> = ({
   onConfirm,
   onCancel,
 }) => {
+  const { t } = useTranslation("assets");
   if (warnings > 0) {
     return (
       <Alert className="mb-4 flex flex-col" variant="warning">
@@ -28,20 +30,15 @@ const ValidationAlert: React.FC<ValidationAlertProps> = ({
           <div className="flex items-center">
             <Icons.AlertCircle className="mr-2 h-4 w-4" />
             <AlertTitle>
-              There are issues with {warnings} activity entries.
-              <p className="pt-1 text-sm font-normal">
-                Please review them in the table below and either correct or remove these entries to
-                proceed with the import.
-              </p>
-              <p className="pt-1 text-sm font-normal">
-                Hover over the error icon on each line for more details about the specific issue.
-              </p>
+              {t("import.legacy.issuesTitle", { n: warnings })}
+              <p className="pt-1 text-sm font-normal">{t("import.legacy.issuesIntro")}</p>
+              <p className="pt-1 text-sm font-normal">{t("import.legacy.issuesHint")}</p>
             </AlertTitle>
           </div>
         </div>
         <div className="mt-2 flex justify-start">
           <Button className="mr-2" onClick={onCancel}>
-            Retry
+            {t("import.legacy.retry")}
           </Button>
         </div>
       </Alert>
@@ -54,27 +51,31 @@ const ValidationAlert: React.FC<ValidationAlertProps> = ({
           <div className="flex items-center">
             <Icons.CheckCircle className="mr-2 h-4 w-4" />
             <div>
-              <AlertTitle>All activities are valid</AlertTitle>
+              <AlertTitle>{t("import.legacy.allValidTitle")}</AlertTitle>
               <AlertDescription>
-                Click <b>Confirm Import</b> to proceed with the import.
+                {t("import.legacy.allValidDescription").split("<0>")[0]}
+                <b>{t("import.legacy.confirmImport")}</b>
+                {t("import.legacy.allValidDescription").split("</0>")[1]}
               </AlertDescription>
             </div>
           </div>
         </div>
         <div className="mt-2 flex justify-start">
           <Button variant="secondary" className="mr-2" disabled={isConfirming} onClick={onCancel}>
-            Cancel
+            {t("import.legacy.cancel")}
           </Button>
           <Button onClick={onConfirm} disabled={isConfirming}>
             {isConfirming ? (
               <>
                 <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
-                <span className="hidden sm:ml-2 sm:inline">Importing...</span>
+                <span className="hidden sm:ml-2 sm:inline">{t("import.legacy.importing")}</span>
               </>
             ) : (
               <>
                 <Icons.Import className="mr-2 h-4 w-4" />
-                <span className="hidden sm:ml-2 sm:inline">Confirm Import</span>
+                <span className="hidden sm:ml-2 sm:inline">
+                  {t("import.legacy.confirmImport")}
+                </span>
               </>
             )}
           </Button>
@@ -93,7 +94,7 @@ const ValidationAlert: React.FC<ValidationAlertProps> = ({
         </div>
         <div className="mt-2 flex justify-start">
           <Button className="mr-2" onClick={onCancel}>
-            Retry
+            {t("import.legacy.retry")}
           </Button>
         </div>
       </Alert>

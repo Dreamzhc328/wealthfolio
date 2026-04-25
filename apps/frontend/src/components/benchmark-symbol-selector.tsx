@@ -23,87 +23,87 @@ import { useState } from "react";
 // exchangeMic is set for ETFs that trade on real exchanges
 const BENCHMARKS = [
   {
-    group: "US Market Indices",
+    group: "美股指数",
     items: [
-      { symbol: "^GSPC", name: "S&P 500", description: "Large-cap US stocks" },
-      { symbol: "^NDX", name: "Nasdaq 100", description: "Large-cap tech-focused US stocks" },
-      { symbol: "^RUT", name: "Russell 2000", description: "Small-cap US stocks" },
-      { symbol: "^DJI", name: "Dow Jones", description: "Blue-chip US stocks" },
+      { symbol: "^GSPC", name: "S&P 500", description: "美国大盘股" },
+      { symbol: "^NDX", name: "Nasdaq 100", description: "美国科技大盘股" },
+      { symbol: "^RUT", name: "Russell 2000", description: "美国小盘股" },
+      { symbol: "^DJI", name: "Dow Jones", description: "美国蓝筹股" },
     ],
   },
   {
-    group: "European Indices",
+    group: "欧洲指数",
     items: [
-      { symbol: "^FTSE", name: "FTSE 100", description: "Large-cap UK stocks" },
-      { symbol: "^STOXX50E", name: "EURO STOXX 50", description: "European blue-chip stocks" },
-      { symbol: "^GDAXI", name: "DAX", description: "German blue-chip stocks" },
-      { symbol: "^FCHI", name: "CAC 40", description: "French large-cap stocks" },
-      { symbol: "^IBEX", name: "IBEX 35", description: "Spanish large-cap stocks" },
-      { symbol: "^AEX", name: "AEX", description: "Dutch blue-chip stocks" },
-      { symbol: "^OMX", name: "OMX Stockholm 30", description: "Swedish large-cap stocks" },
+      { symbol: "^FTSE", name: "FTSE 100", description: "英国大盘股" },
+      { symbol: "^STOXX50E", name: "EURO STOXX 50", description: "欧洲蓝筹股" },
+      { symbol: "^GDAXI", name: "DAX", description: "德国蓝筹股" },
+      { symbol: "^FCHI", name: "CAC 40", description: "法国大盘股" },
+      { symbol: "^IBEX", name: "IBEX 35", description: "西班牙大盘股" },
+      { symbol: "^AEX", name: "AEX", description: "荷兰蓝筹股" },
+      { symbol: "^OMX", name: "OMX Stockholm 30", description: "瑞典大盘股" },
     ],
   },
   {
-    group: "Asian Indices",
+    group: "亚太指数",
     items: [
-      { symbol: "^N225", name: "Nikkei 225", description: "Japanese large-cap stocks" },
-      { symbol: "^HSI", name: "Hang Seng", description: "Hong Kong large-cap stocks" },
-      { symbol: "000001.SS", name: "Shanghai Composite", description: "Chinese A-shares" },
-      { symbol: "^KS11", name: "KOSPI", description: "South Korean stocks" },
-      { symbol: "^TWII", name: "Taiwan Weighted", description: "Taiwanese stocks" },
-      { symbol: "^AXJO", name: "ASX 200", description: "Australian large-cap stocks" },
-      { symbol: "^BSESN", name: "BSE Sensex", description: "Indian large-cap stocks" },
-      { symbol: "^NSEI", name: "NIFTY 50", description: "Indian blue-chip stocks" },
+      { symbol: "^N225", name: "Nikkei 225", description: "日经 225" },
+      { symbol: "^HSI", name: "Hang Seng", description: "香港大盘股" },
+      { symbol: "000001.SS", name: "Shanghai Composite", description: "上证综指" },
+      { symbol: "^KS11", name: "KOSPI", description: "韩国综合指数" },
+      { symbol: "^TWII", name: "Taiwan Weighted", description: "台湾加权指数" },
+      { symbol: "^AXJO", name: "ASX 200", description: "澳大利亚大盘股" },
+      { symbol: "^BSESN", name: "BSE Sensex", description: "印度孟买敏感指数" },
+      { symbol: "^NSEI", name: "NIFTY 50", description: "印度国家证交所指数" },
     ],
   },
   {
-    group: "Global & Emerging Markets",
+    group: "全球与新兴市场",
     items: [
       {
         symbol: "EEM",
         name: "MSCI Emerging Markets",
-        description: "Emerging market stocks",
+        description: "新兴市场股票",
         exchangeMic: "ARCX",
       },
       {
         symbol: "ACWI",
         name: "MSCI All Country World",
-        description: "Global equity markets",
+        description: "全球股市",
         exchangeMic: "XNAS",
       },
       {
         symbol: "IEFA",
         name: "Core MSCI EAFE",
-        description: "Europe, Australasia, Far East",
+        description: "欧洲、澳洲、远东",
         exchangeMic: "ARCX",
       },
     ],
   },
   {
-    group: "ETFs",
+    group: "ETF",
     items: [
       {
         symbol: "VOO",
         name: "Vanguard S&P 500",
-        description: "S&P 500 index fund",
+        description: "S&P 500 指数基金",
         exchangeMic: "ARCX",
       },
       {
         symbol: "VTI",
         name: "Vanguard Total Stock",
-        description: "Total US market",
+        description: "全美股市",
         exchangeMic: "ARCX",
       },
       {
         symbol: "VEA",
         name: "Vanguard FTSE Developed",
-        description: "Developed markets ex-US",
+        description: "美国以外发达市场",
         exchangeMic: "ARCX",
       },
       {
         symbol: "VWO",
         name: "Vanguard FTSE Emerging",
-        description: "Emerging markets",
+        description: "新兴市场",
         exchangeMic: "ARCX",
       },
     ],
@@ -173,7 +173,7 @@ export function BenchmarkSymbolSelector({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          aria-label={iconOnly ? "Add benchmark" : undefined}
+          aria-label={iconOnly ? "添加基准" : undefined}
           className={cn(
             "bg-secondary/30 hover:bg-muted/80 flex items-center gap-1.5 rounded-md border-dashed text-sm font-medium",
             iconOnly ? "h-9 w-9 p-0" : "h-8 px-3 py-1",
@@ -182,19 +182,19 @@ export function BenchmarkSymbolSelector({
           size={iconOnly ? "icon" : "sm"}
         >
           <Icons.TrendingUp className="h-4 w-4" />
-          {!iconOnly && "Add Benchmark"}
+          {!iconOnly && "添加基准"}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[350px] p-0">
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder="Search benchmarks or any symbol..."
+            placeholder="搜索基准或代码…"
             value={searchQuery}
             onValueChange={setSearchQuery}
           />
           <CommandList className="max-h-[300px] overflow-y-auto">
             <CommandEmpty>
-              {isLoading ? "Searching..." : "No benchmarks or symbols found."}
+              {isLoading ? "搜索中…" : "未找到匹配的基准或代码。"}
             </CommandEmpty>
 
             {/* Predefined benchmark groups */}

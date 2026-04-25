@@ -10,6 +10,7 @@ import {
   Skeleton,
 } from "@wealthfolio/ui";
 import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useBalancePrivacy } from "@/hooks/use-balance-privacy";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
@@ -244,6 +245,7 @@ function GoalCard({
   formatter: Intl.NumberFormat;
   isBalanceHidden: boolean;
 }) {
+  const { t } = useTranslation("aiAssistant");
   const progressColor = getProgressColor(goal.progressPercent, goal.deadline);
 
   const formatValue = (value: number) => {
@@ -252,6 +254,9 @@ function GoalCard({
     }
     return formatter.format(value);
   };
+
+  // Replace fallback English title from normalizer with localized version
+  const displayTitle = goal.title === "Untitled Goal" ? t("toolUI.goals.untitled") : goal.title;
 
   return (
     <div className="bg-background/60 hover:bg-background/80 flex flex-col gap-2 rounded-lg border p-3 transition-colors">
@@ -263,7 +268,7 @@ function GoalCard({
           ) : (
             <Icons.Target className="text-muted-foreground h-4 w-4 flex-shrink-0" />
           )}
-          <span className="text-sm font-medium leading-tight">{goal.title}</span>
+          <span className="text-sm font-medium leading-tight">{displayTitle}</span>
         </div>
         <Badge
           variant={goal.isAchieved ? "default" : "secondary"}
@@ -305,13 +310,14 @@ function GoalCard({
 }
 
 function EmptyState() {
+  const { t } = useTranslation("aiAssistant");
   return (
     <Card className="bg-muted/40 border-primary/10">
       <CardContent className="flex flex-col items-center justify-center py-8 text-center">
         <Icons.Target className="text-muted-foreground mb-2 h-8 w-8" />
-        <p className="text-muted-foreground text-sm">No goals set up yet.</p>
+        <p className="text-muted-foreground text-sm">{t("toolUI.goals.empty")}</p>
         <p className="text-muted-foreground mt-1 text-xs">
-          Create investment goals in Settings to track your progress.
+          {t("toolUI.goals.emptyHint")}
         </p>
       </CardContent>
     </Card>
@@ -319,10 +325,11 @@ function EmptyState() {
 }
 
 function ErrorState({ message }: { message?: string }) {
+  const { t } = useTranslation("aiAssistant");
   return (
     <Card className="border-destructive/30 bg-destructive/5">
       <CardContent className="py-4">
-        <p className="text-destructive text-sm font-medium">Failed to load goals</p>
+        <p className="text-destructive text-sm font-medium">{t("toolUI.goals.loadFailed")}</p>
         {message && <p className="text-muted-foreground mt-1 text-xs">{message}</p>}
       </CardContent>
     </Card>
@@ -336,6 +343,7 @@ function ErrorState({ message }: { message?: string }) {
 type GoalsToolUIContentProps = ToolCallMessagePartProps<GetGoalsArgs, GetGoalsResult>;
 
 function GoalsToolUIContentImpl({ args, result, status }: GoalsToolUIContentProps) {
+  const { t } = useTranslation("aiAssistant");
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
   const { isBalanceHidden } = useBalancePrivacy();
@@ -346,9 +354,14 @@ function GoalsToolUIContentImpl({ args, result, status }: GoalsToolUIContentProp
 
   // Compact mode — just show a one-liner when used as a prerequisite
   if (args?.displayMode === "compact" && parsed && !isLoading) {
+    const count = parsed.goals.length;
     return (
       <CompactToolCard
-        label={`Fetched ${parsed.goals.length} goal${parsed.goals.length !== 1 ? "s" : ""}`}
+        label={
+          count === 1
+            ? t("toolUI.goals.compactSingular", { count })
+            : t("toolUI.goals.compactPlural", { count })
+        }
       />
     );
   }
@@ -372,7 +385,7 @@ function GoalsToolUIContentImpl({ args, result, status }: GoalsToolUIContentProp
 
   // Show error state for incomplete/failed status
   if (isIncomplete) {
-    return <ErrorState message="The request was interrupted or failed." />;
+    return <ErrorState message={t("toolUI.goals.errorMessage")} />;
   }
 
   // Show empty state if no goals
@@ -387,19 +400,21 @@ function GoalsToolUIContentImpl({ args, result, status }: GoalsToolUIContentProp
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <CardTitle className="text-base">Goals</CardTitle>
+            <CardTitle className="text-base">{t("toolUI.goals.title")}</CardTitle>
             <Badge variant="secondary" className="text-xs">
-              {count} {count === 1 ? "goal" : "goals"}
+              {count === 1
+                ? t("toolUI.goals.countSingular", { count })
+                : t("toolUI.goals.countPlural", { count })}
             </Badge>
             {truncated && originalCount && (
               <Badge variant="outline" className="text-muted-foreground text-xs">
-                of {originalCount}
+                {t("toolUI.goals.of", { count: originalCount })}
               </Badge>
             )}
           </div>
           {achievedCount > 0 && (
             <Badge variant="default" className="bg-success text-success-foreground text-xs">
-              {achievedCount} achieved
+              {t("toolUI.goals.achieved", { count: achievedCount })}
             </Badge>
           )}
         </div>

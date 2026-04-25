@@ -16,6 +16,7 @@ import {
   formatPercent,
 } from "@wealthfolio/ui";
 import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useBalancePrivacy } from "@/hooks/use-balance-privacy";
 import { Bar, BarChart, ResponsiveContainer, Tooltip as ChartTooltip, XAxis } from "recharts";
 import { CompactToolCard } from "./shared";
@@ -132,53 +133,56 @@ function normalizeResult(result: unknown): GetIncomeOutput | null {
 // Helpers
 // ============================================================================
 
-function getPeriodLabel(period: string): string {
+const MONTH_KEYS = [
+  "jan",
+  "feb",
+  "mar",
+  "apr",
+  "may",
+  "jun",
+  "jul",
+  "aug",
+  "sep",
+  "oct",
+  "nov",
+  "dec",
+] as const;
+
+type IncomeT = (key: string) => string;
+
+function getPeriodLabel(period: string, t: IncomeT): string {
   switch (period) {
     case "YTD":
-      return "Year to Date";
+      return t("toolUI.income.period.ytd");
     case "LAST_YEAR":
-      return "Last Year";
+      return t("toolUI.income.period.lastYear");
     case "TOTAL":
-      return "All Time";
+      return t("toolUI.income.period.total");
     default:
       return period;
   }
 }
 
-function getTypeLabel(type: string): string {
+function getTypeLabel(type: string, t: IncomeT): string {
   switch (type) {
     case "DIVIDEND":
-      return "Dividends";
+      return t("toolUI.income.type.dividend");
     case "INTEREST":
-      return "Interest";
+      return t("toolUI.income.type.interest");
     case "OTHER_INCOME":
-      return "Other";
+      return t("toolUI.income.type.other");
     default:
       return type;
   }
 }
 
-function formatMonthLabel(key: string): string {
+function formatMonthLabel(key: string, t: IncomeT): string {
   // key format: "2024-01" or "2024-1" or "Jan 2024"
   const parts = key.split("-");
   if (parts.length === 2) {
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
     const monthIndex = parseInt(parts[1], 10) - 1;
     if (monthIndex >= 0 && monthIndex < 12) {
-      return monthNames[monthIndex];
+      return t(`toolUI.income.months.${MONTH_KEYS[monthIndex]}`);
     }
   }
   return key;
@@ -200,6 +204,7 @@ type IncomeContentProps = ToolCallMessagePartProps<GetIncomeArgs, GetIncomeOutpu
 const IncomeContent = memo(IncomeContentImpl);
 
 function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
+  const { t } = useTranslation("aiAssistant");
   const { isBalanceHidden } = useBalancePrivacy();
   const parsed = normalizeResult(result);
 
@@ -223,12 +228,12 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
       .filter(([, value]) => value > 0)
       .map(([type, value]) => ({
         type,
-        label: getTypeLabel(type),
+        label: getTypeLabel(type, t),
         value,
         percentage: (value / parsed.totalIncome) * 100,
       }))
       .sort((a, b) => b.value - a.value);
-  }, [parsed?.byType, parsed?.totalIncome]);
+  }, [parsed?.byType, parsed?.totalIncome, t]);
 
   // Prepare monthly chart data
   const monthlyData = useMemo(() => {
@@ -237,10 +242,10 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([month, value]) => ({
         month,
-        label: formatMonthLabel(month),
+        label: formatMonthLabel(month, t),
         income: value,
       }));
-  }, [parsed?.byMonth]);
+  }, [parsed?.byMonth, t]);
 
   // Top assets with percentage of total
   const topAssetsSlice = useMemo(() => {
@@ -263,7 +268,7 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
 
   // Compact mode — just show a one-liner when used as a prerequisite
   if (args?.displayMode === "compact" && parsed && !isLoading) {
-    return <CompactToolCard label="Fetched income summary" />;
+    return <CompactToolCard label={t("toolUI.income.compact")} />;
   }
 
   const formatValue = (value: number) => {
@@ -278,7 +283,7 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <CardTitle className="text-sm font-medium">Income Summary</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("toolUI.income.title")}</CardTitle>
               <Skeleton className="mt-1 h-3 w-16" />
             </div>
             <Skeleton className="h-8 w-28" />
@@ -306,7 +311,7 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
     return (
       <Card className="border-destructive/30 bg-destructive/5 w-full">
         <CardContent className="py-4">
-          <p className="text-destructive text-sm font-medium">Failed to load income data.</p>
+          <p className="text-destructive text-sm font-medium">{t("toolUI.income.loadFailed")}</p>
         </CardContent>
       </Card>
     );
@@ -317,7 +322,7 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
     return (
       <Card className="bg-muted/40 border-primary/10 w-full">
         <CardContent className="py-4">
-          <p className="text-muted-foreground text-sm">No income data found for this period.</p>
+          <p className="text-muted-foreground text-sm">{t("toolUI.income.empty")}</p>
         </CardContent>
       </Card>
     );
@@ -327,7 +332,7 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
     return (
       <Card className="bg-muted/40 border-primary/10 w-full">
         <CardContent className="py-4">
-          <p className="text-muted-foreground text-sm">Income data is unavailable.</p>
+          <p className="text-muted-foreground text-sm">{t("toolUI.income.unavailable")}</p>
         </CardContent>
       </Card>
     );
@@ -339,12 +344,12 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <CardTitle className="text-base font-medium">Income Summary</CardTitle>
+            <CardTitle className="text-base font-medium">{t("toolUI.income.title")}</CardTitle>
             <div className="text-muted-foreground mt-1 flex items-center gap-2 text-xs">
-              <span>{getPeriodLabel(parsed.period)}</span>
+              <span>{getPeriodLabel(parsed.period, t)}</span>
               {parsed.yoyGrowth !== undefined && parsed.yoyGrowth !== null && (
                 <Badge variant="outline" className="px-1.5 py-0 text-[10px]">
-                  <span className="mr-0.5">YoY</span>
+                  <span className="mr-0.5">{t("toolUI.income.yoy")}</span>
                   <GainPercent value={parsed.yoyGrowth} />
                 </Badge>
               )}
@@ -364,14 +369,14 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
         {/* Stat cards */}
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-background/60 rounded-lg border p-3">
-            <span className="text-muted-foreground text-xs">Monthly Average</span>
+            <span className="text-muted-foreground text-xs">{t("toolUI.income.monthlyAverage")}</span>
             <div className="mt-1 text-sm font-semibold tabular-nums">
               {formatValue(parsed.monthlyAverage)}
             </div>
           </div>
           {typeBreakdown.length > 0 && (
             <div className="bg-background/60 rounded-lg border p-3">
-              <span className="text-muted-foreground text-xs">By Type</span>
+              <span className="text-muted-foreground text-xs">{t("toolUI.income.byType")}</span>
               <div className="mt-1 space-y-0.5">
                 {typeBreakdown.map((item) => (
                   <div key={item.type} className="flex items-center justify-between text-xs">
@@ -389,7 +394,7 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
         {/* Monthly bar chart */}
         {monthlyData.length > 1 && (
           <div className="space-y-2">
-            <p className="text-muted-foreground text-xs font-medium uppercase">Monthly Income</p>
+            <p className="text-muted-foreground text-xs font-medium uppercase">{t("toolUI.income.monthlyIncome")}</p>
             <div className="h-24">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlyData} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
@@ -424,7 +429,7 @@ function IncomeContentImpl({ args, result, status }: IncomeContentProps) {
         {topAssetsSlice.length > 0 && (
           <TooltipProvider>
             <div className="space-y-3">
-              <p className="text-muted-foreground text-xs font-medium uppercase">Sources</p>
+              <p className="text-muted-foreground text-xs font-medium uppercase">{t("toolUI.income.sources")}</p>
 
               {/* Stacked bar */}
               <div className="flex h-5 w-full items-center gap-0.5 overflow-hidden rounded-md">

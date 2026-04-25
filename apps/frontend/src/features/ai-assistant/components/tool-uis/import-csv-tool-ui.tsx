@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import type { ToolCallMessagePartProps } from "@assistant-ui/react";
 import { makeAssistantToolUI } from "@assistant-ui/react";
@@ -142,24 +143,28 @@ function LoadingCard() {
 }
 
 function SuccessCard({ count }: { count: number }) {
+  const { t } = useTranslation("aiAssistant");
   return (
     <Card className="bg-muted/40 border-success/30">
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
           <Icons.CheckCircle className="text-success h-5 w-5" />
-          <CardTitle className="text-base">Import complete</CardTitle>
+          <CardTitle className="text-base">{t("toolUI.importCsv.successTitle")}</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
         <p className="text-muted-foreground text-sm">
-          Imported <span className="text-foreground font-medium">{count}</span> activit
-          {count === 1 ? "y" : "ies"}. The mapping was saved as this account's template so the next
-          import from the same broker will skip the AI step.
+          <Trans
+            i18nKey={count === 1 ? "toolUI.importCsv.successMessageSingular" : "toolUI.importCsv.successMessagePlural"}
+            ns="aiAssistant"
+            values={{ count }}
+            components={{ 1: <span className="text-foreground font-medium" /> }}
+          />
         </p>
         <Button variant="outline" size="sm" asChild>
           <Link to="/activities">
             <Icons.ExternalLink className="mr-2 h-4 w-4" />
-            View activities
+            {t("toolUI.importCsv.viewActivities")}
           </Link>
         </Button>
       </CardContent>
@@ -168,10 +173,11 @@ function SuccessCard({ count }: { count: number }) {
 }
 
 function ErrorCard({ message }: { message: string }) {
+  const { t } = useTranslation("aiAssistant");
   return (
     <Card className="border-destructive/30 bg-destructive/5">
       <CardContent className="py-4">
-        <p className="text-destructive text-sm font-medium">CSV import failed</p>
+        <p className="text-destructive text-sm font-medium">{t("toolUI.importCsv.errorTitle")}</p>
         <p className="text-muted-foreground mt-1 text-xs">{message}</p>
       </CardContent>
     </Card>
@@ -179,21 +185,23 @@ function ErrorCard({ message }: { message: string }) {
 }
 
 function StaleImportCard({ mapping }: { mapping: ImportCsvMappingOutput }) {
+  const { t } = useTranslation("aiAssistant");
   const fieldCount = Object.keys(mapping.appliedMapping?.fieldMappings ?? {}).length;
+  const titleKey = mapping.totalRows === 1 ? "toolUI.importCsv.staleTitleSingular" : "toolUI.importCsv.staleTitle";
   return (
     <Card className="bg-muted/40 border-muted-foreground/20">
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
           <Icons.FileSpreadsheet className="text-muted-foreground h-5 w-5" />
           <CardTitle className="text-muted-foreground text-base">
-            CSV import · {mapping.totalRows} row{mapping.totalRows === 1 ? "" : "s"}
+            {t(titleKey, { count: mapping.totalRows })}
           </CardTitle>
         </div>
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground text-sm">
-          {fieldCount > 0 ? `Mapped ${fieldCount} columns. ` : ""}
-          This import was not completed. Attach the CSV again to start a new import.
+          {fieldCount > 0 ? t("toolUI.importCsv.staleMappedColumns", { count: fieldCount }) : ""}
+          {t("toolUI.importCsv.staleMessage")}
         </p>
       </CardContent>
     </Card>
@@ -220,6 +228,7 @@ function ImportCsvToolUIContentImpl({
   status,
   toolCallId,
 }: ImportCsvToolUIContentProps) {
+  const { t } = useTranslation("aiAssistant");
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
 
@@ -259,11 +268,11 @@ function ImportCsvToolUIContentImpl({
     return <LoadingCard />;
   }
   if (status?.type === "incomplete") {
-    return <ErrorCard message="The CSV import request was interrupted." />;
+    return <ErrorCard message={t("toolUI.importCsv.errorInterrupted")} />;
   }
   if (!mapping) {
     return (
-      <ErrorCard message={normalizeError || "No import mapping was returned by the AI tool."} />
+      <ErrorCard message={normalizeError || t("toolUI.importCsv.errorNoMapping")} />
     );
   }
   if (isSubmitted || session.submitted) {
@@ -287,12 +296,14 @@ function ImportCsvToolUIContentImpl({
           <div className="flex items-center gap-2">
             <Icons.FileSpreadsheet className="text-primary h-5 w-5" />
             <CardTitle className="text-base">
-              CSV import · {mapping.totalRows} row{mapping.totalRows === 1 ? "" : "s"}
+              {t(mapping.totalRows === 1 ? "toolUI.importCsv.titleSingular" : "toolUI.importCsv.title", {
+                count: mapping.totalRows,
+              })}
             </CardTitle>
           </div>
           <Select value={session.accountId || ""} onValueChange={session.setAccountId}>
             <SelectTrigger className="w-[220px]">
-              <SelectValue placeholder="Select target account" />
+              <SelectValue placeholder={t("toolUI.importCsv.selectAccount")} />
             </SelectTrigger>
             <SelectContent>
               {mapping.availableAccounts.map((account) => (
@@ -327,13 +338,17 @@ function ImportCsvToolUIContentImpl({
 
         <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
           <div className="text-muted-foreground text-xs">
-            {session.stats.valid} valid · {session.stats.warning} warnings · {session.stats.errors}{" "}
-            errors · {session.stats.duplicates} duplicates
+            {t("toolUI.importCsv.stats", {
+              valid: session.stats.valid,
+              warning: session.stats.warning,
+              errors: session.stats.errors,
+              duplicates: session.stats.duplicates,
+            })}
           </div>
           <div className="flex items-center gap-2">
             {session.status === "ready" && session.error && (
               <Button variant="outline" size="sm" onClick={session.revalidate}>
-                Revalidate
+                {t("toolUI.importCsv.revalidate")}
               </Button>
             )}
             <Button
@@ -345,8 +360,9 @@ function ImportCsvToolUIContentImpl({
               ) : (
                 <Icons.Download className="mr-2 h-4 w-4" />
               )}
-              Import {session.stats.toImport} activit
-              {session.stats.toImport === 1 ? "y" : "ies"}
+              {t(session.stats.toImport === 1 ? "toolUI.importCsv.importSingular" : "toolUI.importCsv.importPlural", {
+                count: session.stats.toImport,
+              })}
             </Button>
           </div>
         </div>

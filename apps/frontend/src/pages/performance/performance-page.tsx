@@ -49,7 +49,7 @@ import { useCalculatePerformanceHistory } from "./hooks/use-performance-data";
 const PORTFOLIO_TOTAL: TrackedItem = {
   id: PORTFOLIO_ACCOUNT_ID,
   type: "account",
-  name: "All Portfolio",
+  name: "全部组合",
 };
 
 // Define the type expected by the chart
@@ -517,7 +517,7 @@ export default function PerformancePage() {
                             <CarouselItem className="basis-[38%] pl-2 md:pl-4">
                               <div className="bg-muted/30 flex flex-col gap-0.5 rounded-lg px-3 py-2">
                                 <span className="text-muted-foreground text-[9px] font-medium uppercase tracking-wide">
-                                  Total Return
+                                  {t("performance.metrics.totalReturn")}
                                 </span>
                                 <span
                                   className={cn(
@@ -539,7 +539,7 @@ export default function PerformancePage() {
                             <CarouselItem className="basis-[38%] pl-2 md:pl-4">
                               <div className="bg-muted/30 flex flex-col gap-0.5 rounded-lg px-3 py-2">
                                 <span className="text-muted-foreground text-[9px] font-medium uppercase tracking-wide">
-                                  Annualized
+                                  {t("performance.metrics.annualized")}
                                 </span>
                                 <span
                                   className={cn(
@@ -561,7 +561,7 @@ export default function PerformancePage() {
                             <CarouselItem className="basis-[38%] pl-2 md:pl-4">
                               <div className="bg-muted/30 flex flex-col gap-0.5 rounded-lg px-3 py-2">
                                 <span className="text-muted-foreground text-[9px] font-medium uppercase tracking-wide">
-                                  Volatility
+                                  {t("performance.metrics.volatility")}
                                 </span>
                                 <span className="text-foreground text-base font-bold">
                                   <NumberFlow
@@ -579,7 +579,7 @@ export default function PerformancePage() {
                             <CarouselItem className="basis-[38%] pl-2 md:pl-4">
                               <div className="bg-muted/30 flex flex-col gap-0.5 rounded-lg px-3 py-2">
                                 <span className="text-muted-foreground text-[9px] font-medium uppercase tracking-wide">
-                                  Max Drawdown
+                                  {t("performance.metrics.maxDrawdown")}
                                 </span>
                                 <span className="text-destructive text-base font-bold">
                                   <NumberFlow
@@ -599,7 +599,7 @@ export default function PerformancePage() {
                         /* Desktop metrics */
                         <div className="grid grid-cols-2 gap-3 rounded-lg p-2 backdrop-blur-sm sm:gap-4 md:grid-cols-4 md:gap-6">
                           <div className="flex flex-col items-center space-y-0.5 sm:space-y-1">
-                            <MetricLabelWithInfo label="Total Return" infoText={totalReturnInfo} />
+                            <MetricLabelWithInfo label={t("performance.metrics.totalReturn")} infoText={totalReturnInfo} />
                             <div className="flex items-baseline justify-center">
                               <span
                                 className={`text-base sm:text-lg ${
@@ -619,7 +619,7 @@ export default function PerformancePage() {
 
                           <div className="flex flex-col items-center space-y-0.5 sm:space-y-1">
                             <MetricLabelWithInfo
-                              label="Annualized Return"
+                              label={t("performance.metrics.annualizedReturn")}
                               infoText={annualizedReturnInfo}
                             />
                             <div className="flex items-baseline justify-center">
@@ -640,7 +640,7 @@ export default function PerformancePage() {
                           </div>
 
                           <div className="flex flex-col items-center space-y-0.5 sm:space-y-1">
-                            <MetricLabelWithInfo label="Volatility" infoText={volatilityInfo} />
+                            <MetricLabelWithInfo label={t("performance.metrics.volatility")} infoText={volatilityInfo} />
                             <div className="flex items-baseline justify-center">
                               <span className="text-foreground text-base sm:text-lg">
                                 <NumberFlow
@@ -656,7 +656,7 @@ export default function PerformancePage() {
                           </div>
 
                           <div className="flex flex-col items-center space-y-0.5 sm:space-y-1">
-                            <MetricLabelWithInfo label="Max Drawdown" infoText={maxDrawdownInfo} />
+                            <MetricLabelWithInfo label={t("performance.metrics.maxDrawdown")} infoText={maxDrawdownInfo} />
                             <div className="flex items-baseline justify-center">
                               <span className="text-destructive text-base sm:text-lg">
                                 <NumberFlow

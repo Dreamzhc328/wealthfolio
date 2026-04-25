@@ -36,6 +36,7 @@ import { SearchableSelect } from "@wealthfolio/ui";
 import { DATE_FORMAT_OPTIONS, isPresetFormat } from "../utils/date-format-options";
 import { computeFieldMappings } from "../hooks/use-import-mapping";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { CSVFileViewer, type CSVLine } from "../components/csv-file-viewer";
 import { FileDropzone } from "../components/file-dropzone";
 import { HelpTooltip } from "../components/help-tooltip";
@@ -68,6 +69,7 @@ interface CsvPreviewTableProps {
 }
 
 function CsvPreviewTable({ headers, rows, maxRows = 50 }: CsvPreviewTableProps) {
+  const { t } = useTranslation("assets");
   const displayRows = rows.slice(0, maxRows);
   const hasMoreRows = rows.length > maxRows;
 
@@ -84,7 +86,11 @@ function CsvPreviewTable({ headers, rows, maxRows = 50 }: CsvPreviewTableProps) 
                 key={idx}
                 className="border-r px-2 py-1.5 text-left font-mono text-xs font-semibold last:border-r-0"
               >
-                {header || <span className="text-muted-foreground italic">empty</span>}
+                {header || (
+                  <span className="text-muted-foreground italic">
+                    {t("import.upload.empty")}
+                  </span>
+                )}
               </th>
             ))}
           </tr>
@@ -123,7 +129,7 @@ function CsvPreviewTable({ headers, rows, maxRows = 50 }: CsvPreviewTableProps) 
       </table>
       {hasMoreRows && (
         <div className="text-muted-foreground border-t px-3 py-2 text-center text-xs">
-          Showing first {maxRows} of {rows.length} rows
+          {t("import.upload.showingFirst", { n: maxRows, total: rows.length })}
         </div>
       )}
     </>
@@ -143,6 +149,7 @@ function CsvPreviewTabs({
   headers: string[];
   rows: string[][];
 }) {
+  const { t } = useTranslation("assets");
   const [csvLines, setCsvLines] = useState<CSVLine[] | null>(null);
 
   const handleTabChange = useCallback(
@@ -163,17 +170,17 @@ function CsvPreviewTabs({
         <CardHeader className="px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-sm font-medium">CSV Preview</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("import.upload.csvPreview")}</CardTitle>
               <span className="text-muted-foreground text-xs">
-                {rows.length} row{rows.length !== 1 ? "s" : ""}
+                {t("import.upload.rowsCount", { n: rows.length })}
               </span>
             </div>
             <TabsList className="bg-secondary flex space-x-1 rounded-full p-1">
               <TabsTrigger className="h-8 rounded-full px-2 text-sm" value="parsed">
-                Parsed
+                {t("import.upload.parsedTab")}
               </TabsTrigger>
               <TabsTrigger className="h-8 rounded-full px-2 text-sm" value="raw">
-                Raw File
+                {t("import.upload.rawTab")}
               </TabsTrigger>
             </TabsList>
           </div>
@@ -202,11 +209,6 @@ const dateFormatSelectOptions = DATE_FORMAT_OPTIONS.map((o) => ({
   label: o.label,
 }));
 
-const DATE_FORMAT_SELECT_OPTIONS = [
-  ...dateFormatSelectOptions,
-  { value: "__custom__", label: "Custom…" },
-];
-
 function DateFormatPicker({
   value,
   onChange,
@@ -214,6 +216,14 @@ function DateFormatPicker({
   value: string;
   onChange: (config: Partial<ParseConfig>) => void;
 }) {
+  const { t } = useTranslation("assets");
+  const dateFormatOptions = useMemo(
+    () => [
+      ...dateFormatSelectOptions,
+      { value: "__custom__", label: t("import.upload.parseSettings.customFormat") },
+    ],
+    [t],
+  );
   const isCustom = value !== "__custom__" && !isPresetFormat(value) && value !== "";
   const [showCustom, setShowCustom] = useState(isCustom);
   const [customValue, setCustomValue] = useState(isCustom ? value : "");
@@ -222,9 +232,11 @@ function DateFormatPicker({
 
   return (
     <div className="space-y-1.5">
-      <Label className="text-muted-foreground text-xs">Date format</Label>
+      <Label className="text-muted-foreground text-xs">
+        {t("import.upload.parseSettings.dateFormat")}
+      </Label>
       <SearchableSelect
-        options={DATE_FORMAT_SELECT_OPTIONS}
+        options={dateFormatOptions}
         value={selectValue}
         onValueChange={(v) => {
           if (v === "__custom__") {
@@ -237,13 +249,13 @@ function DateFormatPicker({
             onChange({ dateFormat: v });
           }
         }}
-        placeholder="Select date format"
-        searchPlaceholder="Search formats…"
-        emptyMessage="No matching format."
+        placeholder={t("import.upload.parseSettings.selectDateFormat")}
+        searchPlaceholder={t("import.upload.parseSettings.searchFormats")}
+        emptyMessage={t("import.upload.parseSettings.noMatchingFormat")}
       />
       {showCustom && (
         <Input
-          placeholder="e.g. dd/MM/yyyy HH:mm:ss"
+          placeholder={t("import.upload.parseSettings.customPlaceholder")}
           value={customValue}
           onChange={(e) => {
             const v = e.target.value;
@@ -333,6 +345,7 @@ function TemplateSelector({
   onConfigChange,
   hasConfigErrors = false,
 }: TemplateSelectorProps) {
+  const { t } = useTranslation("assets");
   const [settingsOpen, setSettingsOpen] = useState(hasConfigErrors);
 
   useEffect(() => {
@@ -364,10 +377,12 @@ function TemplateSelector({
           >
             <div className="flex items-center gap-2">
               <Icons.Settings2 className="text-muted-foreground h-3.5 w-3.5" />
-              <span className="text-muted-foreground text-xs font-medium">Parse Settings</span>
+              <span className="text-muted-foreground text-xs font-medium">
+                {t("import.upload.parseSettings.title")}
+              </span>
               {hasConfigErrors && (
                 <span className="bg-destructive/10 text-destructive rounded-full px-2 py-px text-[10px]">
-                  Adjust settings to fix errors
+                  {t("import.upload.parseSettings.adjustToFix")}
                 </span>
               )}
               {!settingsOpen && !hasConfigErrors && (
@@ -393,13 +408,13 @@ function TemplateSelector({
                   onCheckedChange={(checked) => onConfigChange({ hasHeaderRow: checked === true })}
                 />
                 <Label htmlFor="hasHeaderRow" className="cursor-pointer text-sm">
-                  First row is header
+                  {t("import.upload.parseSettings.firstRowHeader")}
                 </Label>
               </div>
 
               <div className="space-y-1.5">
                 <Label htmlFor="skipTopRows" className="text-muted-foreground text-xs">
-                  Skip top rows
+                  {t("import.upload.parseSettings.skipTopRows")}
                 </Label>
                 <Input
                   id="skipTopRows"
@@ -415,7 +430,7 @@ function TemplateSelector({
 
               <div className="space-y-1.5">
                 <Label htmlFor="skipBottomRows" className="text-muted-foreground text-xs">
-                  Skip bottom rows
+                  {t("import.upload.parseSettings.skipBottomRows")}
                 </Label>
                 <Input
                   id="skipBottomRows"
@@ -431,20 +446,20 @@ function TemplateSelector({
 
               <div className="space-y-1.5">
                 <Label htmlFor="delimiter" className="text-muted-foreground text-xs">
-                  Delimiter
+                  {t("import.upload.parseSettings.delimiter")}
                 </Label>
                 <Select
                   value={config.delimiter}
                   onValueChange={(value) => onConfigChange({ delimiter: value })}
                 >
                   <SelectTrigger id="delimiter" className="h-8 text-sm">
-                    <SelectValue placeholder="Select delimiter" />
+                    <SelectValue placeholder={t("import.upload.parseSettings.selectDelimiter")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="auto">Auto-detect</SelectItem>
-                    <SelectItem value=",">Comma (,)</SelectItem>
-                    <SelectItem value=";">Semicolon (;)</SelectItem>
-                    <SelectItem value="\t">Tab</SelectItem>
+                    <SelectItem value="auto">{t("import.upload.parseSettings.autoDetect")}</SelectItem>
+                    <SelectItem value=",">{t("import.upload.parseSettings.delimiterCommaOpt")}</SelectItem>
+                    <SelectItem value=";">{t("import.upload.parseSettings.delimiterSemicolonOpt")}</SelectItem>
+                    <SelectItem value="\t">{t("import.upload.parseSettings.delimiterTab")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -453,19 +468,19 @@ function TemplateSelector({
 
               <div className="space-y-1.5">
                 <Label htmlFor="decimalSeparator" className="text-muted-foreground text-xs">
-                  Decimal separator
+                  {t("import.upload.parseSettings.decimalSeparator")}
                 </Label>
                 <Select
                   value={config.decimalSeparator}
                   onValueChange={(value) => onConfigChange({ decimalSeparator: value })}
                 >
                   <SelectTrigger id="decimalSeparator" className="h-8 text-sm">
-                    <SelectValue placeholder="Select separator" />
+                    <SelectValue placeholder={t("import.upload.parseSettings.selectSeparator")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="auto">Auto-detect</SelectItem>
-                    <SelectItem value=".">Period (.)</SelectItem>
-                    <SelectItem value=",">Comma (,)</SelectItem>
+                    <SelectItem value="auto">{t("import.upload.parseSettings.autoDetect")}</SelectItem>
+                    <SelectItem value=".">{t("import.upload.parseSettings.decimalPeriodOpt")}</SelectItem>
+                    <SelectItem value=",">{t("import.upload.parseSettings.decimalCommaOpt")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -482,6 +497,7 @@ function TemplateSelector({
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function UploadStep() {
+  const { t } = useTranslation("assets");
   const { state, dispatch } = useImportContext();
   const [parseError, setParseError] = useState<string | null>(null);
   const { accounts } = useAccounts();
@@ -539,7 +555,7 @@ export function UploadStep() {
           dispatch(setParseConfig(result.detectedConfig));
           headers = result.headers;
         } catch (err) {
-          setParseError(err instanceof Error ? err.message : "Failed to re-parse CSV");
+          setParseError(err instanceof Error ? err.message : t("import.upload.reparseFailed"));
         }
       }
 
@@ -605,7 +621,7 @@ export function UploadStep() {
           dispatch(setParseConfig(result.detectedConfig));
         })
         .catch((error) => {
-          setParseError(error instanceof Error ? error.message : "Failed to parse CSV file");
+          setParseError(error instanceof Error ? error.message : t("import.upload.parseFailed"));
         });
     }
   }, [applyTemplate, baselineParseConfig, dispatch, importType, state.accountId, state.file]);
@@ -635,7 +651,7 @@ export function UploadStep() {
               dispatch(setParseConfig(result.detectedConfig));
             })
             .catch((error) => {
-              setParseError(error instanceof Error ? error.message : "Failed to parse CSV file");
+              setParseError(error instanceof Error ? error.message : t("import.upload.parseFailed"));
             });
         }
       }
@@ -704,7 +720,7 @@ export function UploadStep() {
           dispatch(setParsedData(result.headers, result.rows));
         })
         .catch((error) => {
-          setParseError(error instanceof Error ? error.message : "Failed to parse CSV file");
+          setParseError(error instanceof Error ? error.message : t("import.upload.parseFailed"));
         });
     }
   }, [dispatch, selectedAccount, state.parseConfig.defaultCurrency]);
@@ -724,7 +740,7 @@ export function UploadStep() {
       dispatch(setParseConfig(result.detectedConfig));
     },
     onError: (error) => {
-      setParseError(error instanceof Error ? error.message : "Failed to parse CSV file");
+      setParseError(error instanceof Error ? error.message : t("import.upload.parseFailed"));
     },
   });
 
@@ -752,7 +768,7 @@ export function UploadStep() {
             dispatch(setParsedData(result.headers, result.rows));
           })
           .catch((error) => {
-            setParseError(error instanceof Error ? error.message : "Failed to parse CSV file");
+            setParseError(error instanceof Error ? error.message : t("import.upload.parseFailed"));
           });
       }
     },
@@ -769,8 +785,8 @@ export function UploadStep() {
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-1.5">
             <span className="text-muted-foreground font-mono text-[10px] tabular-nums">01</span>
-            <h2 className="text-sm font-semibold">Select Account</h2>
-            <HelpTooltip content="Choose the default account for imported activities. If your CSV includes an Account column with valid account ids, those will take priority for each row." />
+            <h2 className="text-sm font-semibold">{t("import.upload.selectAccount")}</h2>
+            <HelpTooltip content={t("import.upload.selectAccountHelp")} />
           </div>
           <div className="h-[116px]">
             {isMobile ? (
@@ -800,7 +816,7 @@ export function UploadStep() {
                 ) : (
                   <>
                     <Icons.Briefcase className="text-muted-foreground h-8 w-8" />
-                    <p className="text-muted-foreground text-center text-sm">No account selected</p>
+                    <p className="text-muted-foreground text-center text-sm">{t("import.upload.noAccountSelected")}</p>
                     <AccountSelectorMobile
                       setSelectedAccount={handleAccountSelect}
                       includePortfolio={false}
@@ -822,8 +838,8 @@ export function UploadStep() {
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-1.5">
             <span className="text-muted-foreground font-mono text-[10px] tabular-nums">02</span>
-            <h2 className="text-sm font-semibold">Upload CSV File</h2>
-            <HelpTooltip content="After uploading, double-check the Parse Settings below — make sure the delimiter, date format, and rows to skip match your file." />
+            <h2 className="text-sm font-semibold">{t("import.upload.uploadFile")}</h2>
+            <HelpTooltip content={t("import.upload.uploadFileHelp")} />
           </div>
           <div className="h-[116px]">
             <FileDropzone
@@ -842,9 +858,9 @@ export function UploadStep() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1.5">
           <span className="text-muted-foreground font-mono text-[10px] tabular-nums">03</span>
-          <h2 className="text-sm font-semibold">Select Format</h2>
+          <h2 className="text-sm font-semibold">{t("import.upload.selectFormat")}</h2>
           <span className="text-muted-foreground rounded border px-1.5 py-px text-[10px] leading-none">
-            optional
+            {t("import.upload.optional")}
           </span>
         </div>
         <TemplateSelector

@@ -7,6 +7,7 @@ import {
   QuantityInput as BaseQuantityInput,
 } from "@wealthfolio/ui";
 import { useFormContext, type FieldPath, type FieldValues } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface QuantityInputProps<TFieldValues extends FieldValues = FieldValues> {
   name: FieldPath<TFieldValues>;
@@ -20,11 +21,13 @@ interface QuantityInputProps<TFieldValues extends FieldValues = FieldValues> {
 
 export function QuantityInput<TFieldValues extends FieldValues = FieldValues>({
   name,
-  label = "Quantity",
+  label,
   placeholder = "0.00",
   maxDecimalPlaces = 8,
   allowNegative = false,
 }: QuantityInputProps<TFieldValues>) {
+  const { t } = useTranslation("assets");
+  const resolvedLabel = label ?? t("form.fields.quantity");
   const { control } = useFormContext<TFieldValues>();
 
   return (
@@ -33,7 +36,7 @@ export function QuantityInput<TFieldValues extends FieldValues = FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel>{resolvedLabel}</FormLabel>
           <FormControl>
             <BaseQuantityInput
               ref={field.ref}
@@ -43,8 +46,8 @@ export function QuantityInput<TFieldValues extends FieldValues = FieldValues>({
               placeholder={placeholder}
               maxDecimalPlaces={maxDecimalPlaces}
               allowNegative={allowNegative}
-              aria-label={label}
-              data-testid={`${label.toLowerCase().replace(/\s+/g, "-")}-input`}
+              aria-label={resolvedLabel}
+              data-testid={`${name.toLowerCase().replace(/\s+/g, "-")}-input`}
             />
           </FormControl>
           <FormMessage />

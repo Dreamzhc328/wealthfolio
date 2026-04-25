@@ -1,0 +1,128 @@
+{
+  "page": {
+    "logoAlt": "Wealthfolio",
+    "back": "Back",
+    "continue": "Continue",
+    "subscribeAndConnect": "Subscribe & Connect",
+    "getStarted": "Get Started"
+  },
+  "step1": {
+    "tagline": "Two ways to track your portfolio.",
+    "holdings": {
+      "title": "Holdings",
+      "subtitle": "Value Tracking",
+      "badge": "Best for low-maintenance tracking.",
+      "features": {
+        "netWorth": "Net worth & allocation",
+        "valueAndPnl": "Value & unrealized P&L",
+        "pricePerformance": "Price-based performance",
+        "fastSetup": "Fast & lightweight setup"
+      },
+      "limit": "Limit: No cashflow-adjusted performance.",
+      "note": "Note: Requires maintaining holdings/positions."
+    },
+    "transactions": {
+      "title": "Transactions",
+      "subtitle": "Performance Tracking",
+      "badge": "Best for full performance analytics.",
+      "features": {
+        "totalReturn": "Total return over time",
+        "gainsAndCashflow": "Gains & cashflow attribution",
+        "completeView": "Most complete performance view",
+        "bestWithBroker": "Best with broker sync or CSV import"
+      },
+      "limit": "Limit: Requires tracking all transactions.",
+      "note": "Note: Automated if synced with a broker."
+    },
+    "footer": {
+      "differentModes": "You can use different modes for different accounts.",
+      "learnMore": "Learn more"
+    }
+  },
+  "step2": {
+    "tagline": "Just a couple preferences to get you started",
+    "currency": {
+      "label": "Currency",
+      "other": "Other",
+      "modalTitle": "Select Currency",
+      "searchPlaceholder": "Search currencies...",
+      "noResults": "No currencies found",
+      "validationRequired": "Please select a base currency."
+    },
+    "timezone": {
+      "label": "Timezone",
+      "other": "Other",
+      "modalTitle": "Select Timezone",
+      "searchPlaceholder": "Search timezones...",
+      "noResults": "No timezones found",
+      "validationRequired": "Please select a timezone.",
+      "names": {
+        "America/New_York": "New York",
+        "America/Chicago": "Chicago",
+        "America/Denver": "Denver",
+        "America/Los_Angeles": "Los Angeles",
+        "America/Toronto": "Toronto",
+        "Europe/London": "London",
+        "Europe/Paris": "Paris",
+        "Europe/Berlin": "Berlin",
+        "Asia/Tokyo": "Tokyo",
+        "Asia/Singapore": "Singapore",
+        "Asia/Shanghai": "Shanghai",
+        "Asia/Hong_Kong": "Hong Kong",
+        "Australia/Sydney": "Sydney",
+        "Australia/Melbourne": "Melbourne",
+        "UTC": "UTC"
+      }
+    }
+  },
+  "appearance": {
+    "tagline": "Customize your experience",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "lightAlt": "Light theme preview",
+      "dark": "Dark",
+      "darkAlt": "Dark theme preview",
+      "system": "System",
+      "systemAlt": "System theme preview"
+    },
+    "font": {
+      "label": "Font",
+      "sample": "Invest with clarity.",
+      "options": {
+        "mono": {
+          "label": "Mono",
+          "description": "Technical & precise"
+        },
+        "sans": {
+          "label": "Sans",
+          "description": "Clean & modern"
+        },
+        "serif": {
+          "label": "Serif",
+          "description": "Classic & elegant"
+        }
+      }
+    }
+  },
+  "connect": {
+    "optional": "Optional",
+    "title": "Wealthfolio Connect",
+    "subtitle": "Automatically sync your brokers while keeping your data private.",
+    "features": {
+      "brokerageSync": {
+        "title": "Brokerage Sync",
+        "description": "Auto-sync your accounts and transactions into your local database."
+      },
+      "deviceSync": {
+        "title": "Device Sync",
+        "description": "Keep your database in sync across all devices with end-to-end encryption."
+      },
+      "householdView": {
+        "title": "Household View",
+        "description": "Share selected accounts with family and see an aggregated view together."
+      }
+    },
+    "learnMore": "Learn more about Connect"
+  }
+}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@wealthfolio/ui/components/ui/button";
 import {
   Command,
@@ -27,8 +28,10 @@ export function TemplatePicker({
   selectedTemplateId,
   onSelect,
   onClear,
-  placeholder = "Select format…",
+  placeholder,
 }: TemplatePickerProps) {
+  const { t } = useTranslation("assets");
+  const resolvedPlaceholder = placeholder ?? t("import.upload.selectFormatPlaceholder");
   const [open, setOpen] = useState(false);
   const systemTemplates = templates.filter((t) => t.scope === "SYSTEM");
   const userTemplates = templates.filter((t) => t.scope === "USER");
@@ -53,7 +56,7 @@ export function TemplatePicker({
               {selected.name}
             </span>
           ) : (
-            <span className="text-muted-foreground">{placeholder}</span>
+            <span className="text-muted-foreground">{resolvedPlaceholder}</span>
           )}
           <div className="flex shrink-0 items-center gap-1">
             {selectedTemplateId && onClear && (
@@ -71,7 +74,7 @@ export function TemplatePicker({
                   }
                 }}
                 className="text-muted-foreground hover:text-foreground rounded-sm p-0.5 transition-colors"
-                aria-label="Clear format"
+                aria-label={t("import.templates.clearFormat")}
               >
                 <Icons.X className="h-3.5 w-3.5" />
               </span>
@@ -82,14 +85,14 @@ export function TemplatePicker({
       </PopoverTrigger>
       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
         <Command>
-          <CommandInput placeholder="Search formats…" className="h-9" />
+          <CommandInput placeholder={t("import.templates.searchFormats")} className="h-9" />
           <CommandEmpty>
             <div className="text-muted-foreground py-2 text-center text-sm">
-              No matching formats.
+              {t("import.templates.noFormats")}
             </div>
           </CommandEmpty>
           {userTemplates.length > 0 && (
-            <CommandGroup heading="Custom">
+            <CommandGroup heading={t("import.templates.custom")}>
               {userTemplates.map((t) => (
                 <CommandItem
                   key={t.id}
@@ -114,7 +117,7 @@ export function TemplatePicker({
           )}
           {userTemplates.length > 0 && systemTemplates.length > 0 && <CommandSeparator />}
           {systemTemplates.length > 0 && (
-            <CommandGroup heading="Built-in">
+            <CommandGroup heading={t("import.templates.builtIn")}>
               {systemTemplates.map((t) => (
                 <CommandItem
                   key={t.id}

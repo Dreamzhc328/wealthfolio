@@ -116,16 +116,16 @@ function ProviderSettings({
   const getFeatureDisplay = (feature: string) => {
     const normalized = feature.toLowerCase();
     if (normalized.includes("real-time")) {
-      return { icon: <Icons.Activity2 className="h-3 w-3" />, label: "Quote" };
+      return { icon: <Icons.Activity2 className="h-3 w-3" />, label: t("marketData.labels.feature.quote") };
     }
     if (normalized.includes("historical")) {
-      return { icon: <Icons.Clock className="h-3 w-3" />, label: "Historical" };
+      return { icon: <Icons.Clock className="h-3 w-3" />, label: t("marketData.labels.feature.historical") };
     }
     if (normalized.includes("search")) {
-      return { icon: <Icons.Search className="h-3 w-3" />, label: "Search" };
+      return { icon: <Icons.Search className="h-3 w-3" />, label: t("marketData.labels.feature.search") };
     }
     if (normalized.includes("profile")) {
-      return { icon: <Icons.FileText className="h-3 w-3" />, label: "Profiles" };
+      return { icon: <Icons.FileText className="h-3 w-3" />, label: t("marketData.labels.feature.profiles") };
     }
     return { icon: null, label: feature };
   };
@@ -703,7 +703,7 @@ export default function MarketDataSettingsPage() {
 
   return (
     <div className="text-foreground space-y-6">
-      <SettingsHeader heading="Market Data" text="Configure your market data providers.">
+      <SettingsHeader heading={t("marketData.heading")} text={t("marketData.description")}>
         <div className="flex items-center gap-2">
           <Button
             asChild

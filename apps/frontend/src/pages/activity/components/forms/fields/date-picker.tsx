@@ -1,5 +1,6 @@
 import { DatePickerInput, FormField, FormItem, FormLabel, FormMessage } from "@wealthfolio/ui";
 import { useFormContext, type FieldPath, type FieldValues } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { today, now, getLocalTimeZone } from "@internationalized/date";
 
 interface DatePickerProps<TFieldValues extends FieldValues = FieldValues> {
@@ -15,11 +16,13 @@ interface DatePickerProps<TFieldValues extends FieldValues = FieldValues> {
 
 export function DatePicker<TFieldValues extends FieldValues = FieldValues>({
   name,
-  label = "Date",
+  label,
   enableTime = true,
   timeGranularity = "minute",
   allowFutureDates = true,
 }: DatePickerProps<TFieldValues>) {
+  const { t } = useTranslation("assets");
+  const resolvedLabel = label ?? t("form.fields.date");
   const { control } = useFormContext<TFieldValues>();
 
   // Calculate maxValue for disabling future dates
@@ -37,7 +40,7 @@ export function DatePicker<TFieldValues extends FieldValues = FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel>{resolvedLabel}</FormLabel>
           <DatePickerInput
             onChange={(date: Date | undefined) => field.onChange(date)}
             value={field.value}

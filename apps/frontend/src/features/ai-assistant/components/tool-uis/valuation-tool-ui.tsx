@@ -6,6 +6,7 @@ import { makeAssistantToolUI } from "@assistant-ui/react";
 import { Badge, Card, CardContent, CardHeader, CardTitle, IntervalSelector } from "@wealthfolio/ui";
 import { isAfter, parseISO, subMonths } from "date-fns";
 import { memo, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import { useSettingsContext } from "@/lib/settings-provider";
@@ -119,6 +120,7 @@ type ValuationContentProps = ToolCallMessagePartProps<ValuationArgs, ValuationRe
 const ValuationContent = memo(ValuationContentImpl);
 
 function ValuationContentImpl({ args, result, status }: ValuationContentProps) {
+  const { t } = useTranslation("aiAssistant");
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
   const [period, setPeriod] = useState<TimePeriod>("3M");
@@ -165,7 +167,7 @@ function ValuationContentImpl({ args, result, status }: ValuationContentProps) {
 
   // Compact mode — just show a one-liner when used as a prerequisite
   if (args?.displayMode === "compact" && parsed && !isRunning) {
-    return <CompactToolCard label="Fetched valuation history" />;
+    return <CompactToolCard label={t("toolUI.valuation.compact")} />;
   }
 
   // Empty state - don't render anything, let LLM explain
@@ -190,7 +192,7 @@ function ValuationContentImpl({ args, result, status }: ValuationContentProps) {
       <CardHeader className="flex flex-col gap-2 pb-3">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <CardTitle className="text-base">Valuation history</CardTitle>
+            <CardTitle className="text-base">{t("toolUI.valuation.title")}</CardTitle>
             <Badge variant="secondary" className="uppercase">
               {accountLabel}
             </Badge>
@@ -204,7 +206,10 @@ function ValuationContentImpl({ args, result, status }: ValuationContentProps) {
         </div>
         {(typedArgs?.startDate || typedArgs?.endDate) && (
           <p className="text-muted-foreground text-xs">
-            Range {typedArgs?.startDate ?? "start"} - {typedArgs?.endDate ?? "latest"}
+            {t("toolUI.valuation.rangeText", {
+              start: typedArgs?.startDate ?? t("toolUI.valuation.rangeStart"),
+              end: typedArgs?.endDate ?? t("toolUI.valuation.rangeLatest"),
+            })}
           </p>
         )}
       </CardHeader>
@@ -217,12 +222,12 @@ function ValuationContentImpl({ args, result, status }: ValuationContentProps) {
               {isRunning ? (
                 <>
                   <Icons.Spinner className="h-5 w-5 animate-spin" />
-                  <span>Fetching valuation history...</span>
+                  <span>{t("toolUI.valuation.fetching")}</span>
                 </>
               ) : isIncomplete ? (
-                <span>Request was cancelled.</span>
+                <span>{t("toolUI.valuation.cancelled")}</span>
               ) : (
-                <span>No valuation history available.</span>
+                <span>{t("toolUI.valuation.noHistory")}</span>
               )}
             </div>
           )}

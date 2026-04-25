@@ -49,7 +49,7 @@ const AssetHistoryCard: React.FC<AssetHistoryProps> = ({
   }, [syncMarketDataMutation, assetId]);
 
   const [selectedIntervalCode, setSelectedIntervalCode] = useState<TimePeriod>("3M");
-  const [selectedIntervalDesc, setSelectedIntervalDesc] = useState<string>("past 3 months");
+  const [selectedIntervalDesc, setSelectedIntervalDesc] = useState<string>("近 3 个月");
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: subMonths(new Date(), 3),
     to: new Date(),

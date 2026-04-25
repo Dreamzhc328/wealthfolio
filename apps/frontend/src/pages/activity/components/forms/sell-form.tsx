@@ -10,6 +10,7 @@ import { Card, CardContent } from "@wealthfolio/ui/components/ui/card";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import {
   AccountSelect,
@@ -148,6 +149,7 @@ export function SellForm({
   isEditing = false,
   assetCurrency,
 }: SellFormProps) {
+  const { t } = useTranslation("assets");
   const { data: settings } = useSettings();
   const baseCurrency = settings?.baseCurrency;
 
@@ -238,8 +240,12 @@ export function SellForm({
     setValue("assetId", "");
   };
 
-  const quantityLabel = isOption ? "Contracts" : assetType === "bond" ? "Bonds" : "Quantity";
-  const priceLabel = isOption ? "Premium/Share" : "Price";
+  const quantityLabel = isOption
+    ? t("form.fields.contracts")
+    : assetType === "bond"
+      ? t("form.fields.bonds")
+      : t("form.fields.quantity");
+  const priceLabel = isOption ? t("form.fields.premiumPerShare") : t("form.fields.price");
 
   // Get account currency from selected account
   const selectedAccount = useMemo(
@@ -384,7 +390,7 @@ export function SellForm({
             <AccountSelect name="accountId" accounts={accounts} currencyName="currency" />
 
             {/* Date Picker */}
-            <DatePicker name="activityDate" label="Date" enableTime={true} />
+            <DatePicker name="activityDate" label={t("form.fields.date")} enableTime={true} />
 
             {/* Symbol / Option Contract Fields */}
             {isOption ? (
@@ -420,7 +426,9 @@ export function SellForm({
 
             {/* Quantity, Price, Fee Row */}
             {isOption && (
-              <h4 className="text-muted-foreground text-sm font-medium">Trade Details</h4>
+              <h4 className="text-muted-foreground text-sm font-medium">
+                {t("form.fields.tradeDetails")}
+              </h4>
             )}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
@@ -441,12 +449,12 @@ export function SellForm({
                 )}
                 {!isOption && availableHoldingQuantity > 0 && (
                   <p className="text-muted-foreground mt-1.5 text-xs">
-                    Available: {availableHoldingQuantity.toLocaleString()}
+                    {t("warnings.available", { quantity: availableHoldingQuantity.toLocaleString() })}
                   </p>
                 )}
                 {isOption && availableHoldingQuantity > 0 && (
                   <p className="text-muted-foreground mt-1.5 text-xs">
-                    Holding: {availableHoldingQuantity.toLocaleString()} contracts
+                    {t("warnings.holding", { quantity: availableHoldingQuantity.toLocaleString() })}
                   </p>
                 )}
               </div>
@@ -456,7 +464,7 @@ export function SellForm({
                 maxDecimalPlaces={4}
                 currency={currency}
               />
-              <AmountInput name="fee" label="Fee" currency={currency} />
+              <AmountInput name="fee" label={t("form.fields.fee")} currency={currency} />
             </div>
 
             {/* Option Total Credit with formula breakdown */}
@@ -465,7 +473,7 @@ export function SellForm({
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-muted-foreground text-xs font-medium uppercase">
-                      Total Credit
+                      {t("form.fields.totalCredit")}
                     </span>
                     <p className="text-muted-foreground mt-0.5 text-xs tabular-nums">
                       {Number(optQuantity)} ×{" "}
@@ -506,9 +514,11 @@ export function SellForm({
               <Alert variant="default" className="border-warning bg-warning/10">
                 <Icons.AlertTriangle className="text-warning h-4 w-4" />
                 <AlertDescription className="text-warning text-sm">
-                  You are selling more {isOption ? "contracts" : "shares"} (
-                  {optQuantity?.toLocaleString()}) than your available holdings (
-                  {availableHoldingQuantity.toLocaleString()}). This may result in a short position.
+                  {t("warnings.sellingMoreThanHoldings", {
+                    unit: isOption ? t("form.fields.contracts") : t("form.fields.shares"),
+                    quantity: optQuantity?.toLocaleString(),
+                    available: availableHoldingQuantity.toLocaleString(),
+                  })}
                 </AlertDescription>
               </Alert>
             )}
@@ -525,7 +535,11 @@ export function SellForm({
             />
 
             {/* Notes */}
-            <NotesInput name="comment" label="Notes" placeholder="Add an optional note..." />
+            <NotesInput
+              name="comment"
+              label={t("form.fields.notes")}
+              placeholder={t("form.fields.notesPlaceholder")}
+            />
           </CardContent>
         </Card>
 
@@ -533,7 +547,7 @@ export function SellForm({
         <div className="flex justify-end gap-2">
           {onCancel && (
             <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-              Cancel
+              {t("form.buttons.cancel")}
             </Button>
           )}
           <Button type="submit" disabled={isLoading}>
@@ -543,7 +557,11 @@ export function SellForm({
             ) : (
               <Icons.Plus className="mr-2 h-4 w-4" />
             )}
-            {isEditing ? "Update" : isOption ? "Sell to Close" : "Add Sell"}
+            {isEditing
+              ? t("form.buttons.update")
+              : isOption
+                ? t("form.buttons.sellToClose")
+                : t("form.buttons.sell")}
           </Button>
         </div>
       </form>

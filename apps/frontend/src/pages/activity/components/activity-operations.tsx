@@ -10,6 +10,7 @@ import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import type { Activity, ActivityDetails } from "@/lib/types";
 import { Row } from "@tanstack/react-table";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ActivityDetailSheet } from "./activity-detail-sheet";
 
 export interface ActivityOperationsProps<TData> {
@@ -27,6 +28,7 @@ export function ActivityOperations<TData>({
   onDelete,
   onDuplicate,
 }: ActivityOperationsProps<TData>) {
+  const { t } = useTranslation("assets");
   const activity = activityProp ?? (row?.original as ActivityDetails);
   const [detailSheetOpen, setDetailSheetOpen] = useState(false);
 
@@ -35,21 +37,21 @@ export function ActivityOperations<TData>({
       <DropdownMenu>
         <DropdownMenuTrigger className="hover:bg-muted flex h-8 w-8 items-center justify-center rounded-md border transition-colors">
           <Icons.MoreVertical className="h-4 w-4" />
-          <span className="sr-only">Open</span>
+          <span className="sr-only">{t("operations.open")}</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => setDetailSheetOpen(true)}>
             <Icons.Info className="mr-2 h-4 w-4" />
-            More details
+            {t("operations.moreDetails")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => onEdit(activity)}>
             <Icons.Pencil className="mr-2 h-4 w-4" />
-            Edit
+            {t("operations.edit")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onDuplicate(activity)}>
             <Icons.Copy className="mr-2 h-4 w-4" />
-            Duplicate
+            {t("operations.duplicate")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -57,7 +59,7 @@ export function ActivityOperations<TData>({
             onSelect={() => onDelete(activity)}
           >
             <Icons.Trash className="mr-2 h-4 w-4" />
-            Delete
+            {t("operations.delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -1,0 +1,519 @@
+{
+  "common": {
+    "beta": "Beta",
+    "betaTooltip": "This feature is in beta. Results may vary as we continue to improve.",
+    "disclaimer": "Responses may be inaccurate. Not a financial advice."
+  },
+  "header": {
+    "showSidebar": "Show sidebar",
+    "hideSidebar": "Hide sidebar",
+    "toggleMenu": "Toggle menu"
+  },
+  "emptyState": {
+    "title": "No AI provider configured",
+    "description": "Connect an AI provider to start chatting with your personal finance assistant. Your data stays private and secure.",
+    "configureButton": "Configure AI Providers"
+  },
+  "thread": {
+    "welcomeTitle": "Hello there!",
+    "welcomeSubtitle": "How can I help you today?",
+    "scrollToBottom": "Scroll to bottom",
+    "messageInput": "Message input",
+    "composerPlaceholder": "Send a message...",
+    "sendMessage": "Send message",
+    "stopGenerating": "Stop generating",
+    "copy": "Copy",
+    "regenerate": "Refresh",
+    "edit": "Edit",
+    "previous": "Previous",
+    "next": "Next",
+    "cancelEdit": "Cancel edit",
+    "updateMessage": "Update message",
+    "cancel": "Cancel",
+    "update": "Update",
+    "suggestions": {
+      "performance": "How is my portfolio performing this year?",
+      "topHoldings": "What are my top performing holdings?",
+      "dividends": "Show my dividend income summary",
+      "allocation": "Analyze my asset allocation"
+    }
+  },
+  "threadList": {
+    "newThread": "New Thread",
+    "searchPlaceholder": "Search threads...",
+    "clearSearch": "Clear search",
+    "loadingAria": "Loading threads",
+    "noMatches": "No threads match your search.",
+    "noConversations": "No conversations yet.",
+    "pinned": "Pinned",
+    "recent": "Recent",
+    "newChat": "New Chat",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "deleteConfirmTitle": "Delete conversation?",
+    "deleteConfirmMessage": "This will permanently delete \"{{title}}\" and all its messages.",
+    "deleteFallback": "this conversation",
+    "deleteButton": "Delete",
+    "deletePending": "Deleting..."
+  },
+  "threadSidebar": {
+    "header": "Conversations",
+    "newConversation": "New conversation",
+    "newConversationFallback": "New conversation",
+    "searchPlaceholder": "Search conversations...",
+    "noConversations": "No conversations yet",
+    "noConversationsHint": "Start a new chat to ask questions about your portfolio",
+    "noMatches": "No matches found",
+    "noMatchesHintTag": "Try clearing the tag filter",
+    "noMatchesHintSearch": "Try a different search term",
+    "pinned": "Pinned",
+    "recent": "Recent",
+    "options": "Thread options",
+    "rename": "Rename",
+    "editTags": "Edit tags",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "delete": "Delete",
+    "renameDialogTitle": "Rename conversation",
+    "renameDialogPlaceholder": "Enter a new title...",
+    "renameDialogCancel": "Cancel",
+    "renameDialogSave": "Save",
+    "tagsDialogTitle": "Edit tags",
+    "tagsDialogDescription": "Add or remove tags to organize this conversation.",
+    "tagsLabel": "Tags",
+    "tagsPlaceholder": "Type a tag and press Enter...",
+    "tagsHelp": "Press Enter or comma to add a tag. Backspace to remove the last tag.",
+    "tagsDone": "Done",
+    "deleteDialogTitle": "Delete conversation?",
+    "deleteDialogDescription": "This will permanently delete \"{{title}}\" and all its messages. This action cannot be undone.",
+    "deleteDialogFallback": "this conversation",
+    "deleteCancel": "Cancel",
+    "deleteConfirm": "Delete"
+  },
+  "providerPicker": {
+    "noProvidersConfigured": "No providers configured"
+  },
+  "modelPicker": {
+    "noModel": "No model",
+    "selectModel": "Select model",
+    "selectModelAria": "Select model",
+    "noModelsAvailable": "No models available",
+    "addModels": "Add models..."
+  },
+  "thinking": {
+    "label": "Think",
+    "enable": "Enable thinking",
+    "disable": "Disable thinking",
+    "clickToEnable": "Click to enable thinking",
+    "clickToDisable": "Click to disable thinking",
+    "thinking": "Thinking...",
+    "thoughtBrief": "Thought for a few seconds",
+    "thoughtFor": "Thought for {{seconds}} seconds"
+  },
+  "attachment": {
+    "imagePreviewTitle": "Image Attachment Preview",
+    "imageAlt": "Image Preview",
+    "preview": "Attachment preview",
+    "ariaLabel": "{{type}} attachment",
+    "type": {
+      "image": "Image",
+      "document": "Document",
+      "file": "File"
+    },
+    "remove": "Remove file",
+    "add": "Add Attachment"
+  },
+  "tool": {
+    "calling": "Calling {{name}}...",
+    "cancelled": "Cancelled {{name}}",
+    "used": "Used tool: {{name}}"
+  },
+  "markdown": {
+    "copy": "Copy"
+  },
+  "providerSettings": {
+    "default": "Default",
+    "apiKeyRequired": "API Key Required",
+    "apiKeyLabel": "API Key",
+    "apiKeyGet": "Get API key",
+    "apiKeyPlaceholder": "Enter API key",
+    "apiKeyShow": "Show API key",
+    "apiKeyHide": "Hide API key",
+    "apiKeySave": "Save",
+    "modelsLabel": "Models",
+    "addModel": "Add",
+    "searchModelsPlaceholder": "Search models...",
+    "loadingModels": "Loading...",
+    "noModelsFound": "No models found.",
+    "recommended": "Recommended",
+    "otherAvailable": "Other Available",
+    "noModelsSelected": "No models selected. Click \"Add\" to add models.",
+    "needsConfig": "Config",
+    "capabilities": {
+      "tools": "Tools",
+      "vision": "Vision",
+      "thinking": "Thinking"
+    },
+    "recommendedBadge": "Recommended",
+    "capabilitiesPreset": "Capabilities are preset for recommended models.",
+    "dataAccessLabel": "Data Access",
+    "dataAccessDescription": "What data the AI can access",
+    "dataAccess": {
+      "accounts": {
+        "label": "Accounts",
+        "description": "Account names, types, and balances"
+      },
+      "holdings": {
+        "label": "Holdings",
+        "description": "Current positions and their values"
+      },
+      "activities": {
+        "label": "Transactions",
+        "description": "Past transactions and activities"
+      },
+      "performance": {
+        "label": "Performance",
+        "description": "Returns and performance metrics"
+      },
+      "income": {
+        "label": "Income",
+        "description": "Income summary and breakdown"
+      },
+      "goals": {
+        "label": "Goals",
+        "description": "Investment goals and progress"
+      },
+      "allocation": {
+        "label": "Allocation",
+        "description": "Portfolio allocation breakdown"
+      },
+      "history": {
+        "label": "History",
+        "description": "Portfolio value over time"
+      }
+    },
+    "advanced": {
+      "title": "Advanced Options",
+      "customized": "Customized",
+      "resetDefaults": "Reset to defaults",
+      "structuredOptions": "Structured options",
+      "structuredOptionsDescription": "Arrays and objects ship with the app and can't be edited here.",
+      "orphaned": "Orphaned overrides — the following keys are no longer in the catalog:",
+      "remove": "Remove",
+      "endpoint": "Endpoint",
+      "endpointLearnMore": "Learn more",
+      "endpointDescription": "Override the default endpoint for this provider.",
+      "endpointSave": "Save",
+      "effective": "Effective: {{value}}",
+      "default": "Default: {{value}}",
+      "overridden": "Overridden",
+      "modelDefault": "model default",
+      "groups": {
+        "sampling": {
+          "title": "Sampling",
+          "blurb": "How randomly the model picks the next token."
+        },
+        "limits": {
+          "title": "Output limits",
+          "blurb": "Caps on response length and context size."
+        },
+        "repetition": {
+          "title": "Repetition",
+          "blurb": "Discourage the model from repeating itself."
+        },
+        "other": {
+          "title": "Other",
+          "blurb": "Miscellaneous provider-specific options."
+        }
+      },
+      "primary": {
+        "temperature": {
+          "label": "Temperature",
+          "description": "Controls randomness. Lower = more deterministic output."
+        },
+        "maxTokens": {
+          "label": "Max output tokens",
+          "description": "Safety cap on response length."
+        },
+        "maxTokensThinking": {
+          "label": "Max tokens (thinking)",
+          "description": "Used when the model reasons internally — reasoning tokens count against this cap, so it should be larger than Max output tokens."
+        }
+      },
+      "extra": {
+        "num_ctx": "Context window size in tokens. Input + output must fit inside.",
+        "num_predict": "Max tokens to generate (Ollama's equivalent of max_tokens).",
+        "top_k": "Only sample from the top-K most likely tokens. 0 = disabled.",
+        "top_p": "Nucleus sampling — consider tokens up to this cumulative probability.",
+        "min_p": "Minimum probability threshold for candidate tokens.",
+        "mirostat": "Mirostat sampling mode. 0 = off, 1 or 2 = enabled.",
+        "mirostat_eta": "Mirostat learning rate.",
+        "mirostat_tau": "Mirostat target entropy.",
+        "repeat_penalty": "Penalize repeated tokens. 1 = none, >1 = discourage repetition.",
+        "repeat_last_n": "How many recent tokens the repeat penalty considers.",
+        "frequency_penalty": "Penalize tokens by how often they've appeared. Range -2 to 2.",
+        "presence_penalty": "Encourage new topics by penalizing any repetition. Range -2 to 2.",
+        "seed": "Seed for reproducible output. Leave empty for random."
+      }
+    }
+  },
+  "toolUI": {
+    "common": {
+      "fetched": "Fetched {{label}}"
+    },
+    "accounts": {
+      "title": "Accounts",
+      "loadFailed": "Failed to load accounts",
+      "errorMessage": "The request was interrupted or failed.",
+      "empty": "No accounts found.",
+      "emptyHint": "Add accounts in Settings to track your investments.",
+      "compactSingular": "Fetched {{count}} account",
+      "compactPlural": "Fetched {{count}} accounts",
+      "countSingular": "{{count}} account",
+      "countPlural": "{{count}} accounts",
+      "of": "of {{count}}"
+    },
+    "activities": {
+      "title": "Activities",
+      "loadFailed": "Failed to load activities data.",
+      "empty": "No activities found for this query.",
+      "compactSingular": "Fetched {{count}} activity",
+      "compactPlural": "Fetched {{count}} activities",
+      "transactionsSingular": "{{count}} transaction",
+      "transactionsPlural": "{{count}} transactions",
+      "headers": {
+        "date": "Date",
+        "type": "Type",
+        "symbol": "Symbol",
+        "qty": "Qty",
+        "price": "Price",
+        "amount": "Amount"
+      }
+    },
+    "allocation": {
+      "title": "Allocation",
+      "defaultName": "Allocation",
+      "loadFailed": "Failed to load allocation data.",
+      "empty": "No allocation data found.",
+      "compact": "Fetched asset allocation",
+      "categoriesSingular": "{{count}} category",
+      "categoriesPlural": "{{count}} categories",
+      "holdingsSingular": "{{count}} holding",
+      "holdingsPlural": "{{count}} holdings",
+      "drillDown": "Drill-down",
+      "fallbackHoldings": "Holdings",
+      "headers": {
+        "symbol": "Symbol",
+        "name": "Name",
+        "value": "Value",
+        "weight": "Weight"
+      }
+    },
+    "goals": {
+      "title": "Goals",
+      "loadFailed": "Failed to load goals",
+      "errorMessage": "The request was interrupted or failed.",
+      "empty": "No goals set up yet.",
+      "emptyHint": "Create investment goals in Settings to track your progress.",
+      "compactSingular": "Fetched {{count}} goal",
+      "compactPlural": "Fetched {{count}} goals",
+      "countSingular": "{{count}} goal",
+      "countPlural": "{{count}} goals",
+      "achieved": "{{count}} achieved",
+      "of": "of {{count}}",
+      "untitled": "Untitled Goal"
+    },
+    "holdings": {
+      "title": "Holdings",
+      "portfolioToday": "Your Portfolio {{label}}",
+      "today": "Today",
+      "totalReturn": "Total Return",
+      "todayLower": "today",
+      "totalLower": "total",
+      "loadFailed": "Failed to load holdings data.",
+      "empty": "No holdings found for this account.",
+      "compactSingular": "Fetched {{count}} holding",
+      "compactPlural": "Fetched {{count}} holdings",
+      "positionsSingular": "{{count}} position",
+      "positionsPlural": "{{count}} positions",
+      "withReturnLabel": "{{count}} positions · {{label}}",
+      "headers": {
+        "symbol": "Symbol",
+        "value": "Value",
+        "weight": "Weight",
+        "today": "Today",
+        "total": "Total",
+        "gain": "Gain"
+      },
+      "toggle": {
+        "daily": "Daily",
+        "total": "Total"
+      },
+      "treemapTitle": "Holdings",
+      "valueLabel": "Value"
+    },
+    "income": {
+      "title": "Income Summary",
+      "monthlyAverage": "Monthly Average",
+      "byType": "By Type",
+      "monthlyIncome": "Monthly Income",
+      "sources": "Sources",
+      "loadFailed": "Failed to load income data.",
+      "empty": "No income data found for this period.",
+      "unavailable": "Income data is unavailable.",
+      "compact": "Fetched income summary",
+      "yoy": "YoY",
+      "period": {
+        "ytd": "Year to Date",
+        "lastYear": "Last Year",
+        "total": "All Time"
+      },
+      "type": {
+        "dividend": "Dividends",
+        "interest": "Interest",
+        "other": "Other"
+      },
+      "months": {
+        "jan": "Jan",
+        "feb": "Feb",
+        "mar": "Mar",
+        "apr": "Apr",
+        "may": "May",
+        "jun": "Jun",
+        "jul": "Jul",
+        "aug": "Aug",
+        "sep": "Sep",
+        "oct": "Oct",
+        "nov": "Nov",
+        "dec": "Dec"
+      }
+    },
+    "performance": {
+      "title": "Performance",
+      "loadFailed": "Failed to load performance data",
+      "errorMessage": "The request was interrupted or failed.",
+      "compact": "Fetched performance metrics",
+      "portfolio": "Portfolio",
+      "today": "Today",
+      "start": "Start",
+      "annualizedTwr": "Annualized TWR",
+      "moneyWeighted": "Money-Weighted (MWR)",
+      "annualSuffix": "{{value}} ann.",
+      "volatility": "Volatility",
+      "maxDrawdown": "Max Drawdown"
+    },
+    "valuation": {
+      "title": "Valuation history",
+      "compact": "Fetched valuation history",
+      "fetching": "Fetching valuation history...",
+      "cancelled": "Request was cancelled.",
+      "noHistory": "No valuation history available.",
+      "rangeText": "Range {{start}} - {{end}}",
+      "rangeStart": "start",
+      "rangeLatest": "latest"
+    },
+    "importCsv": {
+      "successTitle": "Import complete",
+      "successMessageSingular": "Imported <1>{{count}}</1> activity. The mapping was saved as this account's template so the next import from the same broker will skip the AI step.",
+      "successMessagePlural": "Imported <1>{{count}}</1> activities. The mapping was saved as this account's template so the next import from the same broker will skip the AI step.",
+      "viewActivities": "View activities",
+      "errorTitle": "CSV import failed",
+      "errorInterrupted": "The CSV import request was interrupted.",
+      "errorNoMapping": "No import mapping was returned by the AI tool.",
+      "staleTitle": "CSV import · {{count}} rows",
+      "staleTitleSingular": "CSV import · {{count}} row",
+      "staleMappedColumns": "Mapped {{count}} columns. ",
+      "staleMessage": "This import was not completed. Attach the CSV again to start a new import.",
+      "title": "CSV import · {{count}} rows",
+      "titleSingular": "CSV import · {{count}} row",
+      "selectAccount": "Select target account",
+      "stats": "{{valid}} valid · {{warning}} warnings · {{errors}} errors · {{duplicates}} duplicates",
+      "revalidate": "Revalidate",
+      "importSingular": "Import {{count}} activity",
+      "importPlural": "Import {{count}} activities"
+    },
+    "mappingBadge": {
+      "savedTemplate": "Using saved template",
+      "aiMappingHigh": "AI mapping · High",
+      "aiMappingMedium": "AI mapping · Medium",
+      "aiMappingLow": "AI mapping · Low",
+      "skipPreambleSingular": "Skipped {{count}} preamble row",
+      "skipPreamblePlural": "Skipped {{count}} preamble rows",
+      "skipFooterSingular": "Skipped {{count}} footer row",
+      "skipFooterPlural": "Skipped {{count}} footer rows",
+      "dateFormat": "Date {{format}}",
+      "delimiter": "Delimiter {{value}}",
+      "delimiterTab": "tab",
+      "decimal": "Decimal {{value}}",
+      "viewMapping": "View mapping",
+      "columnMappings": "Column mappings",
+      "noMappings": "No field mappings detected.",
+      "symbolTranslations": "Symbol translations"
+    },
+    "reviewGrid": {
+      "all": "All",
+      "valid": "Valid",
+      "warnings": "Warnings",
+      "errors": "Errors",
+      "duplicates": "Duplicates",
+      "skipped": "Skipped"
+    },
+    "recordActivity": {
+      "loadingTitle": "Recording activity",
+      "successTitle": "Activity Recorded",
+      "errorPrepareFailed": "Failed to prepare activity",
+      "errorInterrupted": "The request was interrupted or failed.",
+      "errorNoData": "No activity data available",
+      "errorUnsupportedType": "Unsupported activity type: {{type}}",
+      "draftTitle": "{{type}} draft",
+      "customAsset": "Custom Asset",
+      "customAssetHint": "\"{{symbol}}\" wasn't found. It will be created as a custom asset on save.",
+      "validationTitle": "The AI flagged some issues — please confirm:",
+      "validationMissing": "Missing: {{field}}",
+      "labels": {
+        "type": "Type:",
+        "date": "Date:",
+        "asset": "Asset:",
+        "quantity": "Quantity:",
+        "amount": "Amount:",
+        "account": "Account:"
+      },
+      "viewInActivities": "View in Activities"
+    },
+    "recordActivities": {
+      "title": "Batch Activity Preview",
+      "subtitle": "Review rows, then confirm once.",
+      "ready": "{{count}} ready",
+      "errorPrepareFailed": "Failed to prepare activity drafts",
+      "errorNoBatch": "No batch activity draft available",
+      "stats": {
+        "rows": "Rows: {{count}}",
+        "valid": "Valid: {{count}}",
+        "errors": "Errors: {{count}}",
+        "willCreate": "Will create: {{count}}"
+      },
+      "noValidRows": "No valid rows available to submit.",
+      "saveFailed": "Failed to save activities",
+      "headers": {
+        "date": "Date",
+        "type": "Type",
+        "symbol": "Symbol",
+        "qty": "Qty",
+        "price": "Price",
+        "amount": "Amount",
+        "fee": "Fee",
+        "account": "Account",
+        "status": "Status"
+      },
+      "rowStatus": {
+        "submitted": "Submitted",
+        "error": "Error",
+        "ready": "Ready",
+        "invalid": "Invalid"
+      },
+      "summary": "Created {{created}} row(s), errors {{errors}}.",
+      "confirmWithCount": "Confirm {{count}} Activities",
+      "confirm": "Confirm Activities"
+    }
+  }
+}

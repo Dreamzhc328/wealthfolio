@@ -337,6 +337,17 @@
       "contributedOver": "{{year}} 年你已向该账户缴款 <contributed/>。累计缴款 <total/>，已超过上限 <limit/>。",
       "contributedTowards": "{{year}} 年你已向该账户缴款 <contributed/>。{{groupName}} 上限为 <limit/>，累计缴款 <total/>。"
     }
+  },
+  "savingGoals": {
+    "title": "储蓄目标",
+    "empty": "还没有储蓄目标。",
+    "create": "创建第一个目标",
+    "tooltip": {
+      "progress": "进度",
+      "currentValue": "当前金额",
+      "targetValue": "目标金额",
+      "pending": "进度计算中或暂不适用。"
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { ColumnDef, RowSelectionState } from "@tanstack/react-table";
 import {
   DataGrid,
@@ -51,32 +52,14 @@ export interface ImportReviewGridProps {
 // Status Display Configuration
 // ─────────────────────────────────────────────────────────────────────────────
 
-interface StatusConfig {
-  label: string;
-  bgClassName: string;
-}
+// StatusConfig kept removed — labels are resolved via i18n keys above.
 
-const STATUS_CONFIG: Record<DraftActivityStatus, StatusConfig> = {
-  valid: {
-    label: "Valid",
-    bgClassName: "bg-green-100 dark:bg-green-900/30",
-  },
-  warning: {
-    label: "Warning",
-    bgClassName: "bg-yellow-100 dark:bg-yellow-900/30",
-  },
-  error: {
-    label: "Error",
-    bgClassName: "bg-red-100 dark:bg-red-900/30",
-  },
-  skipped: {
-    label: "Skipped",
-    bgClassName: "bg-muted/50",
-  },
-  duplicate: {
-    label: "Duplicate",
-    bgClassName: "bg-blue-100 dark:bg-blue-900/30",
-  },
+const STATUS_LABEL_KEYS: Record<DraftActivityStatus, string> = {
+  valid: "import.review.statusValid",
+  warning: "import.review.statusWarnings",
+  error: "import.review.statusErrors",
+  skipped: "import.review.statusSkipped",
+  duplicate: "import.review.statusDuplicates",
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -85,18 +68,19 @@ const STATUS_CONFIG: Record<DraftActivityStatus, StatusConfig> = {
 
 function getStatusTitle(
   status: DraftActivityStatus,
-  skipReason?: string,
-  duplicateOfId?: string,
-  duplicateOfLineNumber?: number,
-  errors?: Record<string, string[]>,
-  warnings?: Record<string, string[]>,
+  skipReason: string | undefined,
+  duplicateOfId: string | undefined,
+  duplicateOfLineNumber: number | undefined,
+  errors: Record<string, string[]> | undefined,
+  warnings: Record<string, string[]> | undefined,
+  t: (key: string, opts?: Record<string, unknown>) => string,
 ): string | undefined {
   if (status === "valid") return undefined;
   if (status === "skipped" && skipReason) return skipReason;
   if (typeof duplicateOfLineNumber === "number") {
-    return `Duplicate of line ${duplicateOfLineNumber} in this import batch`;
+    return t("import.confirm.duplicateOfLine", { n: duplicateOfLineNumber });
   }
-  if (duplicateOfId) return "Duplicate of an existing activity in your portfolio";
+  if (duplicateOfId) return t("import.confirm.duplicateOfExisting");
   if (errors) {
     const errorDetails = Object.entries(errors)
       .flatMap(([field, msgs]) => msgs.map((msg) => `${field}: ${msg}`))
@@ -115,7 +99,7 @@ function getStatusTitle(
       return warningDetails;
     }
   }
-  return STATUS_CONFIG[status].label;
+  return t(STATUS_LABEL_KEYS[status]);
 }
 
 const STATUS_DOT_COLOR: Record<DraftActivityStatus, string> = {
@@ -143,6 +127,7 @@ function useImportReviewColumns({
   onSymbolSelect,
   onCreateCustomAsset,
 }: UseImportReviewColumnsOptions): ColumnDef<DraftActivity>[] {
+  const { t } = useTranslation("assets");
   const accountOptions = useMemo(
     () =>
       accounts.map((account) => ({
@@ -187,7 +172,7 @@ function useImportReviewColumns({
               table.getIsAllRowsSelected() || (table.getIsSomeRowsSelected() && "indeterminate")
             }
             onCheckedChange={(checked) => table.toggleAllRowsSelected(Boolean(checked))}
-            aria-label="Select all rows"
+            aria-label={t("dataGrid.selectAllRows")}
           />
         ),
         cell: ({ row }) => (
@@ -195,7 +180,7 @@ function useImportReviewColumns({
             disabled={!row.getCanSelect()}
             checked={row.getIsSelected()}
             onCheckedChange={(checked) => row.toggleSelected(Boolean(checked))}
-            aria-label="Select row"
+            aria-label={t("dataGrid.selectRow")}
           />
         ),
         size: 40,
@@ -223,7 +208,7 @@ function useImportReviewColumns({
           } = row.original;
           const isForcedDuplicate = status === "duplicate" && forceImport;
           const title = isForcedDuplicate
-            ? "Will be imported – overrides duplicate detection"
+            ? t("import.confirm.willBeImportedTitle")
             : getStatusTitle(
                 status,
                 skipReason,
@@ -231,6 +216,7 @@ function useImportReviewColumns({
                 duplicateOfLineNumber,
                 errors,
                 warnings,
+                t,
               );
           const dotColor = isForcedDuplicate ? "bg-amber-500" : STATUS_DOT_COLOR[status];
           const dot = dotColor ? (
@@ -273,7 +259,7 @@ function useImportReviewColumns({
       {
         id: "activityDate",
         accessorKey: "activityDate",
-        header: "Date & Time",
+        header: t("dataGrid.columns.dateTime"),
         size: 180,
         meta: { cell: { variant: "datetime" } },
       },
@@ -281,7 +267,7 @@ function useImportReviewColumns({
       {
         id: "accountId",
         accessorKey: "accountId",
-        header: "Account",
+        header: t("dataGrid.columns.account"),
         size: 180,
         meta: { cell: { variant: "select", options: accountOptions } },
       },
@@ -291,7 +277,7 @@ function useImportReviewColumns({
       {
         id: "activityType",
         accessorKey: "activityType",
-        header: "Type",
+        header: t("dataGrid.columns.type"),
         size: 150,
         enablePinning: false,
         meta: {
@@ -308,7 +294,7 @@ function useImportReviewColumns({
       {
         id: "subtype",
         accessorKey: "subtype",
-        header: "Subtype",
+        header: t("dataGrid.columns.subtype"),
         size: 180,
         enableSorting: false,
         enableHiding: true,
@@ -318,7 +304,7 @@ function useImportReviewColumns({
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             options: getSubtypeOptions as any,
             allowEmpty: true,
-            emptyLabel: "None",
+            emptyLabel: t("dataGrid.noneOption"),
           },
         },
       },
@@ -326,7 +312,7 @@ function useImportReviewColumns({
       {
         id: "isExternal",
         accessorKey: "isExternal",
-        header: "External",
+        header: t("dataGrid.columns.external"),
         size: 80,
         enableSorting: false,
         enableHiding: true,
@@ -349,7 +335,7 @@ function useImportReviewColumns({
       {
         id: "symbol",
         accessorKey: "symbol",
-        header: "Symbol",
+        header: t("dataGrid.columns.symbol"),
         size: 140,
         meta: {
           cell: {
@@ -368,7 +354,7 @@ function useImportReviewColumns({
       {
         id: "instrumentType",
         accessorKey: "instrumentType",
-        header: "Instrument",
+        header: t("dataGrid.columns.instrument"),
         size: 120,
         enableSorting: false,
         enableHiding: true,
@@ -377,7 +363,7 @@ function useImportReviewColumns({
             variant: "select",
             options: [...INSTRUMENT_TYPE_OPTIONS],
             allowEmpty: true,
-            emptyLabel: "Auto",
+            emptyLabel: t("dataGrid.columns.auto"),
           },
         },
       },
@@ -387,7 +373,7 @@ function useImportReviewColumns({
       {
         id: "quantity",
         accessorKey: "quantity",
-        header: "Quantity",
+        header: t("dataGrid.columns.quantity"),
         size: 120,
         enableSorting: false,
         meta: { cell: { variant: "number", step: 0.000001, valueType: "string" } },
@@ -396,7 +382,7 @@ function useImportReviewColumns({
       {
         id: "unitPrice",
         accessorKey: "unitPrice",
-        header: "Price",
+        header: t("dataGrid.columns.price"),
         size: 120,
         enableSorting: false,
         meta: { cell: { variant: "number", step: 0.000001, valueType: "string" } },
@@ -405,7 +391,7 @@ function useImportReviewColumns({
       {
         id: "amount",
         accessorKey: "amount",
-        header: "Amount",
+        header: t("dataGrid.columns.amount"),
         size: 120,
         enableSorting: false,
         meta: { cell: { variant: "number", step: 0.000001, valueType: "string" } },
@@ -414,7 +400,7 @@ function useImportReviewColumns({
       {
         id: "currency",
         accessorKey: "currency",
-        header: "Currency",
+        header: t("dataGrid.columns.currency"),
         size: 110,
         enableSorting: false,
         meta: { cell: { variant: "currency" } },
@@ -423,7 +409,7 @@ function useImportReviewColumns({
       {
         id: "fee",
         accessorKey: "fee",
-        header: "Fee",
+        header: t("dataGrid.columns.fee"),
         size: 100,
         enableSorting: false,
         meta: { cell: { variant: "number", step: 0.000001, valueType: "string" } },
@@ -432,7 +418,7 @@ function useImportReviewColumns({
       {
         id: "fxRate",
         accessorKey: "fxRate",
-        header: "FX Rate",
+        header: t("dataGrid.columns.fxRate"),
         size: 100,
         enableSorting: false,
         meta: { cell: { variant: "number", step: 0.000001, valueType: "string" } },
@@ -443,7 +429,7 @@ function useImportReviewColumns({
       {
         id: "comment",
         accessorKey: "comment",
-        header: "Comment",
+        header: t("dataGrid.columns.comment"),
         size: 260,
         enableSorting: false,
         meta: { cell: { variant: "long-text" } },
@@ -456,6 +442,7 @@ function useImportReviewColumns({
       onSymbolSearch,
       onSymbolSelect,
       onCreateCustomAsset,
+      t,
     ],
   );
 }

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@wealthfolio/ui";
 import { Card, CardContent } from "@wealthfolio/ui/components/ui/card";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface OnboardingAppearanceHandle {
   submitForm: () => void;
@@ -13,28 +14,17 @@ interface OnboardingAppearanceProps {
   onValidityChange: (isValid: boolean) => void;
 }
 
-const fonts = [
-  {
-    value: "font-mono",
-    label: "Mono",
-    description: "Technical & precise",
-  },
-  {
-    value: "font-sans",
-    label: "Sans",
-    description: "Clean & modern",
-  },
-  {
-    value: "font-serif",
-    label: "Serif",
-    description: "Classic & elegant",
-  },
+const fontOptionKeys = [
+  { value: "font-mono", optionKey: "mono" as const },
+  { value: "font-sans", optionKey: "sans" as const },
+  { value: "font-serif", optionKey: "serif" as const },
 ];
 
 export const OnboardingAppearance = forwardRef<
   OnboardingAppearanceHandle,
   OnboardingAppearanceProps
 >(({ onNext, onValidityChange }, ref) => {
+  const { t } = useTranslation("onboarding");
   const { settings, updateSettings } = useSettingsContext();
   const [theme, setTheme] = useState<string>(settings?.theme ?? "system");
   const [font, setFont] = useState<string>(settings?.font ?? "font-mono");
@@ -66,7 +56,7 @@ export const OnboardingAppearance = forwardRef<
   return (
     <div className="w-full max-w-2xl space-y-8">
       <div className="text-center">
-        <p className="text-muted-foreground">Customize your experience</p>
+        <p className="text-muted-foreground">{t("appearance.tagline")}</p>
       </div>
 
       <Card className="border-none bg-transparent">
@@ -77,7 +67,7 @@ export const OnboardingAppearance = forwardRef<
               <div className="bg-muted rounded-lg p-2">
                 <Icons.Palette className="text-muted-foreground h-5 w-5" />
               </div>
-              <span className="text-xl font-semibold">Theme</span>
+              <span className="text-xl font-semibold">{t("appearance.theme.label")}</span>
             </div>
 
             <div className="grid grid-cols-3 gap-3 sm:gap-4">
@@ -97,7 +87,7 @@ export const OnboardingAppearance = forwardRef<
                   <img
                     src="/themes/theme-light.webp"
                     srcSet="/themes/theme-light.webp 1x, /themes/theme-light@2x.webp 2x"
-                    alt="Light theme preview"
+                    alt={t("appearance.theme.lightAlt")}
                     className="h-auto w-full object-cover"
                   />
                 </div>
@@ -113,7 +103,7 @@ export const OnboardingAppearance = forwardRef<
                       theme === "light" ? "text-primary" : "text-muted-foreground",
                     )}
                   />
-                  <span className="text-sm font-medium">Light</span>
+                  <span className="text-sm font-medium">{t("appearance.theme.light")}</span>
                 </div>
                 {theme === "light" && (
                   <div className="bg-primary absolute right-2 top-2 rounded-full p-0.5">
@@ -137,7 +127,7 @@ export const OnboardingAppearance = forwardRef<
                   <img
                     src="/themes/theme-dark.webp"
                     srcSet="/themes/theme-dark.webp 1x, /themes/theme-dark@2x.webp 2x"
-                    alt="Dark theme preview"
+                    alt={t("appearance.theme.darkAlt")}
                     className="h-auto w-full object-cover"
                   />
                 </div>
@@ -153,7 +143,7 @@ export const OnboardingAppearance = forwardRef<
                       theme === "dark" ? "text-primary" : "text-muted-foreground",
                     )}
                   />
-                  <span className="text-sm font-medium">Dark</span>
+                  <span className="text-sm font-medium">{t("appearance.theme.dark")}</span>
                 </div>
                 {theme === "dark" && (
                   <div className="bg-primary absolute right-2 top-2 rounded-full p-0.5">
@@ -177,7 +167,7 @@ export const OnboardingAppearance = forwardRef<
                   <img
                     src="/themes/theme-system.webp"
                     srcSet="/themes/theme-system.webp 1x, /themes/theme-system@2x.webp 2x"
-                    alt="System theme preview"
+                    alt={t("appearance.theme.systemAlt")}
                     className="h-auto w-full object-cover"
                   />
                 </div>
@@ -193,7 +183,7 @@ export const OnboardingAppearance = forwardRef<
                       theme === "system" ? "text-primary" : "text-muted-foreground",
                     )}
                   />
-                  <span className="text-sm font-medium">System</span>
+                  <span className="text-sm font-medium">{t("appearance.theme.system")}</span>
                 </div>
                 {theme === "system" && (
                   <div className="bg-primary absolute right-2 top-2 rounded-full p-0.5">
@@ -210,11 +200,11 @@ export const OnboardingAppearance = forwardRef<
               <div className="bg-muted rounded-lg p-2">
                 <Icons.Type className="text-muted-foreground h-5 w-5" />
               </div>
-              <span className="text-xl font-semibold">Font</span>
+              <span className="text-xl font-semibold">{t("appearance.font.label")}</span>
             </div>
 
             <div className="grid grid-cols-3 gap-3 sm:gap-4">
-              {fonts.map((f) => (
+              {fontOptionKeys.map((f) => (
                 <button
                   key={f.value}
                   type="button"
@@ -232,11 +222,11 @@ export const OnboardingAppearance = forwardRef<
                     <div className="w-full space-y-2">
                       {/* Font name as hero */}
                       <div className="text-xl font-medium tracking-tight sm:text-2xl">
-                        {f.label}
+                        {t(`appearance.font.options.${f.optionKey}.label`)}
                       </div>
                       {/* Sample text paragraph */}
                       <div className="text-muted-foreground text-[11px] leading-relaxed sm:text-xs">
-                        Invest with clarity.
+                        {t("appearance.font.sample")}
                       </div>
                       {/* Secondary: numbers sample */}
                       <div className="text-muted-foreground/60 whitespace-nowrap text-[10px] sm:text-xs">
@@ -251,7 +241,9 @@ export const OnboardingAppearance = forwardRef<
                       font === f.value ? "bg-primary/10" : "bg-muted/50",
                     )}
                   >
-                    <div className="text-muted-foreground text-xs">{f.description}</div>
+                    <div className="text-muted-foreground text-xs">
+                      {t(`appearance.font.options.${f.optionKey}.description`)}
+                    </div>
                   </div>
                   {font === f.value && (
                     <div className="bg-primary absolute right-2 top-2 rounded-full p-0.5">

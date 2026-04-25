@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Carousel,
   CarouselContent,
@@ -22,24 +23,24 @@ export type ActivityType = PrimaryActivityType | SecondaryActivityType;
 
 interface ActivityTypeConfig<T extends string> {
   value: T;
-  label: string;
+  labelKey: string;
   icon: IconName;
 }
 
 const PRIMARY_ACTIVITY_TYPES: ActivityTypeConfig<PrimaryActivityType>[] = [
-  { value: "BUY", label: "Buy", icon: "TrendingUp" },
-  { value: "SELL", label: "Sell", icon: "TrendingDown" },
-  { value: "DEPOSIT", label: "Deposit", icon: "ArrowDownLeft" },
-  { value: "WITHDRAWAL", label: "Withdrawal", icon: "ArrowUpRight" },
-  { value: "DIVIDEND", label: "Dividend", icon: "Coins" },
-  { value: "TRANSFER", label: "Transfer", icon: "ArrowLeftRight" },
+  { value: "BUY", labelKey: "activityTypes.buy", icon: "TrendingUp" },
+  { value: "SELL", labelKey: "activityTypes.sell", icon: "TrendingDown" },
+  { value: "DEPOSIT", labelKey: "activityTypes.deposit", icon: "ArrowDownLeft" },
+  { value: "WITHDRAWAL", labelKey: "activityTypes.withdrawal", icon: "ArrowUpRight" },
+  { value: "DIVIDEND", labelKey: "activityTypes.dividend", icon: "Coins" },
+  { value: "TRANSFER", labelKey: "activityTypes.transfer", icon: "ArrowLeftRight" },
 ];
 
 const SECONDARY_ACTIVITY_TYPES: ActivityTypeConfig<SecondaryActivityType>[] = [
-  { value: "SPLIT", label: "Split", icon: "Split" },
-  { value: "FEE", label: "Fee", icon: "Receipt" },
-  { value: "INTEREST", label: "Interest", icon: "Percent" },
-  { value: "TAX", label: "Tax", icon: "ReceiptText" },
+  { value: "SPLIT", labelKey: "activityTypes.split", icon: "Split" },
+  { value: "FEE", labelKey: "activityTypes.fee", icon: "Receipt" },
+  { value: "INTEREST", labelKey: "activityTypes.interest", icon: "Percent" },
+  { value: "TAX", labelKey: "activityTypes.tax", icon: "ReceiptText" },
 ];
 
 const ALL_ACTIVITY_TYPES = [...PRIMARY_ACTIVITY_TYPES, ...SECONDARY_ACTIVITY_TYPES];
@@ -68,6 +69,7 @@ function ActivityTypeButton({
   buttonRef?: (el: HTMLButtonElement | null) => void;
   compact?: boolean;
 }) {
+  const { t } = useTranslation("assets");
   const Icon = Icons[type.icon];
 
   return (
@@ -98,7 +100,7 @@ function ActivityTypeButton({
           isSelected ? "text-primary" : "text-foreground",
         )}
       >
-        {type.label}
+        {t(type.labelKey)}
       </span>
     </button>
   );
@@ -226,9 +228,11 @@ function GridView({
     [types.length],
   );
 
+  const { t } = useTranslation("assets");
+
   return (
     <div className="p-1">
-      <div role="group" aria-label="All activity types" className="grid grid-cols-5 gap-2">
+      <div role="group" aria-label={t("activityTypes.groupAria")} className="grid grid-cols-5 gap-2">
         {types.map((type, index) => (
           <ActivityTypeButton
             key={type.value}
@@ -248,6 +252,7 @@ function GridView({
 }
 
 export function ActivityTypePicker({ value, onSelect, allowedTypes }: ActivityTypePickerProps) {
+  const { t } = useTranslation("assets");
   const [viewMode, setViewMode] = useState<ViewMode>("carousel");
 
   const toggleViewMode = useCallback(() => {
@@ -274,7 +279,11 @@ export function ActivityTypePicker({ value, onSelect, allowedTypes }: ActivityTy
           type="button"
           onClick={toggleViewMode}
           className="text-muted-foreground hover:text-foreground flex items-center gap-1 py-1 transition-colors"
-          aria-label={viewMode === "carousel" ? "Expand to show all types" : "Collapse"}
+          aria-label={
+            viewMode === "carousel"
+              ? t("activityTypes.expandTitle")
+              : t("activityTypes.collapseTitle")
+          }
         >
           <Icons.ChevronDown
             className={cn(

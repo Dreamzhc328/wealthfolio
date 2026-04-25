@@ -4,6 +4,7 @@ import { Button } from "@wealthfolio/ui/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@wealthfolio/ui/components/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@wealthfolio/ui/components/ui/tabs";
 import { usePlatform } from "@/hooks/use-platform";
+import { useTranslation } from "react-i18next";
 import {
   ScrollArea,
   Sheet,
@@ -19,14 +20,14 @@ import { downloadSampleCsv, downloadSampleHoldingsCsv } from "./utils/sample-csv
 // ─────────────────────────────────────────────────────────────────────────────
 
 function ActivitiesHelpContent() {
+  const { t } = useTranslation("assets");
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div className="space-y-4">
         <div>
-          <h4 className="text-lg font-semibold">Importing Account Activities</h4>
+          <h4 className="text-lg font-semibold">{t("import.help.activitiesTitle")}</h4>
           <p className="text-muted-foreground mt-2 text-sm">
-            Import your account activities from CSV files with automatic data normalization and
-            flexible column mapping.
+            {t("import.help.activitiesDescription")}
           </p>
         </div>
 
@@ -137,7 +138,7 @@ function ActivitiesHelpContent() {
             onClick={downloadSampleCsv}
           >
             <Icons.Download className="h-4 w-4" />
-            Download Sample CSV
+            {t("import.help.downloadSample")}
           </Button>
         </div>
 
@@ -171,14 +172,14 @@ function ActivitiesHelpContent() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function HoldingsHelpContent() {
+  const { t } = useTranslation("assets");
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div className="space-y-4">
         <div>
-          <h4 className="text-lg font-semibold">Importing Holdings Snapshots</h4>
+          <h4 className="text-lg font-semibold">{t("import.help.holdingsTitle")}</h4>
           <p className="text-muted-foreground mt-2 text-sm">
-            Import point-in-time snapshots of your portfolio holdings. Each row represents a
-            position held on a specific date.
+            {t("import.help.holdingsDescription")}
           </p>
         </div>
 
@@ -283,7 +284,7 @@ function HoldingsHelpContent() {
             onClick={downloadSampleHoldingsCsv}
           >
             <Icons.Download className="h-4 w-4" />
-            Download Sample CSV
+            {t("import.help.downloadSample")}
           </Button>
         </div>
 
@@ -313,13 +314,14 @@ interface ImportHelpPopoverProps {
 }
 
 export function ImportHelpPopover({ defaultTab = "activities" }: ImportHelpPopoverProps) {
+  const { t } = useTranslation("assets");
   const { isMobile } = usePlatform();
 
   const helpContent = (
     <Tabs defaultValue={defaultTab}>
       <TabsList className="mb-4 w-auto">
-        <TabsTrigger value="activities">Activities</TabsTrigger>
-        <TabsTrigger value="holdings">Holdings</TabsTrigger>
+        <TabsTrigger value="activities">{t("import.help.tabs.activities")}</TabsTrigger>
+        <TabsTrigger value="holdings">{t("import.help.tabs.holdings")}</TabsTrigger>
       </TabsList>
       <TabsContent value="activities" className="m-0">
         <ActivitiesHelpContent />
@@ -340,7 +342,7 @@ export function ImportHelpPopover({ defaultTab = "activities" }: ImportHelpPopov
         </SheetTrigger>
         <SheetContent side="bottom" className="rounded-t-4xl mx-1 h-[85vh]">
           <SheetHeader>
-            <SheetTitle>How to Import CSV</SheetTitle>
+            <SheetTitle>{t("import.help.title")}</SheetTitle>
           </SheetHeader>
           <ScrollArea className="h-[calc(85vh-4rem)] pr-4">{helpContent}</ScrollArea>
         </SheetContent>
@@ -353,7 +355,7 @@ export function ImportHelpPopover({ defaultTab = "activities" }: ImportHelpPopov
       <PopoverTrigger asChild>
         <Button type="button" variant="link" className="flex items-center">
           <Icons.HelpCircle className="mr-1 h-5 w-5" />
-          How to Import CSV?
+          {t("import.help.trigger")}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="m-4 max-h-[80vh] w-[900px] max-w-[calc(100vw-2rem)] overflow-y-auto p-6 text-sm">

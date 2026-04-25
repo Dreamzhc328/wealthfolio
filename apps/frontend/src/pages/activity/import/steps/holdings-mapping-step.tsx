@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import {
   Select,
@@ -41,21 +42,25 @@ const HOLDINGS_REQUIRED_FIELDS: HoldingsFormat[] = [
   HoldingsFormat.QUANTITY,
 ];
 
-const HOLDINGS_TARGET_FIELDS: { value: HoldingsFormat; label: string; required: boolean }[] = [
-  { value: HoldingsFormat.DATE, label: "Date", required: true },
-  { value: HoldingsFormat.SYMBOL, label: "Symbol", required: true },
-  { value: HoldingsFormat.QUANTITY, label: "Quantity", required: true },
-  { value: HoldingsFormat.AVG_COST, label: "Avg Cost", required: false },
-  { value: HoldingsFormat.CURRENCY, label: "Currency", required: false },
-];
-
-const HOLDINGS_FIELD_LABELS: Record<HoldingsFormat, string> = {
-  [HoldingsFormat.DATE]: "Date",
-  [HoldingsFormat.SYMBOL]: "Symbol",
-  [HoldingsFormat.QUANTITY]: "Quantity",
-  [HoldingsFormat.AVG_COST]: "Avg Cost",
-  [HoldingsFormat.CURRENCY]: "Currency",
+const HOLDINGS_FIELD_LABEL_KEYS: Record<HoldingsFormat, string> = {
+  [HoldingsFormat.DATE]: "import.holdings.fields.date",
+  [HoldingsFormat.SYMBOL]: "import.holdings.fields.symbol",
+  [HoldingsFormat.QUANTITY]: "import.holdings.fields.quantity",
+  [HoldingsFormat.AVG_COST]: "import.holdings.fields.avgCost",
+  [HoldingsFormat.CURRENCY]: "import.holdings.fields.currency",
 };
+
+const HOLDINGS_TARGET_FIELDS: {
+  value: HoldingsFormat;
+  labelKey: string;
+  required: boolean;
+}[] = [
+  { value: HoldingsFormat.DATE, labelKey: HOLDINGS_FIELD_LABEL_KEYS[HoldingsFormat.DATE], required: true },
+  { value: HoldingsFormat.SYMBOL, labelKey: HOLDINGS_FIELD_LABEL_KEYS[HoldingsFormat.SYMBOL], required: true },
+  { value: HoldingsFormat.QUANTITY, labelKey: HOLDINGS_FIELD_LABEL_KEYS[HoldingsFormat.QUANTITY], required: true },
+  { value: HoldingsFormat.AVG_COST, labelKey: HOLDINGS_FIELD_LABEL_KEYS[HoldingsFormat.AVG_COST], required: false },
+  { value: HoldingsFormat.CURRENCY, labelKey: HOLDINGS_FIELD_LABEL_KEYS[HoldingsFormat.CURRENCY], required: false },
+];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -120,6 +125,7 @@ interface CsvPreviewProps {
 }
 
 function CsvPreviewTable({ headers, rows, mapping }: CsvPreviewProps) {
+  const { t } = useTranslation("assets");
   const displayRows = rows.slice(0, 10);
 
   // Get reverse mapping (headerName -> field), only valid HoldingsFormat keys
@@ -141,7 +147,7 @@ function CsvPreviewTable({ headers, rows, mapping }: CsvPreviewProps) {
           <tr>
             {headers.map((header, idx) => {
               const mappedField = headerToField[header];
-              const fieldLabel = mappedField ? HOLDINGS_FIELD_LABELS[mappedField] : null;
+              const fieldLabel = mappedField ? t(HOLDINGS_FIELD_LABEL_KEYS[mappedField]) : null;
               const isDifferent = fieldLabel && fieldLabel.toLowerCase() !== header.toLowerCase();
               return (
                 <th key={idx} className="border-r px-3 py-2 text-left font-medium last:border-r-0">
@@ -180,6 +186,7 @@ function CsvPreviewTable({ headers, rows, mapping }: CsvPreviewProps) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function HoldingsMappingStep() {
+  const { t } = useTranslation("assets");
   const { state, dispatch } = useImportContext();
   const { headers, parsedRows, mapping, accountId } = state;
   const hasAutoInitialized = useRef(false);
@@ -404,8 +411,11 @@ export function HoldingsMappingStep() {
         <ImportAlert
           variant={requiredFieldsMapped ? "success" : "destructive"}
           size="sm"
-          title="Columns"
-          description={`${mappedFieldsCount} of ${HOLDINGS_TARGET_FIELDS.length} mapped`}
+          title={t("import.holdings.columns")}
+          description={t("import.holdings.columnsMapped", {
+            mapped: mappedFieldsCount,
+            total: HOLDINGS_TARGET_FIELDS.length,
+          })}
           icon={Icons.ListChecks}
           className="mb-0"
           rightIcon={requiredFieldsMapped ? Icons.CheckCircle : Icons.AlertCircle}
@@ -416,16 +426,20 @@ export function HoldingsMappingStep() {
             <ImportAlert
               variant="info"
               size="sm"
-              title="Rows"
-              description={`${parsedRows.length} total (${parsedRows.length - cashRowCount} holdings, ${cashRowCount} cash)`}
+              title={t("import.holdings.rows")}
+              description={t("import.holdings.rowsDescription", {
+                total: parsedRows.length,
+                holdings: parsedRows.length - cashRowCount,
+                cash: cashRowCount,
+              })}
               icon={Icons.FileText}
               className="mb-0"
             />
             <ImportAlert
               variant="info"
               size="sm"
-              title="Snapshots"
-              description={`${uniqueDates.size} date${uniqueDates.size !== 1 ? "s" : ""}`}
+              title={t("import.holdings.snapshots")}
+              description={t("import.holdings.snapshotsCount", { n: uniqueDates.size })}
               icon={Icons.Calendar}
               className="mb-0"
             />
@@ -437,7 +451,7 @@ export function HoldingsMappingStep() {
       <div className="grid gap-4">
         <Card>
           <CardHeader className="px-4 py-3">
-            <CardTitle className="text-sm font-medium">Column Mapping</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("import.holdings.columnMapping")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-1.5 px-4 pb-4">
             {columnMappingItems.map((column) => {
@@ -493,11 +507,11 @@ export function HoldingsMappingStep() {
                         !isMapped && "text-muted-foreground border-dashed",
                       )}
                     >
-                      <SelectValue placeholder="Select field..." />
+                      <SelectValue placeholder={t("import.holdings.selectField")} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value={SKIP_FIELD_VALUE}>
-                        <span className="text-muted-foreground">Skip</span>
+                        <span className="text-muted-foreground">{t("import.holdings.skip")}</span>
                       </SelectItem>
                       <SelectSeparator />
                       {HOLDINGS_TARGET_FIELDS.map((field) => {
@@ -505,10 +519,12 @@ export function HoldingsMappingStep() {
                           usedFields.has(field.value) && column.mappedField !== field.value;
                         return (
                           <SelectItem key={field.value} value={field.value} disabled={isUsed}>
-                            {field.label}
+                            {t(field.labelKey)}
                             {field.required && <span className="ml-1 text-amber-600">*</span>}
                             {isUsed && (
-                              <span className="text-muted-foreground ml-1 text-xs">(used)</span>
+                              <span className="text-muted-foreground ml-1 text-xs">
+                                {t("import.holdings.used")}
+                              </span>
                             )}
                           </SelectItem>
                         );
@@ -525,7 +541,7 @@ export function HoldingsMappingStep() {
       {/* CSV Preview */}
       <Card>
         <CardHeader className="px-4 py-3">
-          <CardTitle className="text-sm font-medium">Data Preview</CardTitle>
+          <CardTitle className="text-sm font-medium">{t("import.holdings.dataPreview")}</CardTitle>
         </CardHeader>
         <CardContent className="border-t p-0">
           <CsvPreviewTable headers={headers} rows={parsedRows} mapping={localFieldMappings} />

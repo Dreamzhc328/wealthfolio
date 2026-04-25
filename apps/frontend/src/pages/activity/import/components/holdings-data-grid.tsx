@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataGrid, useDataGrid, type SymbolSearchResult } from "@wealthfolio/ui";
 import { searchTicker } from "@/adapters";
@@ -49,6 +50,7 @@ function useHoldingsColumns({
   onCreateCustomAsset,
   enableSymbolEditing,
 }: UseHoldingsColumnsOptions): ColumnDef<HoldingsRow>[] {
+  const { t } = useTranslation("assets");
   return useMemo<ColumnDef<HoldingsRow>[]>(
     () => [
       // 1. Row number
@@ -70,7 +72,7 @@ function useHoldingsColumns({
       {
         id: "date",
         accessorKey: "date",
-        header: "Date",
+        header: t("table.headers.date"),
         size: 120,
         meta: { cell: { variant: "short-text" } },
       },
@@ -78,7 +80,7 @@ function useHoldingsColumns({
       {
         id: "symbol",
         accessorKey: "symbol",
-        header: "Symbol",
+        header: t("table.headers.symbol"),
         size: 160,
         meta: enableSymbolEditing
           ? {
@@ -96,7 +98,7 @@ function useHoldingsColumns({
       {
         id: "quantity",
         accessorKey: "quantity",
-        header: "Quantity",
+        header: t("table.headers.quantity"),
         size: 120,
         enableSorting: false,
         meta: { cell: { variant: "number", step: 0.000001, valueType: "string" } },
@@ -105,7 +107,7 @@ function useHoldingsColumns({
       {
         id: "avgCost",
         accessorKey: "avgCost",
-        header: "Avg Cost",
+        header: t("table.headers.avgCost"),
         size: 120,
         enableSorting: false,
         meta: { cell: { variant: "number", step: 0.000001, valueType: "string" } },
@@ -114,7 +116,7 @@ function useHoldingsColumns({
       {
         id: "currency",
         accessorKey: "currency",
-        header: "Currency",
+        header: t("table.headers.currency"),
         size: 110,
         enableSorting: false,
         meta: { cell: { variant: "currency" } },

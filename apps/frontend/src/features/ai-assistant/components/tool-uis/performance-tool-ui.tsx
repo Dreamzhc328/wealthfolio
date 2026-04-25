@@ -2,6 +2,7 @@ import type { ToolCallMessagePartProps } from "@assistant-ui/react";
 import { makeAssistantToolUI } from "@assistant-ui/react";
 import { Badge, Card, CardContent, CardHeader, CardTitle, Skeleton } from "@wealthfolio/ui";
 import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useBalancePrivacy } from "@/hooks/use-balance-privacy";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
@@ -152,10 +153,11 @@ function EmptyState() {
 }
 
 function ErrorState({ message }: { message?: string }) {
+  const { t } = useTranslation("aiAssistant");
   return (
     <Card className="border-destructive/30 bg-destructive/5">
       <CardContent className="py-4">
-        <p className="text-destructive text-sm font-medium">Failed to load performance data</p>
+        <p className="text-destructive text-sm font-medium">{t("toolUI.performance.loadFailed")}</p>
         {message && <p className="text-muted-foreground mt-1 text-xs">{message}</p>}
       </CardContent>
     </Card>
@@ -199,6 +201,7 @@ type PerformanceToolUIContentProps = ToolCallMessagePartProps<
 >;
 
 function PerformanceToolUIContentImpl({ args, result, status }: PerformanceToolUIContentProps) {
+  const { t } = useTranslation("aiAssistant");
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
   const { isBalanceHidden } = useBalancePrivacy();
@@ -210,7 +213,7 @@ function PerformanceToolUIContentImpl({ args, result, status }: PerformanceToolU
 
   // Compact mode — just show a one-liner when used as a prerequisite
   if (args?.displayMode === "compact" && parsed && !isLoading) {
-    return <CompactToolCard label="Fetched performance metrics" />;
+    return <CompactToolCard label={t("toolUI.performance.compact")} />;
   }
 
   // Format values
@@ -251,16 +254,16 @@ function PerformanceToolUIContentImpl({ args, result, status }: PerformanceToolU
           day: "numeric",
           year: "numeric",
         })
-      : "Start";
+      : t("toolUI.performance.start");
     const end = parsed.periodEndDate
       ? new Date(parsed.periodEndDate).toLocaleDateString(undefined, {
           month: "short",
           day: "numeric",
           year: "numeric",
         })
-      : "Today";
+      : t("toolUI.performance.today");
     return `${start} - ${end}`;
-  }, [parsed?.periodStartDate, parsed?.periodEndDate]);
+  }, [parsed?.periodStartDate, parsed?.periodEndDate, t]);
 
   // Show loading skeleton while running
   if (isLoading) {
@@ -269,7 +272,7 @@ function PerformanceToolUIContentImpl({ args, result, status }: PerformanceToolU
 
   // Show error state for incomplete/failed status
   if (isIncomplete) {
-    return <ErrorState message="The request was interrupted or failed." />;
+    return <ErrorState message={t("toolUI.performance.errorMessage")} />;
   }
 
   // Show empty state if no valid data
@@ -278,21 +281,22 @@ function PerformanceToolUIContentImpl({ args, result, status }: PerformanceToolU
   }
 
   const typedArgs = args as GetPerformanceArgs | undefined;
-  const accountLabel = parsed.id ?? typedArgs?.accountId ?? "Portfolio";
+  const accountLabel = parsed.id ?? typedArgs?.accountId ?? t("toolUI.performance.portfolio");
   // Hide UUID-like IDs (e.g., "29628C36-3333-46A2-A1FB-B4D8514D0A74")
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
     accountLabel,
   );
   const isPositiveReturn = parsed.cumulativeTwr >= 0;
   const TrendIcon = isPositiveReturn ? Icons.TrendingUp : Icons.TrendingDown;
+  const portfolioLabel = t("toolUI.performance.portfolio");
 
   return (
     <Card className="bg-muted/40 border-primary/10">
       <CardHeader className="pb-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <CardTitle className="text-base">Performance</CardTitle>
-            {accountLabel !== "TOTAL" && accountLabel !== "Portfolio" && !isUuid && (
+            <CardTitle className="text-base">{t("toolUI.performance.title")}</CardTitle>
+            {accountLabel !== "TOTAL" && accountLabel !== portfolioLabel && !isUuid && (
               <Badge variant="outline" className="text-xs uppercase">
                 {accountLabel}
               </Badge>
@@ -341,23 +345,23 @@ function PerformanceToolUIContentImpl({ args, result, status }: PerformanceToolU
         {/* Metrics Grid */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <MetricCard
-            label="Annualized TWR"
+            label={t("toolUI.performance.annualizedTwr")}
             value={formatPercentSigned(parsed.annualizedTwr)}
             isPositive={parsed.annualizedTwr >= 0}
           />
           <MetricCard
-            label="Money-Weighted (MWR)"
+            label={t("toolUI.performance.moneyWeighted")}
             value={formatPercentSigned(parsed.cumulativeMwr)}
-            subValue={`${formatPercentSigned(parsed.annualizedMwr)} ann.`}
+            subValue={t("toolUI.performance.annualSuffix", { value: formatPercentSigned(parsed.annualizedMwr) })}
             isPositive={parsed.cumulativeMwr >= 0}
           />
           <MetricCard
-            label="Volatility"
+            label={t("toolUI.performance.volatility")}
             value={formatPercent(parsed.volatility)}
             isPositive={null}
           />
           <MetricCard
-            label="Max Drawdown"
+            label={t("toolUI.performance.maxDrawdown")}
             value={formatPercent(parsed.maxDrawdown)}
             isPositive={parsed.maxDrawdown > 0 ? false : null}
           />

@@ -4,103 +4,50 @@ import { RadioGroup, RadioGroupItem } from "@wealthfolio/ui/components/ui/radio-
 import { ScrollArea } from "@wealthfolio/ui/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
-const activityTypes = [
+const activityTypeGroups = [
   {
-    category: "Trade",
+    categoryKey: "activityTypes.categoryTrade",
     types: [
-      {
-        value: "BUY",
-        label: "Buy",
-        icon: "ArrowDown" as const,
-        description: "Purchase an asset",
-      },
-      {
-        value: "SELL",
-        label: "Sell",
-        icon: "ArrowUp" as const,
-        description: "Sell an asset",
-      },
+      { value: "BUY", labelKey: "activityTypes.buy", icon: "ArrowDown" as const, descriptionKey: "activityTypes.buyDescription" },
+      { value: "SELL", labelKey: "activityTypes.sell", icon: "ArrowUp" as const, descriptionKey: "activityTypes.sellDescription" },
     ],
   },
   {
-    category: "Cash",
+    categoryKey: "activityTypes.categoryCash",
     types: [
-      {
-        value: "DEPOSIT",
-        label: "Deposit",
-        icon: "ArrowDown" as const,
-        description: "Add funds to account",
-      },
-      {
-        value: "WITHDRAWAL",
-        label: "Withdrawal",
-        icon: "ArrowUp" as const,
-        description: "Remove funds from account",
-      },
-      {
-        value: "TRANSFER_OUT",
-        label: "Transfer",
-        icon: "ArrowLeftRight" as const,
-        description: "Move cash or securities between accounts",
-      },
+      { value: "DEPOSIT", labelKey: "activityTypes.deposit", icon: "ArrowDown" as const, descriptionKey: "activityTypes.depositDescription" },
+      { value: "WITHDRAWAL", labelKey: "activityTypes.withdrawal", icon: "ArrowUp" as const, descriptionKey: "activityTypes.withdrawalDescription" },
+      { value: "TRANSFER_OUT", labelKey: "activityTypes.transfer", icon: "ArrowLeftRight" as const, descriptionKey: "activityTypes.transferDescription" },
     ],
   },
   {
-    category: "Income",
+    categoryKey: "activityTypes.categoryIncome",
     types: [
-      {
-        value: "DIVIDEND",
-        label: "Dividend",
-        icon: "Income" as const,
-        description: "Dividend payment received",
-      },
-      {
-        value: "INTEREST",
-        label: "Interest",
-        icon: "Percent" as const,
-        description: "Interest earned",
-      },
+      { value: "DIVIDEND", labelKey: "activityTypes.dividend", icon: "Income" as const, descriptionKey: "activityTypes.dividendDescription" },
+      { value: "INTEREST", labelKey: "activityTypes.interest", icon: "Percent" as const, descriptionKey: "activityTypes.interestDescription" },
     ],
   },
   {
-    category: "Other",
+    categoryKey: "activityTypes.categoryOther",
     types: [
-      {
-        value: "FEE",
-        label: "Fee",
-        icon: "DollarSign" as const,
-        description: "Account or transaction fee",
-      },
-      {
-        value: "TAX",
-        label: "Tax",
-        icon: "Receipt" as const,
-        description: "Tax payment",
-      },
-      {
-        value: "SPLIT",
-        label: "Stock Split",
-        icon: "Split" as const,
-        description: "Stock split adjustment",
-      },
-      {
-        value: "ADJUSTMENT",
-        label: "Adjustment",
-        icon: "RefreshCw" as const,
-        description: "Non-trade correction or adjustment",
-      },
+      { value: "FEE", labelKey: "activityTypes.fee", icon: "DollarSign" as const, descriptionKey: "activityTypes.feeDescription" },
+      { value: "TAX", labelKey: "activityTypes.tax", icon: "Receipt" as const, descriptionKey: "activityTypes.taxDescription" },
+      { value: "SPLIT", labelKey: "activityTypes.stockSplit", icon: "Split" as const, descriptionKey: "activityTypes.splitDescription" },
+      { value: "ADJUSTMENT", labelKey: "activityTypes.adjustment", icon: "RefreshCw" as const, descriptionKey: "activityTypes.adjustmentDescription" },
     ],
   },
 ];
 
 export function MobileActivityTypeStep() {
+  const { t } = useTranslation("assets");
   const { control } = useFormContext();
 
   return (
     <div className="flex h-full flex-col">
       <div className="mb-4">
-        <h3 className="text-lg font-semibold">Select Transaction Type</h3>
+        <h3 className="text-lg font-semibold">{t("form.fields.selectTransactionType")}</h3>
       </div>
 
       <ScrollArea>
@@ -112,10 +59,10 @@ export function MobileActivityTypeStep() {
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} value={field.value as string}>
                   <div className="space-y-6 pb-4">
-                    {activityTypes.map((category) => (
-                      <div key={category.category}>
+                    {activityTypeGroups.map((category) => (
+                      <div key={category.categoryKey}>
                         <h4 className="text-muted-foreground mb-3 text-sm font-medium">
-                          {category.category}
+                          {t(category.categoryKey)}
                         </h4>
                         <div className="space-y-2">
                           {category.types.map((type) => {
@@ -148,9 +95,9 @@ export function MobileActivityTypeStep() {
                                     </div>
                                   </div>
                                   <div className="min-w-0 flex-1">
-                                    <div className="font-medium">{type.label}</div>
+                                    <div className="font-medium">{t(type.labelKey)}</div>
                                     <div className="text-muted-foreground mt-0.5 text-sm">
-                                      {type.description}
+                                      {t(type.descriptionKey)}
                                     </div>
                                   </div>
                                   {field.value === type.value && (

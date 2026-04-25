@@ -6,6 +6,7 @@ import { useAssets } from "@/pages/asset/hooks/use-assets";
 import type { SortingState, Updater, VisibilityState } from "@tanstack/react-table";
 import { DataGrid, useDataGrid, type SymbolSearchResult } from "@wealthfolio/ui";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { resolveSymbolQuote } from "@/adapters";
 import { CreateCustomAssetDialog } from "@/components/create-custom-asset-dialog";
 import { ActivityDataGridPagination } from "./activity-data-grid-pagination";
@@ -76,6 +77,7 @@ export function ActivityDataGrid({
   onPageChange,
   onPageSizeChange,
 }: ActivityDataGridProps) {
+  const { t } = useTranslation("assets");
   // State management
   const {
     localTransactions,
@@ -519,11 +521,11 @@ export function ActivityDataGrid({
     setLocalTransactions((prev) => prev.filter((transaction) => !transaction.isNew));
     onRefetch();
     toast({
-      title: "Changes discarded",
-      description: "Unsaved edits and drafts have been cleared.",
+      title: t("dataGrid.changesDiscarded"),
+      description: t("dataGrid.changesDiscardedDescription"),
       variant: "default",
     });
-  }, [dataGrid.table, onRefetch, resetChangeState, setLocalTransactions]);
+  }, [dataGrid.table, onRefetch, resetChangeState, setLocalTransactions, t]);
 
   // Get default currency for custom asset dialog from the row's account
   const dialogDefaultCurrency =

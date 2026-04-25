@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@wealthfolio/ui";
 import { memo, useMemo, type FC } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useBalancePrivacy } from "@/hooks/use-balance-privacy";
 import { ResponsiveContainer, Treemap, Tooltip as ChartTooltip } from "recharts";
@@ -280,6 +281,7 @@ interface TreemapTooltipProps {
 }
 
 const TreemapTooltip: FC<TreemapTooltipProps> = ({ active, payload, currency = "USD" }) => {
+  const { t } = useTranslation("aiAssistant");
   if (!active || !payload?.length) return null;
   const data = payload[0].payload;
   const value = payload[0].value;
@@ -295,11 +297,11 @@ const TreemapTooltip: FC<TreemapTooltipProps> = ({ active, payload, currency = "
         </div>
         <div className="border-t pt-2">
           <div className="flex items-center justify-between gap-4 text-xs">
-            <span className="text-muted-foreground">Value</span>
+            <span className="text-muted-foreground">{t("toolUI.holdings.valueLabel")}</span>
             <span className="font-medium">{formatAmount(value, currency)}</span>
           </div>
           <div className="flex items-center justify-between gap-4 text-xs">
-            <span className="text-muted-foreground">Today</span>
+            <span className="text-muted-foreground">{t("toolUI.holdings.today")}</span>
             <span className={cn("font-medium", isPositive ? "text-success" : "text-destructive")}>
               {isPositive ? "+" : ""}
               {formatPercent(gain)}
@@ -327,6 +329,7 @@ export const HoldingsToolUI = makeAssistantToolUI<GetHoldingsArgs, GetHoldingsOu
 type HoldingsContentProps = ToolCallMessagePartProps<GetHoldingsArgs, GetHoldingsOutput>;
 
 function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
+  const { t } = useTranslation("aiAssistant");
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
   const { isBalanceHidden } = useBalancePrivacy();
@@ -401,9 +404,14 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
 
   // Compact mode — just show a one-liner when used as a prerequisite
   if (args?.displayMode === "compact" && parsed && !isLoading) {
+    const count = parsed.holdings.length;
     return (
       <CompactToolCard
-        label={`Fetched ${parsed.holdings.length} holding${parsed.holdings.length !== 1 ? "s" : ""}`}
+        label={
+          count === 1
+            ? t("toolUI.holdings.compactSingular", { count })
+            : t("toolUI.holdings.compactPlural", { count })
+        }
       />
     );
   }
@@ -426,7 +434,7 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
         <CardHeader className="pb-2">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
-              <CardTitle className="text-sm font-medium">Holdings</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("toolUI.holdings.title")}</CardTitle>
               <Skeleton className="mt-1 h-3 w-16" />
             </div>
             <Skeleton className="h-5 w-20" />
@@ -441,10 +449,10 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
-                  <TableHead className="pl-4 text-xs">Symbol</TableHead>
-                  <TableHead className="text-right text-xs">Value</TableHead>
-                  <TableHead className="hidden text-right text-xs sm:table-cell">Weight</TableHead>
-                  <TableHead className="pr-4 text-right text-xs">Gain</TableHead>
+                  <TableHead className="pl-4 text-xs">{t("toolUI.holdings.headers.symbol")}</TableHead>
+                  <TableHead className="text-right text-xs">{t("toolUI.holdings.headers.value")}</TableHead>
+                  <TableHead className="hidden text-right text-xs sm:table-cell">{t("toolUI.holdings.headers.weight")}</TableHead>
+                  <TableHead className="pr-4 text-right text-xs">{t("toolUI.holdings.headers.gain")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -477,7 +485,7 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
     return (
       <Card className="bg-muted/40 border-destructive/30 w-full">
         <CardContent className="py-4">
-          <p className="text-destructive text-sm">Failed to load holdings data.</p>
+          <p className="text-destructive text-sm">{t("toolUI.holdings.loadFailed")}</p>
         </CardContent>
       </Card>
     );
@@ -488,7 +496,7 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
     return (
       <Card className="bg-muted/40 border-primary/10 w-full">
         <CardContent className="py-4">
-          <p className="text-muted-foreground text-sm">No holdings found for this account.</p>
+          <p className="text-muted-foreground text-sm">{t("toolUI.holdings.empty")}</p>
         </CardContent>
       </Card>
     );
@@ -497,16 +505,19 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
   // Determine view mode: use response viewMode, fallback to args, then default to "treemap"
   const viewMode = parsed?.viewMode ?? args?.viewMode ?? "treemap";
   const canShowTreemap = hasData && treemapData.length > 0;
-  const returnLabel = returnType === "daily" ? "Today" : "Total Return";
+  const returnLabel = returnType === "daily" ? t("toolUI.holdings.today") : t("toolUI.holdings.totalReturn");
+  const returnLowerLabel = returnType === "daily" ? t("toolUI.holdings.todayLower") : t("toolUI.holdings.totalLower");
 
   // Treemap view component
   const TreemapView = () => (
     <div className="pb-2 pt-4">
       <div className="flex flex-wrap items-start justify-between gap-2 px-4 pb-2">
         <div>
-          <p className="text-sm font-medium">Your Portfolio {returnLabel}</p>
+          <p className="text-sm font-medium">{t("toolUI.holdings.portfolioToday", { label: returnLabel })}</p>
           <p className="text-muted-foreground mt-1 text-xs">
-            {holdingsCount} position{holdingsCount !== 1 ? "s" : ""} · {returnLabel}
+            {holdingsCount === 1
+              ? t("toolUI.holdings.positionsSingular", { count: holdingsCount })
+              : t("toolUI.holdings.positionsPlural", { count: holdingsCount })} · {returnLabel}
             {accountLabel !== "TOTAL" && (
               <Badge variant="outline" className="ml-2 text-xs uppercase">
                 {accountLabel}
@@ -524,7 +535,7 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
               )}
             >
               {totalChange > 0 ? "+" : ""}
-              {formatPercent(totalChange)} {returnLabel === "Today" ? "today" : "total"}
+              {formatPercent(totalChange)} {returnLowerLabel}
             </p>
           )}
         </div>
@@ -554,9 +565,11 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
         {showHeader && (
           <div className="flex flex-wrap items-start justify-between gap-2 px-4 pb-2">
             <div>
-              <p className="text-sm font-medium">Holdings {returnLabel}</p>
+              <p className="text-sm font-medium">{t("toolUI.holdings.title")} · {returnLabel}</p>
               <p className="text-muted-foreground mt-1 text-xs">
-                {holdingsCount} position{holdingsCount !== 1 ? "s" : ""}
+                {holdingsCount === 1
+                  ? t("toolUI.holdings.positionsSingular", { count: holdingsCount })
+                  : t("toolUI.holdings.positionsPlural", { count: holdingsCount })}
                 {accountLabel !== "TOTAL" && (
                   <Badge variant="outline" className="ml-2 text-xs uppercase">
                     {accountLabel}
@@ -590,11 +603,11 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="pl-4 text-xs">Symbol</TableHead>
-                <TableHead className="text-right text-xs">Value</TableHead>
-                <TableHead className="hidden text-right text-xs sm:table-cell">Weight</TableHead>
+                <TableHead className="pl-4 text-xs">{t("toolUI.holdings.headers.symbol")}</TableHead>
+                <TableHead className="text-right text-xs">{t("toolUI.holdings.headers.value")}</TableHead>
+                <TableHead className="hidden text-right text-xs sm:table-cell">{t("toolUI.holdings.headers.weight")}</TableHead>
                 <TableHead className="pr-4 text-right text-xs">
-                  {returnType === "daily" ? "Today" : "Total"}
+                  {returnType === "daily" ? t("toolUI.holdings.headers.today") : t("toolUI.holdings.headers.total")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -652,8 +665,8 @@ function HoldingsContentImpl({ args, result, status }: HoldingsContentProps) {
   const ReturnTypeToggle = (
     <AnimatedToggleGroup
       items={[
-        { value: "daily", label: "Daily" },
-        { value: "total", label: "Total" },
+        { value: "daily", label: t("toolUI.holdings.toggle.daily") },
+        { value: "total", label: t("toolUI.holdings.toggle.total") },
       ]}
       value={returnType}
       onValueChange={(value: ReturnType) => setReturnType(value)}

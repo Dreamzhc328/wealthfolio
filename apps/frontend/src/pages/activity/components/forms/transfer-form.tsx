@@ -11,6 +11,7 @@ import { Label } from "@wealthfolio/ui/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@wealthfolio/ui/components/ui/radio-group";
 import { useMemo } from "react";
 import { FormProvider, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import {
   AccountSelect,
@@ -219,6 +220,7 @@ export function TransferForm({
   isEditing = false,
   assetCurrency,
 }: TransferFormProps) {
+  const { t } = useTranslation("assets");
   const { data: settings } = useSettings();
   const baseCurrency = settings?.baseCurrency ?? "USD";
 
@@ -287,8 +289,8 @@ export function TransferForm({
 
   // Toggle items for transfer mode
   const transferModeItems = [
-    { value: "cash" as const, label: "Cash" },
-    { value: "securities" as const, label: "Securities" },
+    { value: "cash" as const, label: t("form.fields.transferModeCash") },
+    { value: "securities" as const, label: t("form.fields.transferModeSecurities") },
   ];
 
   // Handle transfer mode change
@@ -331,13 +333,13 @@ export function TransferForm({
 
   // Generate dynamic submit button text
   const getSubmitButtonText = () => {
-    if (isEditing) return "Update";
+    if (isEditing) return t("form.buttons.update");
 
     const actionPrefix = isExternal
       ? direction === "in"
-        ? "Transfer In"
-        : "Transfer Out"
-      : "Transfer";
+        ? t("form.buttons.transferIn")
+        : t("form.buttons.transferOut")
+      : t("form.buttons.addTransfer");
 
     if (isCashMode && amount && amount > 0) {
       const displayCurrency = initialCurrency || accountCurrency || baseCurrency;
@@ -348,7 +350,7 @@ export function TransferForm({
       return `${actionPrefix} ${quantity} ${assetId}`;
     }
 
-    return isExternal ? `Add ${actionPrefix}` : "Add Transfer";
+    return isExternal ? actionPrefix : t("form.buttons.addTransfer");
   };
 
   // Filter destination accounts to exclude source account (for internal transfers)
@@ -387,7 +389,7 @@ export function TransferForm({
                   onCheckedChange={handleExternalChange}
                 />
                 <Label htmlFor="isExternal" className="cursor-pointer text-sm font-normal">
-                  External transfer
+                  {t("form.fields.externalTransfer")}
                 </Label>
               </div>
 
@@ -403,13 +405,13 @@ export function TransferForm({
                     <div className="flex items-center space-x-1.5">
                       <RadioGroupItem value="in" id="direction-in" />
                       <Label htmlFor="direction-in" className="cursor-pointer text-sm font-normal">
-                        In
+                        {t("form.fields.directionIn")}
                       </Label>
                     </div>
                     <div className="flex items-center space-x-1.5">
                       <RadioGroupItem value="out" id="direction-out" />
                       <Label htmlFor="direction-out" className="cursor-pointer text-sm font-normal">
-                        Out
+                        {t("form.fields.directionOut")}
                       </Label>
                     </div>
                   </RadioGroup>
@@ -423,8 +425,10 @@ export function TransferForm({
                 name="accountId"
                 accounts={accounts}
                 currencyName="currency"
-                label={direction === "in" ? "To Account" : "From Account"}
-                placeholder="Select account..."
+                label={
+                  direction === "in" ? t("form.fields.toAccount") : t("form.fields.fromAccount")
+                }
+                placeholder={t("form.fields.selectAccount")}
               />
             ) : (
               <>
@@ -433,22 +437,22 @@ export function TransferForm({
                   name="fromAccountId"
                   accounts={accounts}
                   currencyName="currency"
-                  label="From Account"
-                  placeholder="Select source account..."
+                  label={t("form.fields.fromAccount")}
+                  placeholder={t("form.fields.selectSourceAccount")}
                 />
 
                 {/* To Account Selection */}
                 <AccountSelect
                   name="toAccountId"
                   accounts={toAccountOptions}
-                  label="To Account"
-                  placeholder="Select destination account..."
+                  label={t("form.fields.toAccount")}
+                  placeholder={t("form.fields.selectDestinationAccount")}
                 />
               </>
             )}
 
             {/* Date Picker */}
-            <DatePicker name="activityDate" label="Date" />
+            <DatePicker name="activityDate" label={t("form.fields.date")} />
 
             {/* Securities mode: Symbol and Quantity at top */}
             {!isCashMode && (
@@ -468,12 +472,12 @@ export function TransferForm({
                 <input type="hidden" {...form.register("assetMetadata.kind")} />
                 <input type="hidden" {...form.register("symbolQuoteCcy")} />
                 <input type="hidden" {...form.register("symbolInstrumentType")} />
-                <QuantityInput name="quantity" label="Quantity" />
+                <QuantityInput name="quantity" label={t("form.fields.quantity")} />
                 {/* Cost basis only needed for external transfer in - backend calculates for transfer out */}
                 {isExternal && direction === "in" && (
                   <AmountInput
                     name="unitPrice"
-                    label="Cost Basis"
+                    label={t("form.fields.costBasis")}
                     maxDecimalPlaces={4}
                     currency={currency}
                   />
@@ -482,7 +486,9 @@ export function TransferForm({
             )}
 
             {/* Cash mode: Amount */}
-            {isCashMode && <AmountInput name="amount" label="Amount" currency={currency} />}
+            {isCashMode && (
+              <AmountInput name="amount" label={t("form.fields.amount")} currency={currency} />
+            )}
 
             {/* Advanced Options */}
             <AdvancedOptionsSection
@@ -496,7 +502,11 @@ export function TransferForm({
             />
 
             {/* Notes */}
-            <NotesInput name="comment" label="Notes" placeholder="Add an optional note..." />
+            <NotesInput
+              name="comment"
+              label={t("form.fields.notes")}
+              placeholder={t("form.fields.notesPlaceholder")}
+            />
           </CardContent>
         </Card>
 
@@ -504,7 +514,7 @@ export function TransferForm({
         <div className="flex justify-end gap-2">
           {onCancel && (
             <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-              Cancel
+              {t("form.buttons.cancel")}
             </Button>
           )}
           <Button type="submit" disabled={isLoading}>

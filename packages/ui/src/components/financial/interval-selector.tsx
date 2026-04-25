@@ -18,15 +18,15 @@ interface IntervalData {
 }
 
 const intervalDescriptions: Record<TimePeriod, string> = {
-  "1D": "past day",
-  "1W": "past week",
-  "1M": "past month",
-  "3M": "past 3 months",
-  "6M": "past 6 months",
-  YTD: "year to date",
-  "1Y": "past year",
-  "5Y": "past 5 years",
-  ALL: "All Time",
+  "1D": "近 1 天",
+  "1W": "近 1 周",
+  "1M": "近 1 个月",
+  "3M": "近 3 个月",
+  "6M": "近 6 个月",
+  YTD: "今年至今",
+  "1Y": "近 1 年",
+  "5Y": "近 5 年",
+  ALL: "全部",
 };
 
 const intervals: IntervalData[] = [

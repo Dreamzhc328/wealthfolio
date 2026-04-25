@@ -15,6 +15,7 @@ import {
 import { toast } from "@wealthfolio/ui/components/ui/use-toast";
 import { useCallback, useEffect } from "react";
 import { FormProvider, useForm, type Resolver, type SubmitHandler } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { useActivityMutations } from "../../hooks/use-activity-mutations";
 import { BulkHoldingsForm } from "./bulk-holdings-form";
@@ -35,6 +36,7 @@ export const BulkHoldingsModal = ({
   onSuccess,
   defaultAccount,
 }: BulkHoldingsModalProps) => {
+  const { t } = useTranslation("assets");
   const { saveActivitiesMutation } = useActivityMutations();
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
@@ -118,9 +120,8 @@ export const BulkHoldingsModal = ({
 
       if (!validHoldings.length) {
         toast({
-          title: "No valid holdings",
-          description:
-            "Please add at least one valid holding with ticker, shares, and average cost.",
+          title: t("bulkHoldings.noValidTitle"),
+          description: t("bulkHoldings.noValidDescription"),
           variant: "destructive",
         });
         return;
@@ -172,7 +173,7 @@ export const BulkHoldingsModal = ({
             .join("\n");
 
           toast({
-            title: hasSuccesses ? "Some holdings failed to save" : "Failed to save holdings",
+            title: hasSuccesses ? t("bulkHoldings.saveSomeFailed") : t("bulkHoldings.saveFailed"),
             description,
             variant: "destructive",
           });
@@ -183,8 +184,8 @@ export const BulkHoldingsModal = ({
         }
 
         toast({
-          title: "Holdings saved",
-          description: "Your holdings have been added to this account.",
+          title: t("bulkHoldings.saved"),
+          description: t("bulkHoldings.savedDescription"),
           variant: "success",
         });
         form.reset();
@@ -222,14 +223,14 @@ export const BulkHoldingsModal = ({
       return null;
     };
 
-    const errorMessage = findFirstMessage(errors) || "Please check the form for errors.";
+    const errorMessage = findFirstMessage(errors) || t("bulkHoldings.checkErrors");
 
     toast({
-      title: "Form validation failed",
+      title: t("bulkHoldings.validationFailed"),
       description: errorMessage,
       variant: "destructive",
     });
-  }, []);
+  }, [t]);
 
   const isSubmitDisabled =
     saveActivitiesMutation.isPending || !hasValidHoldings || !form.watch("accountId");
@@ -238,11 +239,8 @@ export const BulkHoldingsModal = ({
     <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && onClose()}>
       <DialogContent className="max-h-[90vh] w-full overflow-y-auto sm:max-w-6xl">
         <DialogHeader>
-          <DialogTitle>Add Existing Holdings</DialogTitle>
-          <DialogDescription>
-            Quickly add multiple holdings to your portfolio. Enter your current positions with
-            ticker symbols, quantities, and average costs. This will not affect your cash balance.
-          </DialogDescription>
+          <DialogTitle>{t("bulkHoldings.title")}</DialogTitle>
+          <DialogDescription>{t("bulkHoldings.description")}</DialogDescription>
         </DialogHeader>
 
         <FormProvider {...form}>
@@ -259,7 +257,7 @@ export const BulkHoldingsModal = ({
               {Object.keys(form.formState.errors).length > 0 && (
                 <div className="border-destructive/50 bg-destructive/10 rounded-lg border p-4">
                   <h4 className="text-destructive mb-2 text-sm font-medium">
-                    Please fix the following errors:
+                    {t("bulkHoldings.fixErrors")}
                   </h4>
                   <ul className="text-destructive/80 space-y-1 text-sm">
                     {form.formState.errors.accountId && (
@@ -277,14 +275,16 @@ export const BulkHoldingsModal = ({
 
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={onClose}>
-                  Cancel
+                  {t("bulkHoldings.cancel")}
                 </Button>
                 <Button
                   type="submit"
                   disabled={isSubmitDisabled}
                   data-testid="bulk-holdings-confirm"
                 >
-                  {saveActivitiesMutation.isPending ? "Saving..." : "Confirm"}
+                  {saveActivitiesMutation.isPending
+                    ? t("bulkHoldings.saving")
+                    : t("bulkHoldings.confirm")}
                 </Button>
               </DialogFooter>
             </form>

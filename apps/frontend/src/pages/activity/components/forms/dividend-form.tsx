@@ -6,6 +6,7 @@ import { Card, CardContent } from "@wealthfolio/ui/components/ui/card";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import { useMemo } from "react";
 import { FormProvider, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import {
   AccountSelect,
@@ -83,6 +84,7 @@ export function DividendForm({
   isManualSymbol = false,
   assetCurrency,
 }: DividendFormProps) {
+  const { t } = useTranslation("assets");
   const { data: settings } = useSettings();
   const baseCurrency = settings?.baseCurrency;
 
@@ -137,7 +139,7 @@ export function DividendForm({
             {/* Symbol Search/Input */}
             <SymbolSearch
               name="symbol"
-              label="Symbol"
+              label={t("form.fields.symbol")}
               isManualAsset={isManualSymbol}
               exchangeMicName="exchangeMic"
               currencyName="currency"
@@ -148,10 +150,10 @@ export function DividendForm({
             <input type="hidden" {...form.register("symbolInstrumentType")} />
 
             {/* Date Picker */}
-            <DatePicker name="activityDate" label="Date" />
+            <DatePicker name="activityDate" label={t("form.fields.date")} />
 
             {/* Amount */}
-            <AmountInput name="amount" label="Amount" currency={currency} />
+            <AmountInput name="amount" label={t("form.fields.amount")} currency={currency} />
 
             {/* Advanced Options */}
             <AdvancedOptionsSection
@@ -170,16 +172,20 @@ export function DividendForm({
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <AmountInput
                   name="unitPrice"
-                  label="Price"
+                  label={t("form.fields.price")}
                   maxDecimalPlaces={4}
                   currency={currency}
                 />
-                <QuantityInput name="quantity" label="Quantity" />
+                <QuantityInput name="quantity" label={t("form.fields.quantity")} />
               </div>
             )}
 
             {/* Notes */}
-            <NotesInput name="comment" label="Notes" placeholder="Add an optional note..." />
+            <NotesInput
+              name="comment"
+              label={t("form.fields.notes")}
+              placeholder={t("form.fields.notesPlaceholder")}
+            />
           </CardContent>
         </Card>
 
@@ -187,7 +193,7 @@ export function DividendForm({
         <div className="flex justify-end gap-2">
           {onCancel && (
             <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-              Cancel
+              {t("form.buttons.cancel")}
             </Button>
           )}
           <Button type="submit" disabled={isLoading}>
@@ -197,7 +203,7 @@ export function DividendForm({
             ) : (
               <Icons.Plus className="mr-2 h-4 w-4" />
             )}
-            {isEditing ? "Update" : "Add Dividend"}
+            {isEditing ? t("form.buttons.update") : t("form.buttons.addDividend")}
           </Button>
         </div>
       </form>

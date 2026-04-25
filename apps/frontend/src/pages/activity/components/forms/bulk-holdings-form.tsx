@@ -21,6 +21,7 @@ import {
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { bulkHoldingsFormSchema } from "./schemas";
 
@@ -68,6 +69,7 @@ const HoldingRow = memo(
     setFocus: ReturnType<typeof useFormContext<BulkHoldingsFormValues>>["setFocus"];
     canRemove: boolean;
   }) => {
+    const { t } = useTranslation("assets");
     const { control, setValue, getValues } = useFormContext<BulkHoldingsFormValues>();
 
     // Use useWatch for specific fields instead of watch() in parent
@@ -196,7 +198,7 @@ const HoldingRow = memo(
                       handleAssetSelect(symbol, searchResult);
                     }}
                     value={tickerField.value}
-                    placeholder="Search ticker..."
+                    placeholder={t("bulkHoldings.tickerPlaceholder")}
                     className="focus:border-input focus:bg-background bg-muted/40 border-border/40 h-9 truncate rounded-md border text-sm focus:border"
                     data-testid={`bulk-holding-ticker-${index}`}
                   />
@@ -226,7 +228,7 @@ const HoldingRow = memo(
             render={({ field: sharesField }) => (
               <QuantityInput
                 {...sharesField}
-                placeholder="Shares"
+                placeholder={t("bulkHoldings.sharesPlaceholder")}
                 className="focus:border-input focus:bg-background bg-muted/40 border-border/40 h-9 rounded-md border text-sm focus:border"
                 onKeyDown={handleSharesKeyDown}
                 data-testid={`bulk-holding-shares-${index}`}
@@ -243,7 +245,7 @@ const HoldingRow = memo(
             render={({ field: priceField }) => (
               <MoneyInput
                 {...priceField}
-                placeholder="Avg. cost"
+                placeholder={t("bulkHoldings.costPlaceholder")}
                 className="focus:border-input focus:bg-background bg-muted/40 border-border/40 h-9 rounded-md border text-sm focus:border"
                 onKeyDown={handleCostKeyDown}
                 data-testid={`bulk-holding-cost-${index}`}
@@ -286,6 +288,7 @@ const HoldingRow = memo(
 HoldingRow.displayName = "HoldingRow";
 
 export const BulkHoldingsForm = ({ onAccountChange, defaultAccount }: BulkHoldingsFormProps) => {
+  const { t } = useTranslation("assets");
   const { control, setFocus } = useFormContext<BulkHoldingsFormValues>();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -371,7 +374,7 @@ export const BulkHoldingsForm = ({ onAccountChange, defaultAccount }: BulkHoldin
               name="accountId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Account</FormLabel>
+                  <FormLabel>{t("bulkHoldings.account")}</FormLabel>
                   <FormControl>
                     <AccountSelector
                       ref={field.ref}
@@ -395,7 +398,7 @@ export const BulkHoldingsForm = ({ onAccountChange, defaultAccount }: BulkHoldin
               name="activityDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Acquisition Date</FormLabel>
+                  <FormLabel>{t("bulkHoldings.acquisitionDate")}</FormLabel>
                   <FormControl>
                     <DatePickerInput value={field.value} onChange={field.onChange} />
                   </FormControl>
@@ -407,10 +410,12 @@ export const BulkHoldingsForm = ({ onAccountChange, defaultAccount }: BulkHoldin
 
           {/* Table Header */}
           <div className="text-muted-foreground hidden gap-3 border-b pb-3 text-sm sm:grid sm:grid-cols-12">
-            <div className="col-span-6">Tickers</div>
-            <div className="col-span-1 text-right">Shares</div>
-            <div className="col-span-2 text-right">Average cost</div>
-            <div className="col-span-2 whitespace-nowrap text-right">Total value</div>
+            <div className="col-span-6">{t("bulkHoldings.tickers")}</div>
+            <div className="col-span-1 text-right">{t("bulkHoldings.shares")}</div>
+            <div className="col-span-2 text-right">{t("bulkHoldings.averageCost")}</div>
+            <div className="col-span-2 whitespace-nowrap text-right">
+              {t("bulkHoldings.totalValue")}
+            </div>
             <div className="col-span-1 text-right"></div>
           </div>
 
@@ -443,7 +448,7 @@ export const BulkHoldingsForm = ({ onAccountChange, defaultAccount }: BulkHoldin
               data-testid="bulk-holdings-add-row"
             >
               <Icons.PlusCircle className="mr-2 h-4 w-4" />
-              Add Another Holding
+              {t("bulkHoldings.addAnotherHolding")}
             </Button>
           </div>
         </CardContent>

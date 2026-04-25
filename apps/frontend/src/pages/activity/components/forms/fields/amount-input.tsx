@@ -10,6 +10,7 @@ import {
   MoneyInput,
 } from "@wealthfolio/ui";
 import { useFormContext, type FieldPath, type FieldValues } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface AmountInputProps<TFieldValues extends FieldValues = FieldValues> {
   name: FieldPath<TFieldValues>;
@@ -23,11 +24,13 @@ interface AmountInputProps<TFieldValues extends FieldValues = FieldValues> {
 
 export function AmountInput<TFieldValues extends FieldValues = FieldValues>({
   name,
-  label = "Amount",
+  label,
   placeholder = "0.00",
   maxDecimalPlaces = 2,
   currency,
 }: AmountInputProps<TFieldValues>) {
+  const { t } = useTranslation("assets");
+  const resolvedLabel = label ?? t("form.fields.amount");
   const { control } = useFormContext<TFieldValues>();
 
   return (
@@ -36,7 +39,7 @@ export function AmountInput<TFieldValues extends FieldValues = FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel>{resolvedLabel}</FormLabel>
           <FormControl>
             {currency ? (
               <InputGroup className="bg-input-bg h-input-height shadow-xs rounded-md">
@@ -49,8 +52,8 @@ export function AmountInput<TFieldValues extends FieldValues = FieldValues>({
                   onValueChange={field.onChange}
                   placeholder={placeholder}
                   maxDecimalPlaces={maxDecimalPlaces}
-                  aria-label={label}
-                  data-testid={`${label.toLowerCase().replace(/\s+/g, "-")}-input`}
+                  aria-label={resolvedLabel}
+                  data-testid={`${name.toLowerCase().replace(/\s+/g, "-")}-input`}
                 />
                 <InputGroupAddon align="inline-end">
                   <InputGroupText>{currency}</InputGroupText>
@@ -64,8 +67,8 @@ export function AmountInput<TFieldValues extends FieldValues = FieldValues>({
                 onValueChange={field.onChange}
                 placeholder={placeholder}
                 maxDecimalPlaces={maxDecimalPlaces}
-                aria-label={label}
-                data-testid={`${label.toLowerCase().replace(/\s+/g, "-")}-input`}
+                aria-label={resolvedLabel}
+                data-testid={`${name.toLowerCase().replace(/\s+/g, "-")}-input`}
               />
             )}
           </FormControl>

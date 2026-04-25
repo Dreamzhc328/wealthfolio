@@ -1,0 +1,128 @@
+{
+  "page": {
+    "logoAlt": "Wealthfolio",
+    "back": "返回",
+    "continue": "继续",
+    "subscribeAndConnect": "订阅并连接",
+    "getStarted": "开始使用"
+  },
+  "step1": {
+    "tagline": "两种方式追踪你的投资组合。",
+    "holdings": {
+      "title": "持仓",
+      "subtitle": "估值追踪",
+      "badge": "适合轻量记录。",
+      "features": {
+        "netWorth": "净资产与资产分配",
+        "valueAndPnl": "估值与浮动盈亏",
+        "pricePerformance": "基于价格的业绩",
+        "fastSetup": "上手快、轻量"
+      },
+      "limit": "局限：不计入现金流的业绩调整。",
+      "note": "提示：需要持续维护持仓信息。"
+    },
+    "transactions": {
+      "title": "交易",
+      "subtitle": "业绩追踪",
+      "badge": "适合完整业绩分析。",
+      "features": {
+        "totalReturn": "长期总回报",
+        "gainsAndCashflow": "收益与现金流归因",
+        "completeView": "最完整的业绩视图",
+        "bestWithBroker": "建议配合券商同步或 CSV 导入"
+      },
+      "limit": "局限：需要记录全部交易。",
+      "note": "提示：与券商同步后可自动完成。"
+    },
+    "footer": {
+      "differentModes": "不同账户可以使用不同的记录方式。",
+      "learnMore": "了解更多"
+    }
+  },
+  "step2": {
+    "tagline": "几个简单设置，开始使用",
+    "currency": {
+      "label": "本位币",
+      "other": "其他",
+      "modalTitle": "选择本位币",
+      "searchPlaceholder": "搜索货币……",
+      "noResults": "没有找到匹配的货币",
+      "validationRequired": "请选择本位币。"
+    },
+    "timezone": {
+      "label": "时区",
+      "other": "其他",
+      "modalTitle": "选择时区",
+      "searchPlaceholder": "搜索时区……",
+      "noResults": "没有找到匹配的时区",
+      "validationRequired": "请选择时区。",
+      "names": {
+        "America/New_York": "纽约",
+        "America/Chicago": "芝加哥",
+        "America/Denver": "丹佛",
+        "America/Los_Angeles": "洛杉矶",
+        "America/Toronto": "多伦多",
+        "Europe/London": "伦敦",
+        "Europe/Paris": "巴黎",
+        "Europe/Berlin": "柏林",
+        "Asia/Tokyo": "东京",
+        "Asia/Singapore": "新加坡",
+        "Asia/Shanghai": "上海",
+        "Asia/Hong_Kong": "香港",
+        "Australia/Sydney": "悉尼",
+        "Australia/Melbourne": "墨尔本",
+        "UTC": "UTC"
+      }
+    }
+  },
+  "appearance": {
+    "tagline": "定制你的使用体验",
+    "theme": {
+      "label": "主题",
+      "light": "浅色",
+      "lightAlt": "浅色主题预览",
+      "dark": "深色",
+      "darkAlt": "深色主题预览",
+      "system": "跟随系统",
+      "systemAlt": "系统主题预览"
+    },
+    "font": {
+      "label": "字体",
+      "sample": "用清晰的方式投资。",
+      "options": {
+        "mono": {
+          "label": "等宽",
+          "description": "理性而精确"
+        },
+        "sans": {
+          "label": "无衬线",
+          "description": "简洁而现代"
+        },
+        "serif": {
+          "label": "衬线",
+          "description": "经典而优雅"
+        }
+      }
+    }
+  },
+  "connect": {
+    "optional": "可选",
+    "title": "Wealthfolio Connect",
+    "subtitle": "自动同步你的券商账户，同时保护数据隐私。",
+    "features": {
+      "brokerageSync": {
+        "title": "券商同步",
+        "description": "自动把你的账户与交易同步到本地数据库。"
+      },
+      "deviceSync": {
+        "title": "设备同步",
+        "description": "通过端到端加密在所有设备间保持数据库同步。"
+      },
+      "householdView": {
+        "title": "家庭视图",
+        "description": "与家人共享指定账户，查看汇总视图。"
+      }
+    },
+    "learnMore": "了解更多关于 Connect"
+  }
+}

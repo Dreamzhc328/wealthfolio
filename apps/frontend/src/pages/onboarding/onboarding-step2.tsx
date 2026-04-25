@@ -14,16 +14,18 @@ import { Input } from "@wealthfolio/ui/components/ui/input";
 import { worldCurrencies } from "@wealthfolio/ui/lib/currencies";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import * as z from "zod";
 
-const onboardingSettingsSchema = z.object({
-  baseCurrency: z
-    .string({ required_error: "Please select a base currency." })
-    .min(1, "Please select a base currency."),
-  timezone: z
-    .string({ required_error: "Please select a timezone." })
-    .min(1, "Please select a timezone."),
-});
+const buildOnboardingSchema = (t: (key: string) => string) =>
+  z.object({
+    baseCurrency: z
+      .string({ required_error: t("step2.currency.validationRequired") })
+      .min(1, t("step2.currency.validationRequired")),
+    timezone: z
+      .string({ required_error: t("step2.timezone.validationRequired") })
+      .min(1, t("step2.timezone.validationRequired")),
+  });
 
 function detectDefaultCurrency(): string | undefined {
   if (typeof navigator === "undefined") return undefined; // Default SSR/Node
@@ -90,7 +92,14 @@ function detectBrowserTimezone(): string {
   return "UTC";
 }
 
-function formatTimezoneLabel(tz: string): string {
+function formatTimezoneLabel(tz: string, t: (key: string) => string): string {
+  // Try translation map first for popular cities
+  const translationKey = `step2.timezone.names.${tz}`;
+  const translated = t(translationKey);
+  // i18next returns the key itself when missing; fall back to the city portion
+  if (translated && translated !== translationKey) {
+    return translated;
+  }
   const parts = tz.split("/");
   return parts[parts.length - 1].replace(/_/g, " ");
 }
@@ -105,7 +114,10 @@ const popularTimezones = [
   "Australia/Sydney",
 ];
 
-type OnboardingSettingsValues = z.infer<typeof onboardingSettingsSchema>;
+type OnboardingSettingsValues = {
+  baseCurrency: string;
+  timezone: string;
+};
 
 export interface OnboardingStep2Handle {
   submitForm: () => void;
@@ -118,12 +130,15 @@ interface OnboardingStep2Props {
 
 export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2Props>(
   ({ onNext, onValidityChange }, ref) => {
+    const { t } = useTranslation("onboarding");
     const { settings, updateSettings } = useSettingsContext();
     const [initialValuesSet, setInitialValuesSet] = useState(false);
     const [showCurrencySearch, setShowCurrencySearch] = useState(false);
     const [currencySearch, setCurrencySearch] = useState("");
     const [showTimezoneSearch, setShowTimezoneSearch] = useState(false);
     const [timezoneSearch, setTimezoneSearch] = useState("");
+
+    const onboardingSettingsSchema = useMemo(() => buildOnboardingSchema(t), [t]);
 
     const form = useForm<OnboardingSettingsValues>({
       resolver: zodResolver(onboardingSettingsSchema),
@@ -216,7 +231,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
       <>
         <div className="w-full max-w-2xl space-y-4">
           <div className="text-center">
-            <p className="text-muted-foreground">Just a couple preferences to get you started</p>
+            <p className="text-muted-foreground">{t("step2.tagline")}</p>
           </div>
           <Card className="border-none bg-transparent">
             <CardContent className="p-0 sm:p-6">
@@ -231,7 +246,9 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                           <div className="bg-muted rounded-lg p-2">
                             <Icons.DollarSign className="text-muted-foreground h-5 w-5" />
                           </div>
-                          <FormLabel className="text-xl font-semibold">Currency</FormLabel>
+                          <FormLabel className="text-xl font-semibold">
+                            {t("step2.currency.label")}
+                          </FormLabel>
                         </div>
                         <FormControl>
                           <div className="grid grid-cols-3 gap-3 md:grid-cols-4">
@@ -258,7 +275,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                               className="border-border hover:border-primary/50 hover:bg-accent ring-offset-background focus-visible:ring-ring inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-lg border-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
                             >
                               <Icons.Search className="size-5" />
-                              Other
+                              {t("step2.currency.other")}
                             </button>
                           </div>
                         </FormControl>
@@ -276,7 +293,9 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                           <div className="bg-muted rounded-lg p-2">
                             <Icons.Globe className="text-muted-foreground h-5 w-5" />
                           </div>
-                          <FormLabel className="text-xl font-semibold">Timezone</FormLabel>
+                          <FormLabel className="text-xl font-semibold">
+                            {t("step2.timezone.label")}
+                          </FormLabel>
                         </div>
                         <FormControl>
                           <div className="grid grid-cols-3 gap-3 md:grid-cols-4">
@@ -294,7 +313,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                               >
                                 <div className="flex flex-col items-start gap-1">
                                   <span className="whitespace-nowrap font-semibold">
-                                    {formatTimezoneLabel(tz)}
+                                    {formatTimezoneLabel(tz, t)}
                                   </span>
                                 </div>
                               </button>
@@ -305,7 +324,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                               className="border-border hover:border-primary/50 hover:bg-accent ring-offset-background focus-visible:ring-ring inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-lg border-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
                             >
                               <Icons.Search className="size-5" />
-                              Other
+                              {t("step2.timezone.other")}
                             </button>
                           </div>
                         </FormControl>
@@ -324,7 +343,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
             <Card className="w-full max-w-md border shadow-lg">
               <div className="p-6">
                 <div className="mb-4 flex items-center justify-between">
-                  <h3 className="text-xl font-bold">Select Currency</h3>
+                  <h3 className="text-xl font-bold">{t("step2.currency.modalTitle")}</h3>
                   <button
                     onClick={() => {
                       setShowCurrencySearch(false);
@@ -340,7 +359,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                   <Icons.Search className="text-muted-foreground absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform" />
                   <Input
                     type="text"
-                    placeholder="Search currencies..."
+                    placeholder={t("step2.currency.searchPlaceholder")}
                     value={currencySearch}
                     onChange={(e) => setCurrencySearch(e.target.value)}
                     className="pl-10"
@@ -370,7 +389,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                   ))}
                   {filteredCurrencies.length === 0 && (
                     <div className="text-muted-foreground py-8 text-center">
-                      No currencies found
+                      {t("step2.currency.noResults")}
                     </div>
                   )}
                 </div>
@@ -384,7 +403,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
             <Card className="w-full max-w-md border shadow-lg">
               <div className="p-6">
                 <div className="mb-4 flex items-center justify-between">
-                  <h3 className="text-xl font-bold">Select Timezone</h3>
+                  <h3 className="text-xl font-bold">{t("step2.timezone.modalTitle")}</h3>
                   <button
                     onClick={() => {
                       setShowTimezoneSearch(false);
@@ -400,7 +419,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                   <Icons.Search className="text-muted-foreground absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform" />
                   <Input
                     type="text"
-                    placeholder="Search timezones..."
+                    placeholder={t("step2.timezone.searchPlaceholder")}
                     value={timezoneSearch}
                     onChange={(e) => setTimezoneSearch(e.target.value)}
                     className="pl-10"
@@ -419,7 +438,7 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                     >
                       <div className="flex items-center gap-3">
                         <div className="text-left">
-                          <div className="font-semibold">{formatTimezoneLabel(tz)}</div>
+                          <div className="font-semibold">{formatTimezoneLabel(tz, t)}</div>
                           <div className="text-muted-foreground text-sm">{tz}</div>
                         </div>
                       </div>
@@ -429,7 +448,9 @@ export const OnboardingStep2 = forwardRef<OnboardingStep2Handle, OnboardingStep2
                     </button>
                   ))}
                   {filteredTimezones.length === 0 && (
-                    <div className="text-muted-foreground py-8 text-center">No timezones found</div>
+                    <div className="text-muted-foreground py-8 text-center">
+                      {t("step2.timezone.noResults")}
+                    </div>
                   )}
                 </div>
               </div>

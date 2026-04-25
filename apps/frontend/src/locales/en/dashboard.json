@@ -337,6 +337,17 @@
       "contributedOver": "You've contributed <contributed/> to this account in {{year}}. Your total is <total/> which is over the <limit/> limit.",
       "contributedTowards": "You've contributed <contributed/> to this account in {{year}}. Your total contribution towards the <limit/> {{groupName}} limit is <total/>."
     }
+  },
+  "savingGoals": {
+    "title": "Saving Goals",
+    "empty": "No saving goals set.",
+    "create": "Create your first goal",
+    "tooltip": {
+      "progress": "Progress",
+      "currentValue": "Current Value",
+      "targetValue": "Target Value",
+      "pending": "Progress calculation pending or not applicable."
+    }
   }
 }
 

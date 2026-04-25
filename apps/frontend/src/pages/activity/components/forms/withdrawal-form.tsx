@@ -5,6 +5,7 @@ import { Card, CardContent } from "@wealthfolio/ui/components/ui/card";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import { useMemo } from "react";
 import { FormProvider, useForm, type Resolver } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import {
   AccountSelect,
@@ -56,6 +57,7 @@ export function WithdrawalForm({
   isLoading = false,
   isEditing = false,
 }: WithdrawalFormProps) {
+  const { t } = useTranslation("assets");
   const { data: settings } = useSettings();
   const baseCurrency = settings?.baseCurrency;
 
@@ -103,10 +105,10 @@ export function WithdrawalForm({
             <AccountSelect name="accountId" accounts={accounts} currencyName="currency" />
 
             {/* Date Picker */}
-            <DatePicker name="activityDate" label="Date" />
+            <DatePicker name="activityDate" label={t("form.fields.date")} />
 
             {/* Amount */}
-            <AmountInput name="amount" label="Amount" currency={currency} />
+            <AmountInput name="amount" label={t("form.fields.amount")} currency={currency} />
 
             {/* Advanced Options - Currency and FX Rate (no subtypes for withdrawals) */}
             <AdvancedOptionsSection
@@ -118,7 +120,11 @@ export function WithdrawalForm({
             />
 
             {/* Notes */}
-            <NotesInput name="comment" label="Notes" placeholder="Add an optional note..." />
+            <NotesInput
+              name="comment"
+              label={t("form.fields.notes")}
+              placeholder={t("form.fields.notesPlaceholder")}
+            />
           </CardContent>
         </Card>
 
@@ -126,7 +132,7 @@ export function WithdrawalForm({
         <div className="flex justify-end gap-2">
           {onCancel && (
             <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-              Cancel
+              {t("form.buttons.cancel")}
             </Button>
           )}
           <Button type="submit" disabled={isLoading}>
@@ -136,7 +142,7 @@ export function WithdrawalForm({
             ) : (
               <Icons.MinusCircle className="mr-2 h-4 w-4" />
             )}
-            {isEditing ? "Update" : "Add Withdrawal"}
+            {isEditing ? t("form.buttons.update") : t("form.buttons.addWithdrawal")}
           </Button>
         </div>
       </form>

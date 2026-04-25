@@ -3,6 +3,7 @@ import { makeAssistantToolUI } from "@assistant-ui/react";
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Skeleton } from "@wealthfolio/ui";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import { memo, useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useBalancePrivacy } from "@/hooks/use-balance-privacy";
 import { useSettingsContext } from "@/lib/settings-provider";
@@ -290,6 +291,7 @@ interface SuccessStateProps {
 }
 
 function SuccessState({ draft, createdActivityId, currency }: SuccessStateProps) {
+  const { t } = useTranslation("aiAssistant");
   const { isBalanceHidden } = useBalancePrivacy();
 
   const formatAmount = useCallback(
@@ -313,40 +315,40 @@ function SuccessState({ draft, createdActivityId, currency }: SuccessStateProps)
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
           <Icons.CheckCircle className="text-success h-5 w-5" />
-          <CardTitle className="text-base">Activity Recorded</CardTitle>
+          <CardTitle className="text-base">{t("toolUI.recordActivity.successTitle")}</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
           <div>
-            <span className="text-muted-foreground">Type:</span>{" "}
+            <span className="text-muted-foreground">{t("toolUI.recordActivity.labels.type")}</span>{" "}
             <span className="font-medium">{activityTypeDisplay}</span>
           </div>
           <div>
-            <span className="text-muted-foreground">Date:</span>{" "}
+            <span className="text-muted-foreground">{t("toolUI.recordActivity.labels.date")}</span>{" "}
             <span className="font-medium">{new Date(draft.activityDate).toLocaleDateString()}</span>
           </div>
           {draft.symbol && (
             <div>
-              <span className="text-muted-foreground">Asset:</span>{" "}
+              <span className="text-muted-foreground">{t("toolUI.recordActivity.labels.asset")}</span>{" "}
               <span className="font-medium">{draft.symbol}</span>
             </div>
           )}
           {draft.quantity !== undefined && (
             <div>
-              <span className="text-muted-foreground">Quantity:</span>{" "}
+              <span className="text-muted-foreground">{t("toolUI.recordActivity.labels.quantity")}</span>{" "}
               <span className="font-medium">{draft.quantity}</span>
             </div>
           )}
           {draft.amount !== undefined && (
             <div>
-              <span className="text-muted-foreground">Amount:</span>{" "}
+              <span className="text-muted-foreground">{t("toolUI.recordActivity.labels.amount")}</span>{" "}
               <span className="font-medium">{formatAmount(draft.amount)}</span>
             </div>
           )}
           {draft.accountName && (
             <div>
-              <span className="text-muted-foreground">Account:</span>{" "}
+              <span className="text-muted-foreground">{t("toolUI.recordActivity.labels.account")}</span>{" "}
               <span className="font-medium">{draft.accountName}</span>
             </div>
           )}
@@ -355,7 +357,7 @@ function SuccessState({ draft, createdActivityId, currency }: SuccessStateProps)
           <Button variant="outline" size="sm" asChild>
             <Link to={createdActivityId ? `/activities?id=${createdActivityId}` : "/activities"}>
               <Icons.ArrowRight className="mr-2 h-4 w-4" />
-              View in Activities
+              {t("toolUI.recordActivity.viewInActivities")}
             </Link>
           </Button>
         </div>
@@ -486,6 +488,7 @@ function DraftForm({
   toolCallId,
   onSuccess,
 }: DraftFormProps) {
+  const { t } = useTranslation("aiAssistant");
   const runtime = useRuntimeContext();
   const threadId = runtime.currentThreadId;
 
@@ -571,7 +574,7 @@ function DraftForm({
       <Card className="border-destructive/30 bg-destructive/5">
         <CardContent className="py-4">
           <p className="text-destructive text-sm font-medium">
-            Unsupported activity type: {draft.activityType}
+            {t("toolUI.recordActivity.errorUnsupportedType", { type: draft.activityType })}
           </p>
         </CardContent>
       </Card>
@@ -590,21 +593,21 @@ function DraftForm({
     <Card className="bg-muted/40 border-primary/10">
       <CardHeader className="pb-2">
         <div className="flex flex-wrap items-center gap-2">
-          <CardTitle className="text-base">{activityTypeDisplay} draft</CardTitle>
+          <CardTitle className="text-base">{t("toolUI.recordActivity.draftTitle", { type: activityTypeDisplay })}</CardTitle>
           {draft.isCustomAsset && (
             <Badge variant="warning" className="text-xs">
-              Custom Asset
+              {t("toolUI.recordActivity.customAsset")}
             </Badge>
           )}
         </div>
         {draft.isCustomAsset && draft.symbol && (
           <p className="text-warning mt-1 text-xs">
-            "{draft.symbol}" wasn't found. It will be created as a custom asset on save.
+            {t("toolUI.recordActivity.customAssetHint", { symbol: draft.symbol })}
           </p>
         )}
         {showValidationHints && (
           <div className="bg-warning/10 border-warning/30 mt-2 rounded-md border p-2 text-xs">
-            <p className="font-medium">The AI flagged some issues — please confirm:</p>
+            <p className="font-medium">{t("toolUI.recordActivity.validationTitle")}</p>
             <ul className="mt-1 list-disc pl-4">
               {validation.errors.map((e, i) => (
                 <li key={`err-${i}`}>
@@ -612,7 +615,7 @@ function DraftForm({
                 </li>
               ))}
               {validation.missingFields.map((f) => (
-                <li key={`missing-${f}`}>Missing: {f}</li>
+                <li key={`missing-${f}`}>{t("toolUI.recordActivity.validationMissing", { field: f })}</li>
               ))}
             </ul>
           </div>
@@ -644,6 +647,7 @@ function RecordActivityToolUIContentImpl({
   status,
   toolCallId,
 }: RecordActivityToolUIContentProps) {
+  const { t } = useTranslation("aiAssistant");
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
   const parsed = useMemo(() => normalizeResult(result, baseCurrency), [baseCurrency, result]);
@@ -665,9 +669,9 @@ function RecordActivityToolUIContentImpl({
     return (
       <Card className="border-destructive/30 bg-destructive/5">
         <CardContent className="py-4">
-          <p className="text-destructive text-sm font-medium">Failed to prepare activity</p>
+          <p className="text-destructive text-sm font-medium">{t("toolUI.recordActivity.errorPrepareFailed")}</p>
           <p className="text-muted-foreground mt-1 text-xs">
-            The request was interrupted or failed.
+            {t("toolUI.recordActivity.errorInterrupted")}
           </p>
         </CardContent>
       </Card>
@@ -678,7 +682,7 @@ function RecordActivityToolUIContentImpl({
     return (
       <Card className="border-destructive/30 bg-destructive/5">
         <CardContent className="py-4">
-          <p className="text-destructive text-sm font-medium">No activity data available</p>
+          <p className="text-destructive text-sm font-medium">{t("toolUI.recordActivity.errorNoData")}</p>
         </CardContent>
       </Card>
     );

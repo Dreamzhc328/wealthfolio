@@ -14,6 +14,7 @@ import {
 } from "@wealthfolio/ui";
 import { useEffect, useRef } from "react";
 import { useFormContext, type FieldPath, type FieldValues } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface OptionContractFieldsProps<TFieldValues extends FieldValues = FieldValues> {
   underlyingName: FieldPath<TFieldValues>;
@@ -40,6 +41,7 @@ export function OptionContractFields<TFieldValues extends FieldValues = FieldVal
   quoteCcyName,
   unitPriceName,
 }: OptionContractFieldsProps<TFieldValues>) {
+  const { t } = useTranslation("assets");
   const { control, setValue, getValues, watch } = useFormContext<TFieldValues>();
   const latestResolveRequestId = useRef(0);
   const needsCurrencyConfirmation = useRef(false);
@@ -159,7 +161,7 @@ export function OptionContractFields<TFieldValues extends FieldValues = FieldVal
 
   return (
     <div className="space-y-4">
-      <h4 className="text-muted-foreground text-sm font-medium">Option Contract</h4>
+      <h4 className="text-muted-foreground text-sm font-medium">{t("form.option.contract")}</h4>
 
       {/* Symbol search — accepts option contracts, underlying tickers, or OCC symbols */}
       <FormField
@@ -167,19 +169,17 @@ export function OptionContractFields<TFieldValues extends FieldValues = FieldVal
         name={underlyingName}
         render={({ field }) => (
           <FormItem className="-mt-2">
-            <FormLabel>Symbol</FormLabel>
+            <FormLabel>{t("form.fields.symbol")}</FormLabel>
             <FormControl>
               <TickerSearchInput
                 onSelectResult={handleUnderlyingSelect}
                 value={field.value as string}
-                placeholder="Search option or ticker..."
+                placeholder={t("form.option.underlyingSearchPlaceholder")}
               />
             </FormControl>
             <FormMessage className="text-xs" />
             {!field.value && (
-              <p className="text-muted-foreground text-xs">
-                Search by ticker, option contract, or paste an OCC symbol
-              </p>
+              <p className="text-muted-foreground text-xs">{t("form.option.underlyingHelp")}</p>
             )}
           </FormItem>
         )}
@@ -211,7 +211,7 @@ export function OptionContractFields<TFieldValues extends FieldValues = FieldVal
                       strokeLinejoin="round"
                     />
                   </svg>
-                  Call
+                  {t("form.option.call")}
                 </button>
                 <button
                   type="button"
@@ -231,7 +231,7 @@ export function OptionContractFields<TFieldValues extends FieldValues = FieldVal
                       strokeLinejoin="round"
                     />
                   </svg>
-                  Put
+                  {t("form.option.put")}
                 </button>
               </div>
             </FormControl>
@@ -247,7 +247,7 @@ export function OptionContractFields<TFieldValues extends FieldValues = FieldVal
           name={strikePriceName}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Strike Price</FormLabel>
+              <FormLabel>{t("form.option.strikePrice")}</FormLabel>
               <FormControl>
                 <Input
                   type="number"
@@ -258,7 +258,7 @@ export function OptionContractFields<TFieldValues extends FieldValues = FieldVal
                     field.onChange(e.target.value ? Number(e.target.value) : undefined)
                   }
                   className="h-10"
-                  aria-label="Strike Price"
+                  aria-label={t("form.option.strikePrice")}
                 />
               </FormControl>
               <FormMessage />
@@ -270,7 +270,7 @@ export function OptionContractFields<TFieldValues extends FieldValues = FieldVal
           name={expirationDateName}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Expiration</FormLabel>
+              <FormLabel>{t("form.option.expiration")}</FormLabel>
               <FormControl>
                 <DatePickerInput
                   onChange={(date: Date | undefined) => {
@@ -296,7 +296,7 @@ export function OptionContractFields<TFieldValues extends FieldValues = FieldVal
       {hasContractSummary && (
         <div className="bg-muted/50 border-border rounded-md border px-3 py-2">
           <span className="text-muted-foreground text-[10px] font-medium uppercase tracking-wider">
-            Contract
+            {t("form.option.contractLabel")}
           </span>
           <p className="text-sm font-medium tabular-nums">
             {expirationDisplay} ${strikePrice} {optionType}

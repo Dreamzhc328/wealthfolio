@@ -1,0 +1,519 @@
+{
+  "common": {
+    "beta": "Beta",
+    "betaTooltip": "该功能正在公测中，效果可能会随我们的持续优化而变化。",
+    "disclaimer": "回答可能不准确，不构成投资建议。"
+  },
+  "header": {
+    "showSidebar": "显示侧边栏",
+    "hideSidebar": "隐藏侧边栏",
+    "toggleMenu": "切换菜单"
+  },
+  "emptyState": {
+    "title": "尚未配置 AI 服务商",
+    "description": "连接一个 AI 服务商即可开始对话,与你的个人投资助手交流。你的数据安全私密。",
+    "configureButton": "配置 AI 服务商"
+  },
+  "thread": {
+    "welcomeTitle": "你好!",
+    "welcomeSubtitle": "今天有什么可以帮你?",
+    "scrollToBottom": "滚动到底部",
+    "messageInput": "消息输入框",
+    "composerPlaceholder": "输入消息…",
+    "sendMessage": "发送",
+    "stopGenerating": "停止生成",
+    "copy": "复制",
+    "regenerate": "重新生成",
+    "edit": "编辑",
+    "previous": "上一条",
+    "next": "下一条",
+    "cancelEdit": "取消编辑",
+    "updateMessage": "更新消息",
+    "cancel": "取消",
+    "update": "更新",
+    "suggestions": {
+      "performance": "今年我的投资组合表现如何?",
+      "topHoldings": "我表现最好的持仓有哪些?",
+      "dividends": "查看我的股息收益概览",
+      "allocation": "分析我的资产配置"
+    }
+  },
+  "threadList": {
+    "newThread": "新建对话",
+    "searchPlaceholder": "搜索对话…",
+    "clearSearch": "清除搜索",
+    "loadingAria": "正在加载对话",
+    "noMatches": "未找到匹配的对话。",
+    "noConversations": "还没有对话。",
+    "pinned": "已置顶",
+    "recent": "最近",
+    "newChat": "新对话",
+    "pin": "置顶",
+    "unpin": "取消置顶",
+    "deleteConfirmTitle": "删除对话?",
+    "deleteConfirmMessage": "将永久删除“{{title}}”及其全部消息。",
+    "deleteFallback": "这条对话",
+    "deleteButton": "删除",
+    "deletePending": "删除中…"
+  },
+  "threadSidebar": {
+    "header": "对话列表",
+    "newConversation": "新建对话",
+    "newConversationFallback": "新对话",
+    "searchPlaceholder": "搜索对话…",
+    "noConversations": "还没有对话",
+    "noConversationsHint": "开启新对话,问问关于你投资组合的问题",
+    "noMatches": "未找到匹配项",
+    "noMatchesHintTag": "试试清除标签筛选",
+    "noMatchesHintSearch": "换个关键词试试",
+    "pinned": "已置顶",
+    "recent": "最近",
+    "options": "对话选项",
+    "rename": "重命名",
+    "editTags": "编辑标签",
+    "pin": "置顶",
+    "unpin": "取消置顶",
+    "delete": "删除",
+    "renameDialogTitle": "重命名对话",
+    "renameDialogPlaceholder": "输入新标题…",
+    "renameDialogCancel": "取消",
+    "renameDialogSave": "保存",
+    "tagsDialogTitle": "编辑标签",
+    "tagsDialogDescription": "添加或移除标签来整理这条对话。",
+    "tagsLabel": "标签",
+    "tagsPlaceholder": "输入标签后按回车…",
+    "tagsHelp": "按回车或逗号添加标签,按退格删除最后一个。",
+    "tagsDone": "完成",
+    "deleteDialogTitle": "删除对话?",
+    "deleteDialogDescription": "将永久删除“{{title}}”及其全部消息,此操作无法撤销。",
+    "deleteDialogFallback": "这条对话",
+    "deleteCancel": "取消",
+    "deleteConfirm": "删除"
+  },
+  "providerPicker": {
+    "noProvidersConfigured": "尚未配置服务商"
+  },
+  "modelPicker": {
+    "noModel": "未选择模型",
+    "selectModel": "选择模型",
+    "selectModelAria": "选择模型",
+    "noModelsAvailable": "暂无可用模型",
+    "addModels": "添加模型…"
+  },
+  "thinking": {
+    "label": "思考",
+    "enable": "开启思考模式",
+    "disable": "关闭思考模式",
+    "clickToEnable": "点击开启思考模式",
+    "clickToDisable": "点击关闭思考模式",
+    "thinking": "思考中…",
+    "thoughtBrief": "思考了几秒",
+    "thoughtFor": "思考了 {{seconds}} 秒"
+  },
+  "attachment": {
+    "imagePreviewTitle": "图片附件预览",
+    "imageAlt": "图片预览",
+    "preview": "附件预览",
+    "ariaLabel": "{{type}}附件",
+    "type": {
+      "image": "图片",
+      "document": "文档",
+      "file": "文件"
+    },
+    "remove": "移除文件",
+    "add": "上传附件"
+  },
+  "tool": {
+    "calling": "正在调用 {{name}}…",
+    "cancelled": "已取消 {{name}}",
+    "used": "已调用工具:{{name}}"
+  },
+  "markdown": {
+    "copy": "复制"
+  },
+  "providerSettings": {
+    "default": "默认",
+    "apiKeyRequired": "需要 API 密钥",
+    "apiKeyLabel": "API 密钥",
+    "apiKeyGet": "获取 API 密钥",
+    "apiKeyPlaceholder": "输入 API 密钥",
+    "apiKeyShow": "显示 API 密钥",
+    "apiKeyHide": "隐藏 API 密钥",
+    "apiKeySave": "保存",
+    "modelsLabel": "模型",
+    "addModel": "添加",
+    "searchModelsPlaceholder": "搜索模型…",
+    "loadingModels": "加载中…",
+    "noModelsFound": "未找到模型。",
+    "recommended": "推荐",
+    "otherAvailable": "其他可用",
+    "noModelsSelected": "尚未选择模型,点击“添加”来选择。",
+    "needsConfig": "待配置",
+    "capabilities": {
+      "tools": "工具调用",
+      "vision": "视觉",
+      "thinking": "思考"
+    },
+    "recommendedBadge": "推荐",
+    "capabilitiesPreset": "推荐模型的能力已预设。",
+    "dataAccessLabel": "数据访问",
+    "dataAccessDescription": "AI 可以访问哪些数据",
+    "dataAccess": {
+      "accounts": {
+        "label": "账户",
+        "description": "账户名称、类型与余额"
+      },
+      "holdings": {
+        "label": "持仓",
+        "description": "当前持仓及其价值"
+      },
+      "activities": {
+        "label": "交易记录",
+        "description": "历史交易与活动"
+      },
+      "performance": {
+        "label": "投资表现",
+        "description": "收益率与表现指标"
+      },
+      "income": {
+        "label": "收入",
+        "description": "收入概览与明细"
+      },
+      "goals": {
+        "label": "目标",
+        "description": "投资目标与进度"
+      },
+      "allocation": {
+        "label": "资产配置",
+        "description": "投资组合配置明细"
+      },
+      "history": {
+        "label": "历史价值",
+        "description": "投资组合的历史走势"
+      }
+    },
+    "advanced": {
+      "title": "高级选项",
+      "customized": "已自定义",
+      "resetDefaults": "恢复默认",
+      "structuredOptions": "结构化选项",
+      "structuredOptionsDescription": "数组和对象由应用内置,无法在此修改。",
+      "orphaned": "孤立的覆盖项 — 以下键已不在内置目录中:",
+      "remove": "移除",
+      "endpoint": "接口地址",
+      "endpointLearnMore": "了解更多",
+      "endpointDescription": "为该服务商指定一个自定义接口地址。",
+      "endpointSave": "保存",
+      "effective": "当前生效:{{value}}",
+      "default": "默认:{{value}}",
+      "overridden": "已覆盖",
+      "modelDefault": "模型默认",
+      "groups": {
+        "sampling": {
+          "title": "采样",
+          "blurb": "控制模型选词的随机程度。"
+        },
+        "limits": {
+          "title": "输出长度",
+          "blurb": "限制响应长度和上下文大小。"
+        },
+        "repetition": {
+          "title": "重复抑制",
+          "blurb": "避免模型反复输出相同内容。"
+        },
+        "other": {
+          "title": "其他",
+          "blurb": "服务商特有的其他选项。"
+        }
+      },
+      "primary": {
+        "temperature": {
+          "label": "采样温度",
+          "description": "控制随机性,值越低输出越确定。"
+        },
+        "maxTokens": {
+          "label": "最大输出 token 数",
+          "description": "对响应长度的硬性上限。"
+        },
+        "maxTokensThinking": {
+          "label": "最大 token 数(思考)",
+          "description": "用于模型内部推理 — 推理 token 也会计入此上限,因此应大于最大输出 token 数。"
+        }
+      },
+      "extra": {
+        "num_ctx": "上下文窗口大小(token 数),输入 + 输出之和不能超过此值。",
+        "num_predict": "最多生成的 token 数(Ollama 中等同于 max_tokens)。",
+        "top_k": "只从概率最高的 K 个 token 中采样,0 表示不限制。",
+        "top_p": "核采样 — 仅考虑累计概率达到该值的 token。",
+        "min_p": "候选 token 的最低概率阈值。",
+        "mirostat": "Mirostat 采样模式。0 表示关闭,1 或 2 表示开启。",
+        "mirostat_eta": "Mirostat 学习率。",
+        "mirostat_tau": "Mirostat 目标熵。",
+        "repeat_penalty": "对重复 token 的惩罚力度。1 = 无,>1 = 抑制重复。",
+        "repeat_last_n": "重复惩罚回溯的最近 token 数。",
+        "frequency_penalty": "按 token 出现频次进行惩罚,范围 -2 到 2。",
+        "presence_penalty": "鼓励模型尝试新话题,对已出现的 token 进行惩罚,范围 -2 到 2。",
+        "seed": "随机种子,用于复现输出。留空则随机。"
+      }
+    }
+  },
+  "toolUI": {
+    "common": {
+      "fetched": "已获取 {{label}}"
+    },
+    "accounts": {
+      "title": "账户",
+      "loadFailed": "加载账户失败",
+      "errorMessage": "请求被中断或失败。",
+      "empty": "未找到账户。",
+      "emptyHint": "在“设置”中添加账户来追踪你的投资。",
+      "compactSingular": "已获取 {{count}} 个账户",
+      "compactPlural": "已获取 {{count}} 个账户",
+      "countSingular": "{{count}} 个账户",
+      "countPlural": "{{count}} 个账户",
+      "of": "共 {{count}}"
+    },
+    "activities": {
+      "title": "交易记录",
+      "loadFailed": "加载交易数据失败。",
+      "empty": "此查询未找到交易记录。",
+      "compactSingular": "已获取 {{count}} 条交易",
+      "compactPlural": "已获取 {{count}} 条交易",
+      "transactionsSingular": "{{count}} 条交易",
+      "transactionsPlural": "{{count}} 条交易",
+      "headers": {
+        "date": "日期",
+        "type": "类型",
+        "symbol": "代码",
+        "qty": "数量",
+        "price": "价格",
+        "amount": "金额"
+      }
+    },
+    "allocation": {
+      "title": "资产配置",
+      "defaultName": "资产配置",
+      "loadFailed": "加载资产配置数据失败。",
+      "empty": "未找到资产配置数据。",
+      "compact": "已获取资产配置",
+      "categoriesSingular": "{{count}} 个类别",
+      "categoriesPlural": "{{count}} 个类别",
+      "holdingsSingular": "{{count}} 个持仓",
+      "holdingsPlural": "{{count}} 个持仓",
+      "drillDown": "下钻明细",
+      "fallbackHoldings": "持仓",
+      "headers": {
+        "symbol": "代码",
+        "name": "名称",
+        "value": "市值",
+        "weight": "权重"
+      }
+    },
+    "goals": {
+      "title": "目标",
+      "loadFailed": "加载目标失败",
+      "errorMessage": "请求被中断或失败。",
+      "empty": "尚未设置任何目标。",
+      "emptyHint": "在“设置”中创建投资目标来追踪进度。",
+      "compactSingular": "已获取 {{count}} 个目标",
+      "compactPlural": "已获取 {{count}} 个目标",
+      "countSingular": "{{count}} 个目标",
+      "countPlural": "{{count}} 个目标",
+      "achieved": "已达成 {{count}} 个",
+      "of": "共 {{count}}",
+      "untitled": "未命名目标"
+    },
+    "holdings": {
+      "title": "持仓",
+      "portfolioToday": "你的投资组合 · {{label}}",
+      "today": "今日",
+      "totalReturn": "总回报",
+      "todayLower": "今日",
+      "totalLower": "累计",
+      "loadFailed": "加载持仓数据失败。",
+      "empty": "该账户没有持仓。",
+      "compactSingular": "已获取 {{count}} 个持仓",
+      "compactPlural": "已获取 {{count}} 个持仓",
+      "positionsSingular": "{{count}} 个持仓",
+      "positionsPlural": "{{count}} 个持仓",
+      "withReturnLabel": "{{count}} 个持仓 · {{label}}",
+      "headers": {
+        "symbol": "代码",
+        "value": "市值",
+        "weight": "权重",
+        "today": "今日",
+        "total": "累计",
+        "gain": "盈亏"
+      },
+      "toggle": {
+        "daily": "当日",
+        "total": "累计"
+      },
+      "treemapTitle": "持仓",
+      "valueLabel": "市值"
+    },
+    "income": {
+      "title": "收入概览",
+      "monthlyAverage": "月均收入",
+      "byType": "按类型",
+      "monthlyIncome": "每月收入",
+      "sources": "来源",
+      "loadFailed": "加载收入数据失败。",
+      "empty": "此期间没有收入数据。",
+      "unavailable": "收入数据不可用。",
+      "compact": "已获取收入概览",
+      "yoy": "同比",
+      "period": {
+        "ytd": "年初至今",
+        "lastYear": "去年",
+        "total": "全部时间"
+      },
+      "type": {
+        "dividend": "股息",
+        "interest": "利息",
+        "other": "其他"
+      },
+      "months": {
+        "jan": "1月",
+        "feb": "2月",
+        "mar": "3月",
+        "apr": "4月",
+        "may": "5月",
+        "jun": "6月",
+        "jul": "7月",
+        "aug": "8月",
+        "sep": "9月",
+        "oct": "10月",
+        "nov": "11月",
+        "dec": "12月"
+      }
+    },
+    "performance": {
+      "title": "投资表现",
+      "loadFailed": "加载投资表现数据失败",
+      "errorMessage": "请求被中断或失败。",
+      "compact": "已获取投资表现指标",
+      "portfolio": "投资组合",
+      "today": "今天",
+      "start": "起始",
+      "annualizedTwr": "年化时间加权收益率",
+      "moneyWeighted": "资金加权收益率",
+      "annualSuffix": "{{value}}(年化)",
+      "volatility": "波动率",
+      "maxDrawdown": "最大回撤"
+    },
+    "valuation": {
+      "title": "估值历史",
+      "compact": "已获取估值历史",
+      "fetching": "正在获取估值历史…",
+      "cancelled": "请求已取消。",
+      "noHistory": "暂无估值历史。",
+      "rangeText": "区间 {{start}} - {{end}}",
+      "rangeStart": "起始",
+      "rangeLatest": "最新"
+    },
+    "importCsv": {
+      "successTitle": "导入完成",
+      "successMessageSingular": "已导入 <1>{{count}}</1> 条记录。映射已保存为该账户的模板,下次从同一券商导入时将跳过 AI 步骤。",
+      "successMessagePlural": "已导入 <1>{{count}}</1> 条记录。映射已保存为该账户的模板,下次从同一券商导入时将跳过 AI 步骤。",
+      "viewActivities": "查看交易记录",
+      "errorTitle": "CSV 导入失败",
+      "errorInterrupted": "CSV 导入请求被中断。",
+      "errorNoMapping": "AI 工具未返回任何导入映射。",
+      "staleTitle": "CSV 导入 · {{count}} 行",
+      "staleTitleSingular": "CSV 导入 · {{count}} 行",
+      "staleMappedColumns": "已映射 {{count}} 列。",
+      "staleMessage": "本次导入未完成,请重新上传 CSV 开始新的导入。",
+      "title": "CSV 导入 · {{count}} 行",
+      "titleSingular": "CSV 导入 · {{count}} 行",
+      "selectAccount": "选择目标账户",
+      "stats": "{{valid}} 条有效 · {{warning}} 条警告 · {{errors}} 条错误 · {{duplicates}} 条重复",
+      "revalidate": "重新校验",
+      "importSingular": "导入 {{count}} 条记录",
+      "importPlural": "导入 {{count}} 条记录"
+    },
+    "mappingBadge": {
+      "savedTemplate": "使用已保存的模板",
+      "aiMappingHigh": "AI 映射 · 高置信度",
+      "aiMappingMedium": "AI 映射 · 中置信度",
+      "aiMappingLow": "AI 映射 · 低置信度",
+      "skipPreambleSingular": "跳过 {{count}} 行表头说明",
+      "skipPreamblePlural": "跳过 {{count}} 行表头说明",
+      "skipFooterSingular": "跳过 {{count}} 行表尾",
+      "skipFooterPlural": "跳过 {{count}} 行表尾",
+      "dateFormat": "日期格式 {{format}}",
+      "delimiter": "分隔符 {{value}}",
+      "delimiterTab": "Tab",
+      "decimal": "小数点 {{value}}",
+      "viewMapping": "查看映射",
+      "columnMappings": "列映射",
+      "noMappings": "未识别到字段映射。",
+      "symbolTranslations": "代码转换"
+    },
+    "reviewGrid": {
+      "all": "全部",
+      "valid": "有效",
+      "warnings": "警告",
+      "errors": "错误",
+      "duplicates": "重复",
+      "skipped": "已跳过"
+    },
+    "recordActivity": {
+      "loadingTitle": "正在记录交易",
+      "successTitle": "交易已记录",
+      "errorPrepareFailed": "准备交易失败",
+      "errorInterrupted": "请求被中断或失败。",
+      "errorNoData": "没有可用的交易数据",
+      "errorUnsupportedType": "不支持的交易类型:{{type}}",
+      "draftTitle": "{{type}} 草稿",
+      "customAsset": "自定义资产",
+      "customAssetHint": "未找到“{{symbol}}”,保存时将作为自定义资产创建。",
+      "validationTitle": "AI 标注了一些问题,请确认:",
+      "validationMissing": "缺少:{{field}}",
+      "labels": {
+        "type": "类型:",
+        "date": "日期:",
+        "asset": "资产:",
+        "quantity": "数量:",
+        "amount": "金额:",
+        "account": "账户:"
+      },
+      "viewInActivities": "在交易记录中查看"
+    },
+    "recordActivities": {
+      "title": "批量交易预览",
+      "subtitle": "审阅各行,然后一次性确认。",
+      "ready": "{{count}} 条就绪",
+      "errorPrepareFailed": "准备交易草稿失败",
+      "errorNoBatch": "没有可用的批量交易草稿",
+      "stats": {
+        "rows": "总行数:{{count}}",
+        "valid": "有效:{{count}}",
+        "errors": "错误:{{count}}",
+        "willCreate": "将创建:{{count}}"
+      },
+      "noValidRows": "没有可提交的有效行。",
+      "saveFailed": "保存交易失败",
+      "headers": {
+        "date": "日期",
+        "type": "类型",
+        "symbol": "代码",
+        "qty": "数量",
+        "price": "价格",
+        "amount": "金额",
+        "fee": "手续费",
+        "account": "账户",
+        "status": "状态"
+      },
+      "rowStatus": {
+        "submitted": "已提交",
+        "error": "错误",
+        "ready": "就绪",
+        "invalid": "无效"
+      },
+      "summary": "已创建 {{created}} 行,错误 {{errors}} 行。",
+      "confirmWithCount": "确认 {{count}} 笔交易",
+      "confirm": "确认交易"
+    }
+  }
+}

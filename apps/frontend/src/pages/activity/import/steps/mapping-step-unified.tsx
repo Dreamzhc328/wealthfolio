@@ -13,6 +13,7 @@ import { Input } from "@wealthfolio/ui/components/ui/input";
 import { Label } from "@wealthfolio/ui/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@wealthfolio/ui/components/ui/tabs";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { CSVFileViewer } from "../components/csv-file-viewer";
 import { ImportAlert } from "../components/import-alert";
@@ -44,6 +45,7 @@ import type { Account, CsvRowData, ImportTemplateData } from "@/lib/types";
 import { ImportType } from "@/lib/types";
 
 export function MappingStepUnified() {
+  const { t } = useTranslation("assets");
   const { state, dispatch } = useImportContext();
   const { headers, parsedRows, mapping, accountId } = state;
   const queryClient = useQueryClient();
@@ -442,7 +444,7 @@ export function MappingStepUnified() {
     },
     onError: (error) => {
       setTemplateError(
-        error instanceof Error ? error.message : "Failed to save the import template.",
+        error instanceof Error ? error.message : t("import.templates.saveFailed"),
       );
     },
   });
@@ -457,7 +459,7 @@ export function MappingStepUnified() {
     },
     onError: (error) => {
       setTemplateError(
-        error instanceof Error ? error.message : "Failed to delete the import template.",
+        error instanceof Error ? error.message : t("import.templates.deleteFailed"),
       );
     },
   });
@@ -474,7 +476,7 @@ export function MappingStepUnified() {
 
         const template = templates.find((item) => item.id === templateId);
         if (!template) {
-          setTemplateError("The selected template is no longer available.");
+          setTemplateError(t("import.templates.templateNotFound"));
           return;
         }
 
@@ -511,7 +513,7 @@ export function MappingStepUnified() {
         dispatch(setSelectedTemplate(template.id, template.scope));
       } catch (error) {
         setTemplateError(
-          error instanceof Error ? error.message : "Failed to apply the import template.",
+          error instanceof Error ? error.message : t("import.templates.applyFailed"),
         );
       }
     },
@@ -546,7 +548,7 @@ export function MappingStepUnified() {
   const handleSaveTemplate = useCallback(() => {
     const name = templateName.trim();
     if (!name) {
-      setTemplateError("Template name is required.");
+      setTemplateError(t("import.templates.templateNameRequired"));
       return;
     }
 
@@ -567,7 +569,7 @@ export function MappingStepUnified() {
   const handleSaveAsNewTemplate = useCallback(() => {
     const name = templateName.trim();
     if (!name) {
-      setTemplateError("Template name is required.");
+      setTemplateError(t("import.templates.templateNameRequired"));
       return;
     }
 
@@ -578,7 +580,11 @@ export function MappingStepUnified() {
     if (!state.selectedTemplateId || state.selectedTemplateScope !== "USER") {
       return;
     }
-    if (!window.confirm(`Delete template "${templateName || localMapping.name}"?`)) {
+    if (
+      !window.confirm(
+        t("import.templates.deleteConfirm", { name: templateName || localMapping.name }),
+      )
+    ) {
       return;
     }
     deleteTemplateMutation.mutate(state.selectedTemplateId);
@@ -594,8 +600,8 @@ export function MappingStepUnified() {
     return (
       <ImportAlert
         variant="destructive"
-        title="No CSV data available"
-        description="Please go back and upload a valid file."
+        title={t("import.mapping.noCsvDataTitle")}
+        description={t("import.mapping.noCsvDataDescription")}
         icon={Icons.AlertCircle}
       />
     );
@@ -606,7 +612,7 @@ export function MappingStepUnified() {
       <div className="bg-muted/20 mb-4 rounded-lg border p-4">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
           <div className="space-y-1.5">
-            <Label>Template</Label>
+            <Label>{t("import.templates.templateLabel")}</Label>
             <TemplatePicker
               templates={templates}
               selectedTemplateId={effectiveSelectedTemplateId}
@@ -615,7 +621,7 @@ export function MappingStepUnified() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="import-template-name">Template Name</Label>
+            <Label htmlFor="import-template-name">{t("import.templates.templateName")}</Label>
             <Input
               id="import-template-name"
               value={templateName}
@@ -624,7 +630,7 @@ export function MappingStepUnified() {
                 setTemplateError(null);
                 updateMapping({ name: event.target.value });
               }}
-              placeholder="e.g. Interactive Brokers - Trades"
+              placeholder={t("import.templates.templateNamePlaceholder")}
             />
           </div>
 
@@ -634,12 +640,12 @@ export function MappingStepUnified() {
               disabled={saveTemplateMutation.isPending || templateName.trim() === ""}
             >
               {saveTemplateMutation.isPending
-                ? "Saving..."
+                ? t("import.templates.saving")
                 : state.selectedTemplateId &&
                     !isDefaultActivityTemplateId(state.selectedTemplateId) &&
                     state.selectedTemplateScope === "USER"
-                  ? "Update Template"
-                  : "Save Template"}
+                  ? t("import.templates.updateTemplate")
+                  : t("import.templates.saveTemplate")}
             </Button>
             {state.selectedTemplateId && state.selectedTemplateScope === "USER" && (
               <>
@@ -648,14 +654,14 @@ export function MappingStepUnified() {
                   onClick={handleSaveAsNewTemplate}
                   disabled={saveTemplateMutation.isPending || templateName.trim() === ""}
                 >
-                  Save as New
+                  {t("import.templates.saveAsNew")}
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={handleDeleteTemplate}
                   disabled={deleteTemplateMutation.isPending}
                 >
-                  Delete
+                  {t("import.templates.delete")}
                 </Button>
               </>
             )}
@@ -666,7 +672,7 @@ export function MappingStepUnified() {
           <ImportAlert
             variant="destructive"
             size="sm"
-            title="Template Error"
+            title={t("import.templates.templateError")}
             description={templateError}
             className="mb-0 mt-3"
           />
@@ -678,8 +684,11 @@ export function MappingStepUnified() {
         <ImportAlert
           variant={requiredFieldsMapped ? "success" : "destructive"}
           size="sm"
-          title="Fields"
-          description={`${mappedFieldsCount} of ${totalFields} mapped`}
+          title={t("import.mapping.fields")}
+          description={t("import.mapping.fieldsMapped", {
+            mapped: mappedFieldsCount,
+            total: totalFields,
+          })}
           icon={Icons.ListChecks}
           className="mb-0"
           rightIcon={requiredFieldsMapped ? Icons.CheckCircle : Icons.AlertCircle}
@@ -688,8 +697,11 @@ export function MappingStepUnified() {
         <ImportAlert
           variant={activitiesToMapCount === 0 ? "success" : "destructive"}
           size="sm"
-          title="Activities"
-          description={`${distinctActivityTypes.length - activitiesToMapCount} of ${distinctActivityTypes.length} mapped`}
+          title={t("import.mapping.activities")}
+          description={t("import.mapping.fieldsMapped", {
+            mapped: distinctActivityTypes.length - activitiesToMapCount,
+            total: distinctActivityTypes.length,
+          })}
           icon={Icons.Activity}
           className="mb-0"
           rightIcon={activitiesToMapCount === 0 ? Icons.CheckCircle : Icons.AlertCircle}
@@ -698,8 +710,11 @@ export function MappingStepUnified() {
         <ImportAlert
           variant={symbolsToMapCount === 0 ? "success" : "destructive"}
           size="sm"
-          title="Symbols"
-          description={`${distinctSymbols.length - symbolsToMapCount} of ${distinctSymbols.length} mapped`}
+          title={t("import.mapping.symbols")}
+          description={t("import.mapping.fieldsMapped", {
+            mapped: distinctSymbols.length - symbolsToMapCount,
+            total: distinctSymbols.length,
+          })}
           icon={Icons.Tag}
           className="mb-0"
           rightIcon={symbolsToMapCount === 0 ? Icons.CheckCircle : Icons.AlertCircle}
@@ -708,7 +723,7 @@ export function MappingStepUnified() {
         <ImportAlert
           variant={accountsReady ? "success" : "destructive"}
           size="sm"
-          title="Accounts"
+          title={t("import.mapping.accounts")}
           description={accountsDescription}
           icon={Icons.Wallet}
           className="mb-0"
@@ -721,11 +736,17 @@ export function MappingStepUnified() {
           <ImportAlert
             variant="destructive"
             size="sm"
-            title="Account assignment required"
+            title={t("import.mapping.accountAssignmentTitle")}
             description={
               missingAccountRowsCount > 0
-                ? `Map every CSV row to an account. ${missingAccountRowsCount} row${missingAccountRowsCount === 1 ? " is" : "s are"} still blank, so choose a default account in Upload or fill the account column.`
-                : "Choose a default account in Upload or map the CSV account column before continuing."
+                ? missingAccountRowsCount === 1
+                  ? t("import.mapping.accountAssignmentMissing", {
+                      n: missingAccountRowsCount,
+                    })
+                  : t("import.mapping.accountAssignmentMissingPlural", {
+                      n: missingAccountRowsCount,
+                    })
+                : t("import.mapping.accountAssignmentNoColumn")
             }
           />
         )}
@@ -736,21 +757,20 @@ export function MappingStepUnified() {
           <div className="py-2">
             <div className="flex items-center justify-between">
               <div className="text-muted-foreground hidden px-3 text-sm md:block">
-                <span className="font-medium">{totalRows} </span>total row
-                {totalRows !== 1 ? "s" : ""}
+                {t("import.mapping.totalRows", { n: totalRows })}
               </div>
               <TabsList className="bg-secondary flex space-x-1 rounded-full p-1">
                 <TabsTrigger
                   className="data-[state=active]:bg-primary data-[state=active]:text-primary data-[state=active]:hover:bg-primary/90 h-8 rounded-full px-2 text-sm"
                   value="preview"
                 >
-                  Activity Preview
+                  {t("import.mapping.activityPreview")}
                 </TabsTrigger>
                 <TabsTrigger
                   className="data-[state=active]:bg-primary data-[state=active]:text-primary data-[state=active]:hover:bg-primary/90 h-8 rounded-full px-2 text-sm"
                   value="raw"
                 >
-                  File Preview
+                  {t("import.mapping.filePreview")}
                 </TabsTrigger>
               </TabsList>
             </div>

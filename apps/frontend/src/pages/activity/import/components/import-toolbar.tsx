@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   DropdownMenu,
@@ -44,6 +45,7 @@ export function ImportToolbar({
   onSetAccount,
   onClearSelection,
 }: ImportToolbarProps) {
+  const { t } = useTranslation("assets");
   const { accounts } = useAccounts({ filterActive: true, includeArchived: false });
   const [currencySearch, setCurrencySearch] = useState("");
 
@@ -74,7 +76,9 @@ export function ImportToolbar({
       <div className="text-muted-foreground flex shrink-0 items-center gap-2 text-sm">
         <Icons.CheckSquare className="h-4 w-4" />
         <span className="font-medium">
-          {selectedCount} row{selectedCount === 1 ? "" : "s"} selected
+          {selectedCount === 1
+            ? t("import.toolbar.selectedSingle", { n: selectedCount })
+            : t("import.toolbar.selected", { n: selectedCount })}
         </span>
       </div>
 
@@ -85,11 +89,11 @@ export function ImportToolbar({
           variant="outline"
           size="sm"
           onClick={onSkip}
-          title="Skip selected rows"
+          title={t("import.toolbar.skipTitle")}
           className="h-8"
         >
           <Icons.MinusCircle className="mr-1.5 h-3.5 w-3.5" />
-          Skip
+          {t("import.toolbar.skip")}
         </Button>
 
         {/* Unskip button */}
@@ -97,11 +101,11 @@ export function ImportToolbar({
           variant="outline"
           size="sm"
           onClick={onUnskip}
-          title="Unskip selected rows"
+          title={t("import.toolbar.unskipTitle")}
           className="h-8"
         >
           <Icons.PlusCircle className="mr-1.5 h-3.5 w-3.5" />
-          Unskip
+          {t("import.toolbar.unskip")}
         </Button>
 
         {/* Import anyway button — only shown when the handler is provided (duplicate filter active) */}
@@ -110,11 +114,11 @@ export function ImportToolbar({
             variant="outline"
             size="sm"
             onClick={onForceImport}
-            title="Import selected rows even if they match existing activities"
+            title={t("import.toolbar.importAnywayTitle")}
             className="h-8 border-amber-500/50 text-amber-700 hover:bg-amber-500/10 dark:text-amber-400"
           >
             <Icons.ShieldAlert className="mr-1.5 h-3.5 w-3.5" />
-            Import anyway
+            {t("import.toolbar.importAnyway")}
           </Button>
         )}
 
@@ -126,11 +130,11 @@ export function ImportToolbar({
             <Button
               variant="outline"
               size="sm"
-              title="Set currency for selected rows"
+              title={t("import.toolbar.currencyTitle")}
               className="h-8"
             >
               <Icons.DollarSign className="mr-1.5 h-3.5 w-3.5" />
-              Currency
+              {t("import.toolbar.currency")}
               <Icons.ChevronDown className="ml-1 h-3 w-3" />
             </Button>
           </DropdownMenuTrigger>
@@ -139,7 +143,7 @@ export function ImportToolbar({
             <div className="px-2 py-1.5">
               <input
                 type="text"
-                placeholder="Search currencies..."
+                placeholder={t("import.toolbar.searchCurrencies")}
                 value={currencySearch}
                 onChange={(e) => setCurrencySearch(e.target.value)}
                 className="bg-muted/50 focus:ring-ring w-full rounded-md border px-2 py-1 text-sm outline-none focus:ring-1"
@@ -150,7 +154,9 @@ export function ImportToolbar({
             {/* Common currencies */}
             {!currencySearch && (
               <>
-                <div className="text-muted-foreground px-2 py-1 text-xs font-medium">Common</div>
+                <div className="text-muted-foreground px-2 py-1 text-xs font-medium">
+                  {t("import.toolbar.common")}
+                </div>
                 {COMMON_CURRENCIES.map((code) => (
                   <DropdownMenuItem
                     key={code}
@@ -164,7 +170,7 @@ export function ImportToolbar({
                 ))}
                 <DropdownMenuSeparator />
                 <div className="text-muted-foreground px-2 py-1 text-xs font-medium">
-                  All Currencies
+                  {t("import.toolbar.allCurrencies")}
                 </div>
               </>
             )}
@@ -186,11 +192,13 @@ export function ImportToolbar({
               ))}
               {filteredCurrencies.length > 20 && (
                 <div className="text-muted-foreground px-2 py-1 text-xs">
-                  Type to search more...
+                  {t("import.toolbar.typeToSearch")}
                 </div>
               )}
               {filteredCurrencies.length === 0 && (
-                <div className="text-muted-foreground px-2 py-1 text-xs">No currencies found</div>
+                <div className="text-muted-foreground px-2 py-1 text-xs">
+                  {t("import.toolbar.noCurrencies")}
+                </div>
               )}
             </div>
           </DropdownMenuContent>
@@ -202,18 +210,18 @@ export function ImportToolbar({
             <Button
               variant="outline"
               size="sm"
-              title="Set account for selected rows"
+              title={t("import.toolbar.accountTitle")}
               className="h-8"
             >
               <Icons.Briefcase className="mr-1.5 h-3.5 w-3.5" />
-              Account
+              {t("import.toolbar.account")}
               <Icons.ChevronDown className="ml-1 h-3 w-3" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             {accounts.length === 0 ? (
               <div className="text-muted-foreground px-2 py-3 text-center text-sm">
-                No accounts available
+                {t("import.toolbar.noAccounts")}
               </div>
             ) : (
               accounts.map((account) => (
@@ -234,7 +242,7 @@ export function ImportToolbar({
           variant="ghost"
           size="sm"
           onClick={onClearSelection}
-          title="Clear selection"
+          title={t("import.toolbar.clearSelection")}
           className="h-8 px-2"
         >
           <Icons.X className="h-4 w-4" />
@@ -271,6 +279,7 @@ export function ImportContextMenu({
   onSetCurrency,
   onSetAccount,
 }: ImportContextMenuProps) {
+  const { t } = useTranslation("assets");
   const { accounts } = useAccounts({ filterActive: true, includeArchived: false });
 
   if (!open || selectedCount === 0) return null;
@@ -294,23 +303,25 @@ export function ImportContextMenu({
       <DropdownMenuTrigger style={triggerStyle} />
       <DropdownMenuContent align="start" className="w-52">
         <div className="text-muted-foreground px-2 py-1.5 text-xs font-medium">
-          {selectedCount} row{selectedCount === 1 ? "" : "s"} selected
+          {selectedCount === 1
+            ? t("import.toolbar.selectedSingle", { n: selectedCount })
+            : t("import.toolbar.selected", { n: selectedCount })}
         </div>
         <DropdownMenuSeparator />
 
         {/* Skip/Unskip actions */}
         <DropdownMenuItem onSelect={onSkip}>
           <Icons.MinusCircle className="mr-2 h-4 w-4" />
-          Skip Selected
+          {t("import.toolbar.skipSelected")}
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={onUnskip}>
           <Icons.PlusCircle className="mr-2 h-4 w-4" />
-          Unskip Selected
+          {t("import.toolbar.unskipSelected")}
         </DropdownMenuItem>
         {onForceImport && (
           <DropdownMenuItem onSelect={onForceImport} className="text-amber-700 dark:text-amber-400">
             <Icons.ShieldAlert className="mr-2 h-4 w-4" />
-            Import Anyway
+            {t("import.toolbar.importAnywayMenu")}
           </DropdownMenuItem>
         )}
 
@@ -320,7 +331,7 @@ export function ImportContextMenu({
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Icons.DollarSign className="mr-2 h-4 w-4" />
-            Set Currency
+            {t("import.toolbar.setCurrency")}
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="w-40">
             {COMMON_CURRENCIES.map((code) => (
@@ -335,11 +346,13 @@ export function ImportContextMenu({
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Icons.Briefcase className="mr-2 h-4 w-4" />
-            Set Account
+            {t("import.toolbar.setAccount")}
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="w-48">
             {accounts.length === 0 ? (
-              <div className="text-muted-foreground px-2 py-2 text-xs">No accounts available</div>
+              <div className="text-muted-foreground px-2 py-2 text-xs">
+                {t("import.toolbar.noAccounts")}
+              </div>
             ) : (
               accounts.map((account) => (
                 <DropdownMenuItem key={account.id} onSelect={() => onSetAccount(account.id)}>

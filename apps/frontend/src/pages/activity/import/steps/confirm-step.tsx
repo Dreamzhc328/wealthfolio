@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion } from "motion/react";
 import { Button } from "@wealthfolio/ui/components/ui/button";
 import { Icons, type Icon } from "@wealthfolio/ui/components/ui/icons";
@@ -81,6 +82,7 @@ function computeSummary(draftActivities: DraftActivity[]): ImportSummary {
       case "skipped": {
         summary.skipped++;
         const skipReason = draft.skipReason ?? "Manual";
+        // Skip reasons can be raw backend strings; left untranslated by design.
         summary.bySkipReason[skipReason] = (summary.bySkipReason[skipReason] ?? 0) + 1;
         break;
       }
@@ -112,39 +114,22 @@ function computeSummary(draftActivities: DraftActivity[]): ImportSummary {
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
 
-const ACTIVITY_TYPE_CONFIG: Record<string, { label: string; icon: Icon; color: string }> = {
-  BUY: { label: "Buy", icon: Icons.TrendingUp, color: "text-green-600 dark:text-green-400" },
-  SELL: { label: "Sell", icon: Icons.TrendingDown, color: "text-red-500 dark:text-red-400" },
-  DIVIDEND: {
-    label: "Dividend",
-    icon: Icons.DollarSign,
-    color: "text-emerald-600 dark:text-emerald-400",
-  },
-  INTEREST: { label: "Interest", icon: Icons.Coins, color: "text-amber-600 dark:text-amber-400" },
-  DEPOSIT: {
-    label: "Deposit",
-    icon: Icons.ArrowDownLeft,
-    color: "text-blue-600 dark:text-blue-400",
-  },
-  WITHDRAWAL: {
-    label: "Withdrawal",
-    icon: Icons.ArrowUpRight,
-    color: "text-orange-600 dark:text-orange-400",
-  },
-  TRANSFER_IN: {
-    label: "Transfer In",
-    icon: Icons.ArrowDownLeft,
-    color: "text-blue-600 dark:text-blue-400",
-  },
-  TRANSFER_OUT: {
-    label: "Transfer Out",
-    icon: Icons.ArrowUpRight,
-    color: "text-orange-600 dark:text-orange-400",
-  },
-  FEE: { label: "Fee", icon: Icons.Receipt, color: "text-slate-600 dark:text-slate-400" },
-  TAX: { label: "Tax", icon: Icons.FileText, color: "text-slate-600 dark:text-slate-400" },
-  SPLIT: { label: "Split", icon: Icons.Split, color: "text-purple-600 dark:text-purple-400" },
-  UNKNOWN: { label: "Unknown", icon: Icons.HelpCircle, color: "text-muted-foreground" },
+const ACTIVITY_TYPE_CONFIG: Record<
+  string,
+  { labelKey: string; icon: Icon; color: string }
+> = {
+  BUY: { labelKey: "import.confirm.labels.BUY", icon: Icons.TrendingUp, color: "text-green-600 dark:text-green-400" },
+  SELL: { labelKey: "import.confirm.labels.SELL", icon: Icons.TrendingDown, color: "text-red-500 dark:text-red-400" },
+  DIVIDEND: { labelKey: "import.confirm.labels.DIVIDEND", icon: Icons.DollarSign, color: "text-emerald-600 dark:text-emerald-400" },
+  INTEREST: { labelKey: "import.confirm.labels.INTEREST", icon: Icons.Coins, color: "text-amber-600 dark:text-amber-400" },
+  DEPOSIT: { labelKey: "import.confirm.labels.DEPOSIT", icon: Icons.ArrowDownLeft, color: "text-blue-600 dark:text-blue-400" },
+  WITHDRAWAL: { labelKey: "import.confirm.labels.WITHDRAWAL", icon: Icons.ArrowUpRight, color: "text-orange-600 dark:text-orange-400" },
+  TRANSFER_IN: { labelKey: "import.confirm.labels.TRANSFER_IN", icon: Icons.ArrowDownLeft, color: "text-blue-600 dark:text-blue-400" },
+  TRANSFER_OUT: { labelKey: "import.confirm.labels.TRANSFER_OUT", icon: Icons.ArrowUpRight, color: "text-orange-600 dark:text-orange-400" },
+  FEE: { labelKey: "import.confirm.labels.FEE", icon: Icons.Receipt, color: "text-slate-600 dark:text-slate-400" },
+  TAX: { labelKey: "import.confirm.labels.TAX", icon: Icons.FileText, color: "text-slate-600 dark:text-slate-400" },
+  SPLIT: { labelKey: "import.confirm.labels.SPLIT", icon: Icons.Split, color: "text-purple-600 dark:text-purple-400" },
+  UNKNOWN: { labelKey: "import.confirm.labels.UNKNOWN", icon: Icons.HelpCircle, color: "text-muted-foreground" },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -152,6 +137,7 @@ const ACTIVITY_TYPE_CONFIG: Record<string, { label: string; icon: Icon; color: s
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function ConfirmStep() {
+  const { t } = useTranslation("assets");
   const { state, dispatch } = useImportContext();
   const [importError, setImportError] = useState<string | null>(null);
   const [isPreparingAssets, setIsPreparingAssets] = useState(false);
@@ -266,7 +252,7 @@ export function ConfirmStep() {
       (d) => d.status === "valid" || d.status === "warning" || d.status === "duplicate",
     );
     if (draftsToImport.length === 0) {
-      setImportError("No valid activities to import");
+      setImportError(t("import.confirm.noValidToImport"));
       return;
     }
 
@@ -319,7 +305,7 @@ export function ConfirmStep() {
     } catch (error) {
       persistCreatedAssets(createdAssetIdsByKey);
       setImportError(
-        error instanceof Error ? error.message : "Failed to prepare assets for import.",
+        error instanceof Error ? error.message : t("import.confirm.prepareFailed"),
       );
     } finally {
       setIsPreparingAssets(false);
@@ -333,10 +319,10 @@ export function ConfirmStep() {
   if (importError) {
     return (
       <div className="space-y-4">
-        <ImportAlert variant="destructive" title="Import Error" description={importError}>
+        <ImportAlert variant="destructive" title={t("import.confirm.errorTitle")} description={importError}>
           <div className="mt-4">
             <Button variant="destructive" onClick={() => setImportError(null)} size="sm">
-              Try Again
+              {t("import.confirm.tryAgain")}
             </Button>
           </div>
         </ImportAlert>
@@ -350,26 +336,28 @@ export function ConfirmStep() {
       {summary.toImport === 0 ? (
         <ImportAlert
           variant="warning"
-          title="No Activities to Import"
-          description="All activities have been skipped or have validation errors. Go back to review and fix any issues."
+          title={t("import.confirm.noActivitiesTitle")}
+          description={t("import.confirm.noActivitiesDescription")}
         />
       ) : summary.warnings > 0 ? (
         <ImportAlert
           variant="warning"
-          title={`${summary.toImport} activities ready to import`}
-          description={`${summary.warnings} activities have warnings but will still be imported.`}
+          title={t("import.confirm.readyWithWarnings", { n: summary.toImport })}
+          description={t("import.confirm.warningsHint", { n: summary.warnings })}
         />
       ) : summary.forcedDuplicates > 0 ? (
         <ImportAlert
           variant="warning"
-          title={`${summary.toImport} activities ready to import`}
-          description={`Includes ${summary.forcedDuplicates} duplicate${summary.forcedDuplicates === 1 ? "" : "s"} marked "import anyway".`}
+          title={t("import.confirm.readyWithWarnings", { n: summary.toImport })}
+          description={
+            summary.forcedDuplicates === 1
+              ? t("import.confirm.forcedDuplicateHint", { n: summary.forcedDuplicates })
+              : t("import.confirm.forcedDuplicateHintPlural", { n: summary.forcedDuplicates })
+          }
         />
       ) : (
         <div>
-          <p className="text-muted-foreground">
-            Review the summary below, then click Import to proceed.
-          </p>
+          <p className="text-muted-foreground">{t("import.confirm.reviewSummary")}</p>
         </div>
       )}
 
@@ -383,7 +371,7 @@ export function ConfirmStep() {
               <Icons.FileText className="text-muted-foreground h-5 w-5" />
             </div>
             <div>
-              <div className="text-muted-foreground text-sm">Total Rows</div>
+              <div className="text-muted-foreground text-sm">{t("import.confirm.totalRows")}</div>
               <div className="text-2xl font-semibold">{summary.total}</div>
             </div>
           </div>
@@ -394,7 +382,7 @@ export function ConfirmStep() {
               <Icons.Import className="text-primary-foreground h-5 w-5" />
             </div>
             <div>
-              <div className="text-primary text-sm">To Import</div>
+              <div className="text-primary text-sm">{t("import.confirm.toImport")}</div>
               <div className="text-primary text-2xl font-semibold">{summary.toImport}</div>
             </div>
           </div>
@@ -405,7 +393,7 @@ export function ConfirmStep() {
               <Icons.Minus className="text-muted-foreground h-5 w-5" />
             </div>
             <div>
-              <div className="text-muted-foreground text-sm">Skipped</div>
+              <div className="text-muted-foreground text-sm">{t("import.confirm.skipped")}</div>
               <div className="text-muted-foreground text-2xl font-semibold">{skippedTotal}</div>
             </div>
           </div>
@@ -415,7 +403,7 @@ export function ConfirmStep() {
         {Object.keys(summary.byType).length > 0 && (
           <div className="space-y-3">
             <h4 className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
-              By Activity Type
+              {t("import.confirm.byActivityType")}
             </h4>
             <div className="flex flex-wrap gap-2">
               {Object.entries(summary.byType)
@@ -429,7 +417,7 @@ export function ConfirmStep() {
                       className="bg-muted/50 flex items-center gap-2 rounded-full px-3 py-1.5"
                     >
                       <IconComponent className={`h-4 w-4 ${config.color}`} />
-                      <span className="text-sm">{config.label}</span>
+                      <span className="text-sm">{t(config.labelKey)}</span>
                       <span className="text-muted-foreground bg-background rounded-full px-2 py-0.5 text-xs font-medium">
                         {count}
                       </span>
@@ -444,7 +432,7 @@ export function ConfirmStep() {
         {Object.keys(summary.bySkipReason).length > 0 && (
           <div className="space-y-3">
             <h4 className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
-              Skipped Breakdown
+              {t("import.confirm.skippedBreakdown")}
             </h4>
             <div className="flex flex-wrap gap-2">
               {Object.entries(summary.bySkipReason)
@@ -468,9 +456,9 @@ export function ConfirmStep() {
 
       {/* Progress indicator dialog */}
       <ProgressIndicator
-        title="Import Progress"
-        description="Please wait while the application processes your data."
-        message="Importing activities..."
+        title={t("import.confirm.progressTitle")}
+        description={t("import.confirm.progressDescription")}
+        message={t("import.confirm.progressMessage")}
         isLoading={isProcessing}
         open={isProcessing}
       />
@@ -479,7 +467,7 @@ export function ConfirmStep() {
       <div className="flex justify-between gap-3 border-t pt-6">
         <Button variant="outline" onClick={handleBack} disabled={isProcessing}>
           <Icons.ArrowLeft className="mr-2 h-4 w-4" />
-          Back
+          {t("import.confirm.back")}
         </Button>
 
         <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
@@ -491,12 +479,16 @@ export function ConfirmStep() {
             {isProcessing ? (
               <>
                 <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
-                {isPreparingAssets ? "Preparing assets..." : "Importing..."}
+                {isPreparingAssets
+                  ? t("import.confirm.preparingAssets")
+                  : t("import.confirm.importing")}
               </>
             ) : (
               <>
                 <Icons.Import className="mr-2 h-4 w-4" />
-                Import {summary.toImport} {summary.toImport === 1 ? "Activity" : "Activities"}
+                {summary.toImport === 1
+                  ? t("import.confirm.importSingle", { n: summary.toImport })
+                  : t("import.confirm.importPlural", { n: summary.toImport })}
               </>
             )}
           </Button>

@@ -7,6 +7,7 @@ import {
   Textarea,
 } from "@wealthfolio/ui";
 import { useFormContext, type FieldPath, type FieldValues } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface NotesInputProps<TFieldValues extends FieldValues = FieldValues> {
   name: FieldPath<TFieldValues>;
@@ -18,10 +19,13 @@ interface NotesInputProps<TFieldValues extends FieldValues = FieldValues> {
 
 export function NotesInput<TFieldValues extends FieldValues = FieldValues>({
   name,
-  label = "Notes",
-  placeholder = "Add an optional note or comment...",
+  label,
+  placeholder,
   rows = 3,
 }: NotesInputProps<TFieldValues>) {
+  const { t } = useTranslation("assets");
+  const resolvedLabel = label ?? t("form.fields.notes");
+  const resolvedPlaceholder = placeholder ?? t("form.fields.notesPlaceholder");
   const { control } = useFormContext<TFieldValues>();
 
   return (
@@ -30,15 +34,15 @@ export function NotesInput<TFieldValues extends FieldValues = FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel>{resolvedLabel}</FormLabel>
           <FormControl>
             <Textarea
-              placeholder={placeholder}
+              placeholder={resolvedPlaceholder}
               className="resize-none"
               rows={rows}
               {...field}
               value={field.value || ""}
-              aria-label={label}
+              aria-label={resolvedLabel}
               data-testid="notes-input"
             />
           </FormControl>

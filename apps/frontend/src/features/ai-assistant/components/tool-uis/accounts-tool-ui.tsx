@@ -2,6 +2,7 @@ import type { ToolCallMessagePartProps } from "@assistant-ui/react";
 import { makeAssistantToolUI } from "@assistant-ui/react";
 import { Badge, Card, CardContent, CardHeader, CardTitle, Skeleton } from "@wealthfolio/ui";
 import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useSettingsContext } from "@/lib/settings-provider";
 import { CompactToolCard } from "./shared";
 
@@ -170,12 +171,13 @@ function AccountCard({ account }: { account: AccountDto }) {
 }
 
 function EmptyState() {
+  const { t } = useTranslation("aiAssistant");
   return (
     <Card className="bg-muted/40 border-primary/10">
       <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-        <p className="text-muted-foreground text-sm">No accounts found.</p>
+        <p className="text-muted-foreground text-sm">{t("toolUI.accounts.empty")}</p>
         <p className="text-muted-foreground mt-1 text-xs">
-          Add accounts in Settings to track your investments.
+          {t("toolUI.accounts.emptyHint")}
         </p>
       </CardContent>
     </Card>
@@ -183,10 +185,11 @@ function EmptyState() {
 }
 
 function ErrorState({ message }: { message?: string }) {
+  const { t } = useTranslation("aiAssistant");
   return (
     <Card className="border-destructive/30 bg-destructive/5">
       <CardContent className="py-4">
-        <p className="text-destructive text-sm font-medium">Failed to load accounts</p>
+        <p className="text-destructive text-sm font-medium">{t("toolUI.accounts.loadFailed")}</p>
         {message && <p className="text-muted-foreground mt-1 text-xs">{message}</p>}
       </CardContent>
     </Card>
@@ -200,6 +203,7 @@ function ErrorState({ message }: { message?: string }) {
 type AccountsToolUIContentProps = ToolCallMessagePartProps<GetAccountsArgs, GetAccountsResult>;
 
 function AccountsToolUIContentImpl({ args, result, status }: AccountsToolUIContentProps) {
+  const { t } = useTranslation("aiAssistant");
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
   const parsed = useMemo(() => normalizeResult(result, baseCurrency), [baseCurrency, result]);
@@ -222,9 +226,14 @@ function AccountsToolUIContentImpl({ args, result, status }: AccountsToolUIConte
 
   // Compact mode — just show a one-liner when used as a prerequisite
   if (args?.displayMode === "compact" && parsed && !isLoading) {
+    const count = parsed.accounts.length;
     return (
       <CompactToolCard
-        label={`Fetched ${parsed.accounts.length} account${parsed.accounts.length !== 1 ? "s" : ""}`}
+        label={
+          count === 1
+            ? t("toolUI.accounts.compactSingular", { count })
+            : t("toolUI.accounts.compactPlural", { count })
+        }
       />
     );
   }
@@ -236,7 +245,7 @@ function AccountsToolUIContentImpl({ args, result, status }: AccountsToolUIConte
 
   // Show error state for incomplete/failed status
   if (isIncomplete) {
-    return <ErrorState message="The request was interrupted or failed." />;
+    return <ErrorState message={t("toolUI.accounts.errorMessage")} />;
   }
 
   // Show empty state if no accounts
@@ -251,13 +260,15 @@ function AccountsToolUIContentImpl({ args, result, status }: AccountsToolUIConte
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <CardTitle className="text-base">Accounts</CardTitle>
+            <CardTitle className="text-base">{t("toolUI.accounts.title")}</CardTitle>
             <Badge variant="secondary" className="text-xs">
-              {count} {count === 1 ? "account" : "accounts"}
+              {count === 1
+                ? t("toolUI.accounts.countSingular", { count })
+                : t("toolUI.accounts.countPlural", { count })}
             </Badge>
             {truncated && originalCount && (
               <Badge variant="outline" className="text-muted-foreground text-xs">
-                of {originalCount}
+                {t("toolUI.accounts.of", { count: originalCount })}
               </Badge>
             )}
           </div>

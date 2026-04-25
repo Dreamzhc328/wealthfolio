@@ -18,6 +18,7 @@ import type { ActivityCreate, ActivityDetails, SymbolInput } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm, type Resolver, type SubmitHandler } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { useActivityMutations } from "../../hooks/use-activity-mutations";
 import type { AccountSelectOption } from "../forms/fields";
@@ -132,6 +133,7 @@ function extractErrorMessage(error: unknown): string {
 }
 
 export function MobileActivityForm({ accounts, activity, open, onClose }: MobileActivityFormProps) {
+  const { t } = useTranslation("assets");
   const [currentStep, setCurrentStep] = useState(activity?.id ? 2 : 1);
   const { addActivityMutation, updateActivityMutation, saveActivitiesMutation } =
     useActivityMutations(onClose);
@@ -409,7 +411,7 @@ export function MobileActivityForm({ accounts, activity, open, onClose }: Mobile
       form.reset(defaultValues);
       setCurrentStep(1);
     } catch (error) {
-      toast.error("Failed to save activity", { description: extractErrorMessage(error) });
+      toast.error(t("form.saveFailed"), { description: extractErrorMessage(error) });
       logger.error(
         `Mobile Activity Form Submit Error: ${JSON.stringify({ error, formValues: form.getValues() })}`,
       );
@@ -464,7 +466,9 @@ export function MobileActivityForm({ accounts, activity, open, onClose }: Mobile
       <SheetContent side="bottom" className="rounded-t-4xl mx-1 flex h-[90vh] flex-col p-0">
         <SheetHeader className="border-b px-6 py-4">
           <div className="flex flex-col items-center space-y-2">
-            <SheetTitle>{activity?.id ? "Update Activity" : "Add Activity"}</SheetTitle>
+            <SheetTitle>
+              {activity?.id ? t("form.buttons.updateActivity") : t("form.buttons.addActivity")}
+            </SheetTitle>
             {!activity?.id && (
               <div className="flex gap-1.5">
                 {[1, 2].map((step) => (
@@ -481,7 +485,9 @@ export function MobileActivityForm({ accounts, activity, open, onClose }: Mobile
                 ))}
               </div>
             )}
-            {activity?.id && <SheetDescription>Update transaction details</SheetDescription>}
+            {activity?.id && (
+              <SheetDescription>{t("form.fields.updateTransactionDetails")}</SheetDescription>
+            )}
           </div>
         </SheetHeader>
 
@@ -510,7 +516,7 @@ export function MobileActivityForm({ accounts, activity, open, onClose }: Mobile
                 className="flex-1"
               >
                 <Icons.ArrowLeft className="mr-2 h-4 w-4" />
-                Back
+                {t("form.buttons.back")}
               </Button>
             )}
 
@@ -522,7 +528,7 @@ export function MobileActivityForm({ accounts, activity, open, onClose }: Mobile
                 className="flex-1 font-medium"
                 disabled={!form.watch("activityType") && currentStep === 1}
               >
-                Next
+                {t("form.buttons.next")}
                 <Icons.ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             ) : (
@@ -538,7 +544,7 @@ export function MobileActivityForm({ accounts, activity, open, onClose }: Mobile
                 ) : (
                   <Icons.Check className="mr-2 h-4 w-4" />
                 )}
-                {activity?.id ? "Update" : "Add"} Activity
+                {activity?.id ? t("form.buttons.updateActivity") : t("form.buttons.addActivity")}
               </Button>
             )}
           </div>
