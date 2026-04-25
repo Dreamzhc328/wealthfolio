@@ -53,8 +53,8 @@ export function OpenTradesTable({ positions, onAssetClick }: OpenTradesTableProp
         <EmptyPlaceholder
           className="mx-auto flex max-w-[400px] items-center justify-center"
           icon={<Icons.TrendingUp className="h-10 w-10" />}
-          title="No Open Positions"
-          description="You don't have any open swing trading positions at the moment. Closed trades will appear in your performance metrics."
+          title="暂无未平仓位"
+          description="你目前没有任何持仓中的短线交易。平仓后的交易会出现在表现统计中。"
         />
       </div>
     );
@@ -99,13 +99,13 @@ export function OpenTradesTable({ positions, onAssetClick }: OpenTradesTableProp
           <TableHeader>
             <TableRow>
               <TableHead className="w-[60px]"></TableHead>
-              <TableHead>Symbol</TableHead>
-              <TableHead className="text-right">Quantity</TableHead>
-              <TableHead className="text-right">Avg Cost</TableHead>
-              <TableHead className="text-right">Current</TableHead>
-              <TableHead className="text-right">P/L</TableHead>
-              <TableHead className="text-right">Return %</TableHead>
-              <TableHead className="text-center">Days</TableHead>
+              <TableHead>代码</TableHead>
+              <TableHead className="text-right">数量</TableHead>
+              <TableHead className="text-right">均价</TableHead>
+              <TableHead className="text-right">现价</TableHead>
+              <TableHead className="text-right">盈亏</TableHead>
+              <TableHead className="text-right">收益率</TableHead>
+              <TableHead className="text-center">持仓天数</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

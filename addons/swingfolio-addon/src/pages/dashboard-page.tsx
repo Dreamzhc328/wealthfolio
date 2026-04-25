@@ -36,18 +36,18 @@ const getChartPeriodDisplay = (period: "1M" | "3M" | "6M" | "YTD" | "1Y" | "ALL"
   switch (period) {
     case "1M":
       return {
-        type: "Daily",
-        description: "Daily P/L and cumulative equity performance",
+        type: "日度",
+        description: "日度盈亏与累计权益表现",
       };
     case "3M":
       return {
-        type: "Weekly",
-        description: "Weekly P/L and cumulative equity performance",
+        type: "周度",
+        description: "周度盈亏与累计权益表现",
       };
     default:
       return {
-        type: "Monthly",
-        description: "Monthly P/L and cumulative equity performance",
+        type: "月度",
+        description: "月度盈亏与累计权益表现",
       };
   }
 };
@@ -104,16 +104,16 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
   if (error || !dashboardData) {
     return (
       <Page>
-        <PageHeader heading="Trading Dashboard" />
+        <PageHeader heading="交易仪表盘" />
         <PageContent>
           <div className="flex h-[calc(100vh-200px)] items-center justify-center">
             <div className="px-4 text-center">
               <Icons.AlertCircle className="text-muted-foreground mx-auto mb-4 h-10 w-10 sm:h-12 sm:w-12" />
-              <h3 className="mb-2 text-base font-semibold sm:text-lg">Failed to load dashboard</h3>
+              <h3 className="mb-2 text-base font-semibold sm:text-lg">仪表盘加载失败</h3>
               <p className="text-muted-foreground mb-4 text-sm sm:text-base">
-                {error?.message || "Unable to load swing trading data"}
+                {error?.message || "无法加载短线交易数据"}
               </p>
-              <Button onClick={() => refetch()}>Try Again</Button>
+              <Button onClick={() => refetch()}>重试</Button>
             </div>
           </div>
         </PageContent>
@@ -128,20 +128,20 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
   if (!hasSelectedActivities) {
     return (
       <Page>
-        <PageHeader heading="Trading Dashboard" />
+        <PageHeader heading="交易仪表盘" />
         <PageContent>
           <div className="flex h-[calc(100vh-200px)] items-center justify-center">
             <div className="px-4 text-center">
               <Icons.BarChart className="text-muted-foreground mx-auto mb-4 h-10 w-10 sm:h-12 sm:w-12" />
               <h3 className="mb-2 text-base font-semibold sm:text-lg">
-                No Swing Trading Activities Selected
+                尚未选择短线交易活动
               </h3>
               <p className="text-muted-foreground mb-4 text-sm sm:text-base">
-                Select BUY and SELL activities to start tracking your swing trading performance
+                选择买入和卖出活动，开始追踪您的短线交易表现
               </p>
               <Button onClick={handleNavigateToActivities} className="mx-auto">
                 <Icons.Plus className="mr-2 h-4 w-4" />
-                Select Activities
+                选择活动
               </Button>
             </div>
           </div>
@@ -176,14 +176,14 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
         onClick={handleNavigateToActivities}
       >
         <Icons.ListChecks className="mr-2 h-4 w-4" />
-        <span>Select Activities</span>
+        <span>选择活动</span>
       </Button>
       <Button
         variant="outline"
         size="icon"
         onClick={handleNavigateToActivities}
         className="sm:hidden"
-        aria-label="Select activities"
+        aria-label="选择活动"
       >
         <Icons.ListChecks className="h-4 w-4" />
       </Button>
@@ -201,7 +201,7 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
 
   return (
     <Page>
-      <PageHeader heading="Trading Dashboard" actions={headerActions} />
+      <PageHeader heading="交易仪表盘" actions={headerActions} />
 
       <PageContent>
         <div className="space-y-4 sm:space-y-6">
@@ -218,7 +218,7 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
               className={`${metrics.totalPL >= 0 ? "border-success/10 bg-success/10" : "border-destructive/10 bg-destructive/10"}`}
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pt-4 pb-3">
-                <CardTitle className="text-sm font-medium">P/L</CardTitle>
+                <CardTitle className="text-sm font-medium">盈亏</CardTitle>
                 <GainAmount
                   className="text-xl font-bold sm:text-2xl"
                   value={metrics.totalPL}
@@ -230,7 +230,7 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
                 <div className="space-y-2 pt-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground text-xs">
-                      Realized ({metrics.totalTrades} trades)
+                      已实现（{metrics.totalTrades} 笔交易）
                     </span>
                     <div className="flex items-center gap-2">
                       <GainAmount
@@ -243,7 +243,7 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground text-xs">
-                      Unrealized ({metrics.openPositions} open)
+                      未实现（{metrics.openPositions} 个持仓）
                     </span>
                     <div className="flex items-center gap-2">
                       <GainAmount
@@ -261,13 +261,13 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
             {/* Widget 2: Core Performance */}
             <Card className="border-blue-500/10 bg-blue-500/10">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Core Performance</CardTitle>
+                <CardTitle className="text-sm font-medium">核心表现</CardTitle>
                 <Icons.CheckCircle className="text-muted-foreground h-4 w-4" />
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-xs">Win Rate</span>
+                    <span className="text-muted-foreground text-xs">胜率</span>
                     <GainPercent
                       value={metrics.winRate}
                       className="text-sm font-semibold"
@@ -275,7 +275,7 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-xs">Avg Win</span>
+                    <span className="text-muted-foreground text-xs">平均盈利</span>
                     <GainAmount
                       value={metrics.averageWin}
                       currency={metrics.currency}
@@ -284,7 +284,7 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-xs">Avg Loss</span>
+                    <span className="text-muted-foreground text-xs">平均亏损</span>
                     <GainAmount
                       value={-metrics.averageLoss}
                       currency={metrics.currency}
@@ -293,7 +293,7 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-xs">Total Trades</span>
+                    <span className="text-muted-foreground text-xs">交易总数</span>
                     <span className="text-sm font-semibold">{metrics.totalTrades}</span>
                   </div>
                 </div>
@@ -303,13 +303,13 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
             {/* Widget 3: Analytics & Ratios */}
             <Card className="border-purple-500/10 bg-purple-500/10">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Analytics & Ratios</CardTitle>
+                <CardTitle className="text-sm font-medium">分析与比率</CardTitle>
                 <Icons.BarChart className="text-muted-foreground h-4 w-4" />
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-xs">Expectancy</span>
+                    <span className="text-muted-foreground text-xs">期望值</span>
                     <GainAmount
                       value={metrics.expectancy}
                       currency={metrics.currency}
@@ -318,7 +318,7 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-xs">Profit Factor</span>
+                    <span className="text-muted-foreground text-xs">盈亏比</span>
                     <span className="text-sm font-semibold">
                       {metrics.profitFactor === Number.POSITIVE_INFINITY
                         ? "∞"
@@ -326,9 +326,9 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground text-xs">Avg Hold Time</span>
+                    <span className="text-muted-foreground text-xs">平均持仓时间</span>
                     <span className="text-sm font-semibold">
-                      {metrics.averageHoldingDays.toFixed(1)} days
+                      {metrics.averageHoldingDays.toFixed(1)} 天
                     </span>
                   </div>
                 </div>
@@ -342,7 +342,7 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
             <Card className="flex flex-col">
               <CardHeader className="shrink-0 pb-2">
                 <CardTitle className="text-base sm:text-lg">
-                  {getChartPeriodDisplay(selectedPeriod).type} Equity Curve
+                  {getChartPeriodDisplay(selectedPeriod).type}权益曲线
                 </CardTitle>
                 <p className="text-muted-foreground text-xs sm:text-sm">
                   {getChartPeriodDisplay(selectedPeriod).description}
@@ -378,9 +378,9 @@ export default function DashboardPage({ ctx }: DashboardPageProps) {
           {/* Open Positions - Full Width on Mobile */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-base sm:text-lg">Open Positions</CardTitle>
+              <CardTitle className="text-base sm:text-lg">未平仓持仓</CardTitle>
               <span className="text-muted-foreground text-sm">
-                {openPositions.length} {openPositions.length === 1 ? "position" : "positions"}
+                {openPositions.length} 个持仓
               </span>
             </CardHeader>
             <CardContent className="px-2 sm:px-6">
@@ -405,8 +405,8 @@ function DashboardSkeleton() {
   return (
     <Page>
       <PageHeader
-        heading="Trading Dashboard"
-        text="Track your trading performance and analytics"
+        heading="交易仪表盘"
+        text="追踪您的交易表现与数据分析"
         actions={
           <>
             <Skeleton className="h-9 w-[280px]" />

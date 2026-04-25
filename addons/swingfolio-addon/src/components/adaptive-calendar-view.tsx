@@ -144,9 +144,9 @@ function DailyCalendarView({
     <div>
       <div className="mb-2 flex items-start justify-between gap-2 sm:mb-4">
         <div className="min-w-0">
-          <h3 className="text-sm font-semibold sm:text-base">Daily Calendar</h3>
+          <h3 className="text-sm font-semibold sm:text-base">每日交易日历</h3>
           <div className="text-muted-foreground flex items-center gap-1 text-xs">
-            <span>{monthlyTrades} trades</span>
+            <span>{monthlyTrades} 笔交易</span>
             <span>·</span>
             <GainAmount value={monthlyPL} currency={currency} className="text-xs" />
           </div>
@@ -335,9 +335,9 @@ function YearlyCalendarView({
     <div>
       <div className="mb-2 flex items-start justify-between gap-2 sm:mb-4">
         <div className="min-w-0">
-          <h3 className="text-sm font-semibold sm:text-base">Yearly Calendar</h3>
+          <h3 className="text-sm font-semibold sm:text-base">年度交易日历</h3>
           <div className="text-muted-foreground flex items-center gap-1 text-xs">
-            <span>{yearlyTrades} trades</span>
+            <span>{yearlyTrades} 笔交易</span>
             <span>·</span>
             <GainAmount value={yearlyPL} currency={currency} className="text-xs" />
           </div>
@@ -434,7 +434,7 @@ function YearlyCalendarView({
                                   </div>
                                 </>
                               ) : (
-                                <div className="text-muted-foreground/60 text-xs">No trades</div>
+                                <div className="text-muted-foreground/60 text-xs">无交易</div>
                               )}
                             </div>
                           </div>

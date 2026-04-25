@@ -55,14 +55,14 @@ export function EquityCurveChart({
         <EmptyPlaceholder
           className="mx-auto flex max-w-[420px] items-center justify-center"
           icon={<Icons.TrendingUp className="h-10 w-10" />}
-          title="No data available"
-          description="There is no equity curve data for the selected period. Try selecting a different time range or check the selected activities."
+          title="暂无数据"
+          description="所选区间没有权益曲线数据。换个时间范围试试，或检查所选交易记录。"
         />
       </div>
     );
   }
 
-  const periodLabel = periodType === "daily" ? "Daily" : "Monthly";
+  const periodLabel = periodType === "daily" ? "当日" : "当月";
   const dateFormat = periodType === "daily" ? "MMM dd" : "MMM yy";
   const tooltipDateFormat = periodType === "daily" ? "MMMM dd, yyyy" : "MMMM yyyy";
 
@@ -71,11 +71,11 @@ export function EquityCurveChart({
       <ChartContainer
         config={{
           periodPL: {
-            label: `${periodLabel} P/L`,
+            label: `${periodLabel}盈亏`,
             color: "var(--success)",
           },
           cumulativeRealizedPL: {
-            label: "Cumulative Equity",
+            label: "累计权益",
             color: "var(--chart-2)",
           },
         }}
@@ -111,9 +111,9 @@ export function EquityCurveChart({
                       <div className="flex flex-1 items-center justify-between">
                         <span className="text-muted-foreground">
                           {name === "periodPL"
-                            ? `${periodLabel} P/L`
+                            ? `${periodLabel}盈亏`
                             : name === "cumulativeRealizedPL"
-                              ? "Cumulative Equity"
+                              ? "累计权益"
                               : name}
                         </span>
                         <span className="text-foreground ml-2 font-mono font-medium tabular-nums">

@@ -35,15 +35,15 @@ function GoalSelector({
           aria-expanded={open}
           className="w-full justify-between sm:w-[200px]"
         >
-          {selectedGoal ? selectedGoal.title : "Select a goal..."}
+          {selectedGoal ? selectedGoal.title : "选择目标..."}
           <Icons.ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0 sm:w-[200px]">
         <Command>
-          <CommandInput placeholder="Search goals..." />
+          <CommandInput placeholder="搜索目标..." />
           <CommandList>
-            <CommandEmpty>No goals found.</CommandEmpty>
+            <CommandEmpty>未找到目标。</CommandEmpty>
             <CommandGroup>
               <CommandItem
                 value="no-goal"
@@ -56,7 +56,7 @@ function GoalSelector({
                   className={`mr-2 h-4 w-4 ${!selectedGoal ? "opacity-100" : "opacity-0"}`}
                 />
                 <div className="flex flex-col">
-                  <span className="text-muted-foreground">No goal selected</span>
+                  <span className="text-muted-foreground">未选择目标</span>
                 </div>
               </CommandItem>
               {goals.map((goal) => (
@@ -76,7 +76,7 @@ function GoalSelector({
                   <div className="flex flex-col">
                     <span>{goal.title}</span>
                     <span className="text-muted-foreground text-xs">
-                      Target: ${goal.targetAmount.toLocaleString()}
+                      目标：${goal.targetAmount.toLocaleString()}
                     </span>
                   </div>
                 </CommandItem>

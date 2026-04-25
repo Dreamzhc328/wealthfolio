@@ -142,28 +142,28 @@ export function calculateFeeSummary({
     let feeType: string;
     switch (activity.activityType) {
       case "FEE":
-        feeType = "Management Fees";
+        feeType = "管理费";
         break;
       case "BUY":
       case "SELL":
-        feeType = "Trading Fees";
+        feeType = "交易费";
         break;
       case "TRANSFER_IN":
       case "TRANSFER_OUT":
-        feeType = "Transfer Fees";
+        feeType = "转账费";
         break;
       default:
-        feeType = "Other Fees";
+        feeType = "其他费用";
     }
     byType[feeType] = (byType[feeType] || 0) + feeAmount;
 
     // Group by account
-    const accountKey = activity.accountName || "Unknown Account";
+    const accountKey = activity.accountName || "未知账户";
     byAccount[accountKey] = (byAccount[accountKey] || 0) + feeAmount;
 
     // Group by asset (for transaction fees)
     if (activity.activityType !== "FEE") {
-      const assetKey = activity.assetSymbol || "Unknown Asset";
+      const assetKey = activity.assetSymbol || "未知资产";
       byAsset[assetKey] = (byAsset[assetKey] || 0) + feeAmount;
     }
 
@@ -296,18 +296,18 @@ export function calculateFeeAnalytics({
 
     switch (activity.activityType) {
       case "FEE":
-        category = "Management Fees";
+        category = "管理费";
         break;
       case "BUY":
       case "SELL":
-        category = "Trading Fees";
+        category = "交易费";
         break;
       case "TRANSFER_IN":
       case "TRANSFER_OUT":
-        category = "Transfer Fees";
+        category = "转账费";
         break;
       default:
-        category = "Other Fees";
+        category = "其他费用";
     }
 
     const existing = feeCategories.get(category) || { amount: 0, transactions: 0 };

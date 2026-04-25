@@ -54,17 +54,17 @@ export default function FeesPage({ ctx }: FeesPageProps) {
 
   if (feeError || analyticsError || !feeData || !analyticsData) {
     const errorMessage =
-      feeError?.message || analyticsError?.message || "Unable to load fee information.";
+      feeError?.message || analyticsError?.message || "无法加载费用数据。";
 
     return (
       <Page>
-        <PageHeader heading="Fees Tracker" actions={headerActions} />
+        <PageHeader heading="费用追踪" actions={headerActions} />
         <PageContent>
           <div className="flex h-[calc(100vh-200px)] items-center justify-center">
             <EmptyPlaceholder
               className="border-border/50 w-full max-w-[420px] border border-dashed"
               icon={<Icons.CreditCard className="h-10 w-10" />}
-              title="Failed to load fee data"
+              title="加载费用数据失败"
               description={errorMessage}
             />
           </div>
@@ -79,14 +79,14 @@ export default function FeesPage({ ctx }: FeesPageProps) {
   if (!periodSummary || !totalSummary) {
     return (
       <Page>
-        <PageHeader heading="Fees Tracker" actions={headerActions} />
+        <PageHeader heading="费用追踪" actions={headerActions} />
         <PageContent>
           <div className="flex h-[calc(100vh-200px)] items-center justify-center">
             <EmptyPlaceholder
               className="border-border/50 w-full max-w-[420px] border border-dashed"
               icon={<Icons.CreditCard className="h-10 w-10" />}
-              title="No fee data available"
-              description="There is no fee data for the selected period. Try selecting a different time range or check back later."
+              title="暂无费用数据"
+              description="所选时间范围内没有费用数据。请尝试选择其他时间范围或稍后查看。"
             />
           </div>
         </PageContent>
@@ -124,7 +124,7 @@ export default function FeesPage({ ctx }: FeesPageProps) {
 
   return (
     <Page>
-      <PageHeader heading="Fees Tracker" actions={headerActions} />
+      <PageHeader heading="费用追踪" actions={headerActions} />
       <PageContent>
         <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
           <FeeOverviewCards
@@ -160,7 +160,7 @@ export default function FeesPage({ ctx }: FeesPageProps) {
 function FeesDashboardSkeleton({ actions }: { actions: React.ReactNode }) {
   return (
     <Page>
-      <PageHeader heading="Fees Tracker" actions={actions} />
+      <PageHeader heading="费用追踪" actions={actions} />
 
       <PageContent>
         <div className="grid gap-6 md:grid-cols-3">

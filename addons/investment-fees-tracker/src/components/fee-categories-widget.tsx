@@ -33,7 +33,7 @@ export function FeeCategoriesWidget({
   return (
     <Card className="border-purple-500/10 bg-purple-500/10">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Fee Categories</CardTitle>
+        <CardTitle className="text-sm font-medium">费用类别</CardTitle>
         <Icons.PieChart className="text-muted-foreground h-4 w-4" />
       </CardHeader>
       <CardContent>

@@ -113,13 +113,13 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
   }
 
   const pageDescription =
-    "Choose which trading activities to include in your swing portfolio analysis";
+    "选择要纳入短线组合分析的交易活动";
 
   if (error || !activities) {
     return (
       <Page>
         <PageHeader
-          heading="Select Activities"
+          heading="选择活动"
           text={pageDescription}
           actions={
             <Button
@@ -127,7 +127,7 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
               onClick={() => ctx.api.navigation.navigate("/addons/swingfolio")}
             >
               <Icons.ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
+              返回仪表盘
             </Button>
           }
         />
@@ -135,12 +135,12 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
           <div className="flex h-[calc(100vh-200px)] items-center justify-center">
             <div className="text-center">
               <Icons.AlertCircle className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
-              <h3 className="mb-2 text-lg font-semibold">Failed to load activities</h3>
+              <h3 className="mb-2 text-lg font-semibold">活动加载失败</h3>
               <p className="text-muted-foreground mb-4">
-                {error?.message || "Unable to load trading activities"}
+                {error?.message || "无法加载交易活动"}
               </p>
               <Button onClick={() => ctx.api.navigation.navigate("/addons/swingfolio")}>
-                Back to Dashboard
+                返回仪表盘
               </Button>
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
     <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
       <Button variant="outline" onClick={() => ctx.api.navigation.navigate("/addons/swingfolio")}>
         <Icons.ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Dashboard
+        返回仪表盘
       </Button>
       <Button onClick={handleSaveSelection} disabled={isUpdating}>
         {isUpdating ? (
@@ -161,18 +161,18 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
         ) : (
           <Icons.Save className="mr-2 h-4 w-4" />
         )}
-        Save Selection
+        保存选择
       </Button>
     </div>
   );
 
   return (
     <Page>
-      <PageHeader heading="Select Activities" text={pageDescription} actions={headerActions} />
+      <PageHeader heading="选择活动" text={pageDescription} actions={headerActions} />
       <PageContent>
         <Card>
           <CardHeader>
-            <CardTitle>Auto-Selection Options</CardTitle>
+            <CardTitle>自动选择规则</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-2">
@@ -182,11 +182,11 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
                 onCheckedChange={handleToggleSwingTag}
               />
               <label htmlFor="swing-tag" className="text-sm font-medium">
-                Automatically include activities tagged with &quot;Swing&quot;
+                自动纳入备注含 &quot;Swing&quot; 标签的活动
               </label>
             </div>
             <p className="text-muted-foreground mt-2 text-xs">
-              Activities with &quot;swing&quot; in their comment will be automatically included
+              备注中含 &quot;swing&quot; 字样的活动将被自动纳入
             </p>
           </CardContent>
         </Card>
@@ -194,13 +194,13 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <span>Manual Selection</span>
+              <span>手动选择</span>
               <div className="text-muted-foreground flex items-center gap-2 text-sm">
                 <span>
-                  {filteredSelectedCount} of {filteredActivities.length} selected
+                  当前已选 {filteredSelectedCount} / {filteredActivities.length}
                 </span>
                 <span>•</span>
-                <span>{selectedCount} total selected</span>
+                <span>共选中 {selectedCount}</span>
               </div>
             </CardTitle>
           </CardHeader>
@@ -208,7 +208,7 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
             <div className="flex flex-col gap-4 lg:flex-row">
               <div className="flex-1">
                 <Input
-                  placeholder="Search by symbol or name..."
+                  placeholder="按代码或名称搜索..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="max-w-sm"
@@ -217,10 +217,10 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 <Select value={selectedAccount} onValueChange={setSelectedAccount}>
                   <SelectTrigger className="w-[200px]">
-                    <SelectValue placeholder="All Accounts" />
+                    <SelectValue placeholder="全部账户" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Accounts</SelectItem>
+                    <SelectItem value="all">全部账户</SelectItem>
                     {accounts.map((account) => (
                       <SelectItem key={account.id} value={account.name}>
                         {account.name}
@@ -230,12 +230,12 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
                 </Select>
                 <Select value={selectedType} onValueChange={setSelectedType}>
                   <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder="All Types" />
+                    <SelectValue placeholder="全部类型" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="BUY">Buy</SelectItem>
-                    <SelectItem value="SELL">Sell</SelectItem>
+                    <SelectItem value="all">全部类型</SelectItem>
+                    <SelectItem value="BUY">买入</SelectItem>
+                    <SelectItem value="SELL">卖出</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -243,10 +243,10 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
 
             <div className="flex flex-wrap items-center gap-2">
               <Button variant="outline" size="sm" onClick={handleSelectAll}>
-                Select All Filtered
+                全选筛选结果
               </Button>
               <Button variant="outline" size="sm" onClick={handleDeselectAll}>
-                Deselect All Filtered
+                取消全选筛选结果
               </Button>
             </div>
 
@@ -270,13 +270,13 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
                           }}
                         />
                       </th>
-                      <th className="p-3 text-left">Date</th>
-                      <th className="p-3 text-left">Type</th>
-                      <th className="p-3 text-left">Symbol</th>
-                      <th className="p-3 text-left">Quantity</th>
-                      <th className="p-3 text-left">Price</th>
-                      <th className="p-3 text-left">Account</th>
-                      <th className="p-3 text-left">Tags</th>
+                      <th className="p-3 text-left">日期</th>
+                      <th className="p-3 text-left">类型</th>
+                      <th className="p-3 text-left">代码</th>
+                      <th className="p-3 text-left">数量</th>
+                      <th className="p-3 text-left">价格</th>
+                      <th className="p-3 text-left">账户</th>
+                      <th className="p-3 text-left">标签</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -289,13 +289,13 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
                           />
                         </td>
                         <td className="p-3 text-sm">
-                          {format(new Date(activity.date), "MMM dd, yyyy")}
+                          {format(new Date(activity.date), "yyyy-MM-dd")}
                         </td>
                         <td className="p-3">
                           <Badge
                             variant={activity.activityType === "BUY" ? "default" : "secondary"}
                           >
-                            {activity.activityType}
+                            {activity.activityType === "BUY" ? "买入" : "卖出"}
                           </Badge>
                         </td>
                         <td className="p-3 font-medium">
@@ -325,7 +325,7 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
                             )}
                             {activity.isSelected && (
                               <Badge variant="default" className="text-xs">
-                                Selected
+                                已选
                               </Badge>
                             )}
                           </div>
@@ -339,7 +339,7 @@ export default function ActivitySelectorPage({ ctx }: ActivitySelectorPageProps)
 
             {filteredActivities.length === 0 && (
               <div className="text-muted-foreground py-8 text-center">
-                No activities match your current filters
+                没有符合当前筛选条件的活动
               </div>
             )}
           </CardContent>

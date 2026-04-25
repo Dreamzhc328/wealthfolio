@@ -24,7 +24,7 @@ const enable: AddonEnableFunction = (context) => {
     // Add sidebar navigation item
     const sidebarItem = context.sidebar.addItem({
       id: "investment-fees-tracker",
-      label: "Fee Tracker",
+      label: "费用追踪",
       icon: <Icons.Invoice className="h-5 w-5" />,
       route: "/addons/investment-fees-tracker",
       order: 200,

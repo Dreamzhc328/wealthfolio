@@ -54,9 +54,9 @@ function InvestmentTargetTracker({ ctx }: { ctx: AddonContext }) {
   const headerDescription =
     goals && goals.length > 0
       ? selectedGoal
-        ? `Tracking progress for: ${selectedGoal.title}`
-        : "Select a goal to track your investment progress"
-      : "Track your investment progress towards your financial goals";
+        ? `正在追踪目标：${selectedGoal.title}`
+        : "请选择一个目标以追踪投资进度"
+      : "追踪您朝着财务目标推进的投资进度";
 
   const headerActions =
     !isLoading && goals && goals.length > 0 ? (
@@ -69,7 +69,7 @@ function InvestmentTargetTracker({ ctx }: { ctx: AddonContext }) {
     <PageHeader actions={headerActions}>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <h1 className="text-lg font-semibold sm:text-xl">Goal Progress Tracker</h1>
+          <h1 className="text-lg font-semibold sm:text-xl">目标进度追踪</h1>
           <HelpPopover />
         </div>
         <p className="text-muted-foreground text-sm sm:text-base">{headerDescription}</p>
@@ -85,7 +85,7 @@ function InvestmentTargetTracker({ ctx }: { ctx: AddonContext }) {
           <div className="flex min-h-[40vh] items-center justify-center">
             <div className="text-center">
               <Icons.Loader className="text-primary mx-auto mb-4 h-8 w-8 animate-spin" />
-              <p className="text-muted-foreground text-sm">Loading data...</p>
+              <p className="text-muted-foreground text-sm">加载中...</p>
             </div>
           </div>
         </PageContent>
@@ -100,7 +100,7 @@ function InvestmentTargetTracker({ ctx }: { ctx: AddonContext }) {
         <PageContent>
           <div className="flex min-h-[40vh] items-center justify-center px-4">
             <div className="text-destructive max-w-md rounded-xl border border-red-200 bg-red-50 p-6 text-center dark:border-red-800 dark:bg-red-950">
-              <h3 className="mb-2 text-base font-semibold">Error Loading Data</h3>
+              <h3 className="mb-2 text-base font-semibold">加载数据失败</h3>
               <p className="text-sm">{error?.message}</p>
             </div>
           </div>
@@ -119,14 +119,13 @@ function InvestmentTargetTracker({ ctx }: { ctx: AddonContext }) {
             <div className="w-full max-w-lg">
               <EmptyPlaceholder className="mt-16">
                 <EmptyPlaceholder.Icon name="Goals" />
-                <EmptyPlaceholder.Title>No Goals Found</EmptyPlaceholder.Title>
+                <EmptyPlaceholder.Title>暂无目标</EmptyPlaceholder.Title>
                 <EmptyPlaceholder.Description>
-                  You haven&apos;t created any investment goals yet. Create your first goal to start
-                  tracking your progress.
+                  您还没有创建任何投资目标。创建您的第一个目标，开始追踪进度。
                 </EmptyPlaceholder.Description>
                 <Button onClick={() => ctx.api.navigation.navigate("/settings/goals")}>
                   <Icons.Plus className="mr-2 h-4 w-4" />
-                  Create Your First Goal
+                  创建第一个目标
                 </Button>
               </EmptyPlaceholder>
             </div>
@@ -181,7 +180,7 @@ export default function enable(ctx: AddonContext) {
     // Add sidebar navigation item
     const sidebarItem = ctx.sidebar.addItem({
       id: "investment-target-tracker",
-      label: "Target Tracker",
+      label: "目标追踪",
       icon: <Icons.Goals className="h-5 w-5" />,
       route: "/addon/investment-target-tracker",
       order: 200,
