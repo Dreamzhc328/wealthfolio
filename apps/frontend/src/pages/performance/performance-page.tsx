@@ -40,6 +40,7 @@ import {
 } from "@wealthfolio/ui";
 import { subMonths } from "date-fns";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AccountSelector } from "../../components/account-selector";
 import { AccountSelectorMobile } from "../../components/account-selector-mobile";
 import { BenchmarkSymbolSelectorMobile } from "../../components/benchmark-symbol-selector-mobile";
@@ -77,6 +78,7 @@ function PerformanceContent({
   errorMessages: string[];
   isMobile: boolean;
 }) {
+  const { t } = useTranslation("dashboard");
   return (
     <div className="relative flex h-full w-full flex-col">
       {chartData && chartData.length > 0 && (
@@ -93,8 +95,8 @@ function PerformanceContent({
         <EmptyPlaceholder
           className="mx-auto flex max-w-[420px] items-center justify-center"
           icon={<Icons.BarChart className="h-10 w-10" />}
-          title="No performance data"
-          description="Select accounts to compare their performance over time."
+          title={t("performance.noDataTitle")}
+          description={t("performance.noDataDescription")}
         />
       )}
 
@@ -108,7 +110,7 @@ function PerformanceContent({
             <div className="bg-background/80 rounded-md border px-3 py-1.5 shadow-sm backdrop-blur-sm">
               <p className="text-muted-foreground flex items-center text-xs font-medium">
                 <span className="bg-primary mr-2 inline-block h-2 w-2 animate-pulse rounded-full"></span>
-                Calculating...
+                {t("performance.calculating")}
               </p>
             </div>
           </div>
@@ -118,7 +120,7 @@ function PerformanceContent({
       {/* Error display using AlertFeedback component */}
       {hasErrors && (
         <div className="w-full">
-          <AlertFeedback title="Error calculating performance data" variant="error">
+          <AlertFeedback title={t("performance.errorTitle")} variant="error">
             <div>
               {errorMessages.map((error, index) => (
                 <p key={index} className="text-sm">
@@ -128,7 +130,7 @@ function PerformanceContent({
             </div>
             <div className="mt-4 flex justify-end">
               <Button size="sm" onClick={() => window.location.reload()} variant="default">
-                Retry
+                {t("performance.retry")}
               </Button>
             </div>
           </AlertFeedback>
@@ -151,6 +153,7 @@ const SelectedItemBadge = ({
   onDelete: (e: React.MouseEvent) => void;
   color?: string;
 }) => {
+  const { t } = useTranslation("dashboard");
   return (
     <Badge
       className={cn(
@@ -196,7 +199,7 @@ const SelectedItemBadge = ({
           "focus-visible:ring-destructive/50 focus-visible:ring-2",
         )}
         onClick={onDelete}
-        aria-label={`Remove ${item.name}`}
+        aria-label={t("performance.removeItem", { name: item.name })}
       >
         <Icons.Close className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
       </Button>
@@ -205,6 +208,7 @@ const SelectedItemBadge = ({
 };
 
 export default function PerformancePage() {
+  const { t } = useTranslation("dashboard");
   const isMobile = useIsMobileViewport();
   const [selectedItems, setSelectedItems] = usePersistentState<TrackedItem[]>(
     "performance:selectedItems",
@@ -397,7 +401,7 @@ export default function PerformancePage() {
                 variant="outline"
                 size="icon"
                 className="bg-secondary/30 hover:bg-muted/80 size-9 flex-shrink-0 rounded-md border-[1.5px] border-none"
-                aria-label="Add item"
+                aria-label={t("performance.addItem")}
               >
                 <Icons.Plus className="h-4 w-4" />
               </Button>
@@ -405,14 +409,14 @@ export default function PerformancePage() {
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem onSelect={() => setAccountSheetOpen(true)} className="py-4 md:py-2">
                 <Icons.Briefcase className="mr-2 h-4 w-4" />
-                Add Account
+                {t("performance.addAccountMobile")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={() => setBenchmarkSheetOpen(true)}
                 className="py-4 md:py-2"
               >
                 <Icons.TrendingUp className="mr-2 h-4 w-4" />
-                Add Benchmark
+                {t("performance.addBenchmark")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -455,7 +459,7 @@ export default function PerformancePage() {
             <AccountSelector
               setSelectedAccount={handleAccountSelect}
               variant="button"
-              buttonText="Add account"
+              buttonText={t("performance.addAccount")}
               includePortfolio={true}
             />
             <BenchmarkSymbolSelector onSelect={handleSymbolSelect} />
@@ -490,7 +494,7 @@ export default function PerformancePage() {
                 <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <div>
                     <CardTitle className={cn("text-lg sm:text-xl", isMobile && "text-sm")}>
-                      Performance
+                      {t("performance.title")}
                     </CardTitle>
                     <CardDescription
                       className={cn("text-xs sm:text-sm", isMobile && "text-[10px]")}

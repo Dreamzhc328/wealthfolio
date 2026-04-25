@@ -6,6 +6,7 @@ import { QueryKeys } from "@/lib/query-keys";
 import { ContributionLimit, DepositsCalculation } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { Icons, PrivacyAmount } from "@wealthfolio/ui";
+import { Trans } from "react-i18next";
 import { Link } from "react-router-dom";
 
 interface AccountContributionLimitProps {
@@ -39,12 +40,20 @@ export function AccountContributionLimit({ accountId }: AccountContributionLimit
       <Card className="border-muted bg-muted/70 border-none p-6 shadow-none">
         <div className="flex items-center justify-between text-sm">
           <span>
-            No contribution limit set for this account.{" "}
+            <Trans
+              i18nKey="account.contributionLimit.notSet"
+              ns="dashboard"
+              defaults="No contribution limit set for this account."
+            />{" "}
             <Link
               to="/settings/contribution-limits"
               className="text-primary inline-flex items-center gap-1 font-semibold"
             >
-              Set limit
+              <Trans
+                i18nKey="account.contributionLimit.setLimit"
+                ns="dashboard"
+                defaults="Set limit"
+              />
               <Icons.ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </span>
@@ -100,35 +109,62 @@ function AccountContributionLimitItem({
           <div className="text-sm">
             {isOverLimit ? (
               <span>
-                You&apos;ve contributed{" "}
-                <span className="font-semibold">
-                  <PrivacyAmount value={deposit?.convertedAmount ?? 0} currency={baseCurrency} />
-                </span>{" "}
-                to this account in {limit.contributionYear}. Your total is{" "}
-                <span className="text-destructive font-semibold">
-                  <PrivacyAmount value={totalDeposits} currency={baseCurrency} />
-                </span>{" "}
-                which is over the{" "}
-                <span className="font-semibold">
-                  <PrivacyAmount value={limit.limitAmount} currency={baseCurrency} />
-                </span>{" "}
-                limit.
+                <Trans
+                  i18nKey="account.contributionLimit.contributedOver"
+                  ns="dashboard"
+                  values={{ year: limit.contributionYear }}
+                  components={{
+                    contributed: (
+                      <span className="font-semibold">
+                        <PrivacyAmount
+                          value={deposit?.convertedAmount ?? 0}
+                          currency={baseCurrency}
+                        />
+                      </span>
+                    ),
+                    total: (
+                      <span className="text-destructive font-semibold">
+                        <PrivacyAmount value={totalDeposits} currency={baseCurrency} />
+                      </span>
+                    ),
+                    limit: (
+                      <span className="font-semibold">
+                        <PrivacyAmount value={limit.limitAmount} currency={baseCurrency} />
+                      </span>
+                    ),
+                  }}
+                />
               </span>
             ) : (
               <span>
-                You&apos;ve contributed{" "}
-                <span className="font-semibold">
-                  <PrivacyAmount value={deposit?.convertedAmount ?? 0} currency={baseCurrency} />
-                </span>{" "}
-                to this account in {limit.contributionYear}. Your total contribution towards the{" "}
-                <span className="font-semibold">
-                  <PrivacyAmount value={limit.limitAmount} currency={baseCurrency} />
-                </span>{" "}
-                {limit.groupName} limit is{" "}
-                <span className="font-semibold">
-                  <PrivacyAmount value={totalDeposits} currency={baseCurrency} />
-                </span>
-                .
+                <Trans
+                  i18nKey="account.contributionLimit.contributedTowards"
+                  ns="dashboard"
+                  values={{
+                    year: limit.contributionYear,
+                    groupName: limit.groupName,
+                  }}
+                  components={{
+                    contributed: (
+                      <span className="font-semibold">
+                        <PrivacyAmount
+                          value={deposit?.convertedAmount ?? 0}
+                          currency={baseCurrency}
+                        />
+                      </span>
+                    ),
+                    total: (
+                      <span className="font-semibold">
+                        <PrivacyAmount value={totalDeposits} currency={baseCurrency} />
+                      </span>
+                    ),
+                    limit: (
+                      <span className="font-semibold">
+                        <PrivacyAmount value={limit.limitAmount} currency={baseCurrency} />
+                      </span>
+                    ),
+                  }}
+                />
               </span>
             )}
           </div>

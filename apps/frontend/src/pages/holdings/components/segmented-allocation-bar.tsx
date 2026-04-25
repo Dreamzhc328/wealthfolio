@@ -83,8 +83,8 @@ export function SegmentedAllocationBar({
         <CardContent>
           <EmptyPlaceholder
             icon={<Icons.BarChart className="h-8 w-8" />}
-            title="No data"
-            description={`No ${displayTitle.toLowerCase()} assignments yet.`}
+            title="暂无数据"
+            description={`还没有「${displayTitle}」的分配。`}
             className="py-4"
           />
         </CardContent>

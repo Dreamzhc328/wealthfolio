@@ -35,5 +35,308 @@
       "gain": "收益"
     },
     "shares": "{{count}} 股"
+  },
+  "holdings": {
+    "tabs": {
+      "investments": "投资",
+      "assets": "资产",
+      "liabilities": "负债"
+    },
+    "allPortfolio": "全部组合",
+    "summary": {
+      "assets": "资产",
+      "debts": "负债",
+      "netWorth": "净资产"
+    },
+    "actions": {
+      "addAsset": "添加资产",
+      "addLiability": "添加负债",
+      "addActivity": "添加交易",
+      "updatePrices": "更新价格",
+      "updateHoldings": "更新持仓",
+      "importFromCSV": "从 CSV 导入",
+      "addTransaction": "添加交易",
+      "update": "更新",
+      "openFilters": "打开持仓筛选"
+    },
+    "empty": {
+      "investmentsTitle": "暂无持仓",
+      "investmentsDescriptionEditable": "你可以更新持仓，或从 CSV 文件导入。",
+      "investmentsDescription": "添加第一笔交易，或快速从 CSV 导入已有持仓。",
+      "assetsTitle": "暂无资产",
+      "assetsDescription": "添加第一项房产、车辆、收藏品或其他资产。",
+      "liabilitiesTitle": "暂无负债",
+      "liabilitiesDescription": "记录你的房贷、贷款及其他债务。"
+    },
+    "table": {
+      "position": "标的",
+      "symbolName": "名称",
+      "quantity": "数量",
+      "quantityFull": "数量",
+      "todayPrice": "现价",
+      "bookCost": "成本",
+      "totalValue": "市值",
+      "unrealizedGain": "浮动盈亏",
+      "dayChange": "当日涨跌",
+      "assetType": "资产类型",
+      "currency": "币种",
+      "type": "类型",
+      "expired": "已到期",
+      "manual": "手动",
+      "contracts": "张",
+      "bonds": "份",
+      "shares": "股",
+      "showInBaseCurrency": "按本位币显示",
+      "showInAssetCurrency": "按原币种显示",
+      "totalShort": "累计",
+      "dailyShort": "当日",
+      "actions": {
+        "classify": "分类",
+        "viewDetails": "查看详情"
+      }
+    },
+    "alternative": {
+      "asset": "资产",
+      "value": "估值",
+      "gain": "盈亏",
+      "lastValued": "最近估值",
+      "noAssetsTitle": "暂无资产",
+      "noAssetsDescription": "点击上方按钮添加第一项资产。",
+      "noLiabilitiesTitle": "暂无负债",
+      "noLiabilitiesDescription": "点击上方按钮添加第一项负债。",
+      "openActions": "打开操作菜单",
+      "actions": {
+        "updateValue": "更新估值",
+        "valueHistory": "估值历史",
+        "editDetails": "编辑详情",
+        "delete": "删除"
+      },
+      "deleteDialog": {
+        "title": "删除资产",
+        "description": "确定要删除 <bold>{{name}}</bold> 吗？所有估值历史都将被清除，且无法恢复。",
+        "cancel": "取消",
+        "deleting": "删除中…",
+        "delete": "删除"
+      }
+    },
+    "filterSheet": {
+      "title": "显示选项",
+      "sortBy": "排序方式",
+      "returnView": "收益视图",
+      "category": "类别",
+      "account": "账户",
+      "assetType": "资产类型",
+      "marketValue": "市值",
+      "symbol": "代码",
+      "totalReturn": "累计收益",
+      "dailyReturn": "当日收益",
+      "allTypes": "全部类型",
+      "allPortfolio": "全部组合",
+      "done": "完成"
+    },
+    "insights": {
+      "loading": "面板加载中…",
+      "tabs": {
+        "holdings": "持仓",
+        "performance": "表现",
+        "income": "收入"
+      },
+      "cards": {
+        "classes": "资产类别",
+        "regions": "地域分布",
+        "securityTypes": "证券类型",
+        "riskComposition": "风险分布",
+        "composition": "持仓构成",
+        "currency": "币种分布",
+        "accounts": "账户分布",
+        "sectors": "行业分布"
+      },
+      "section": {
+        "holdingsIn": "{{name}} 持仓",
+        "assetClass": "资产类别：{{name}}",
+        "riskCategory": "风险类别：{{name}}",
+        "type": "类型：{{name}}",
+        "holdingsInSector": "{{name}} 行业持仓"
+      },
+      "noHoldingsTitle": "暂无持仓",
+      "noHoldingsDescription": "添加第一笔交易，或从 CSV 快速导入已有持仓。",
+      "noHoldingsDataTitle": "暂无持仓数据",
+      "noHoldingsDataDescription": "当前组合暂无可用的持仓数据。",
+      "showFullNames": "显示全称",
+      "showSymbols": "显示代码",
+      "marketValue": "市值",
+      "return": "收益率",
+      "daily": "当日",
+      "total": "累计",
+      "cashBalance": "现金余额"
+    }
+  },
+  "performance": {
+    "title": "表现",
+    "calculating": "计算中…",
+    "noDataTitle": "暂无表现数据",
+    "noDataDescription": "选择账户对比它们随时间的表现。",
+    "errorTitle": "表现数据计算出错",
+    "retry": "重试",
+    "addAccount": "添加账户",
+    "addBenchmark": "添加基准",
+    "addAccountMobile": "添加账户",
+    "addItem": "添加",
+    "removeItem": "移除 {{name}}",
+    "metrics": {
+      "totalReturn": "累计收益率",
+      "annualizedReturn": "年化收益率",
+      "annualized": "年化",
+      "volatility": "波动率",
+      "maxDrawdown": "最大回撤"
+    }
+  },
+  "income": {
+    "periods": {
+      "ytd": "今年至今",
+      "lastYear": "去年",
+      "allTime": "全部",
+      "ytdShort": "YTD",
+      "lastYearShort": "去年",
+      "allShort": "全部"
+    },
+    "loadFailed": "加载收入汇总失败：{{error}}",
+    "unknownError": "未知错误",
+    "empty": {
+      "title": "暂无收入数据",
+      "description": "所选区间没有收入数据。换个时间范围试试，或稍后再来。"
+    },
+    "cards": {
+      "allTimeIncome": "累计收入",
+      "lastYearIncome": "去年收入",
+      "thisYearIncome": "今年收入",
+      "yoyGrowth": "同比增长",
+      "cumulative": "自创建以来累计收入",
+      "monthlyAverage": "月均收入",
+      "sinceLastPeriod": "环比变化",
+      "incomeSources": "收入来源",
+      "dividends": "股息",
+      "interest": "利息",
+      "topDividends": "派息 Top 10",
+      "noDividendTitle": "暂无股息收入",
+      "noDividendDescription": "所选区间无派息记录。换个时间范围试试，或稍后再来。",
+      "otherSources": "其余 {{count}} 个来源",
+      "percentOfTotal": "占比 {{value}}%",
+      "other": "其他"
+    },
+    "history": {
+      "title": "收入历史",
+      "combined": "合并视图",
+      "byAccount": "按账户",
+      "monthlyIncome": "月度收入",
+      "cumulativeIncome": "累计收入",
+      "previousPeriodIncome": "上一周期收入",
+      "monthly": "月度",
+      "monthlyShort": "月度",
+      "cumulativeShort": "累计",
+      "previousShort": "上期",
+      "emptyTitle": "暂无收入历史",
+      "emptyDescription": "所选区间没有收入历史。换个时间范围试试，或稍后再来。"
+    },
+    "filterSheet": {
+      "title": "筛选选项",
+      "account": "账户",
+      "allPortfolio": "全部组合",
+      "done": "完成"
+    },
+    "allPortfolio": "全部组合"
+  },
+  "netWorth": {
+    "title": "净资产",
+    "breakdown": "明细",
+    "composition": "构成",
+    "assets": "资产",
+    "liabilities": "负债",
+    "netWorthLabel": "净资产",
+    "loadFailed": "加载净资产失败",
+    "noHistoryData": "暂无历史数据",
+    "noAssets": "暂无资产。",
+    "addFirstAsset": "添加第一项资产",
+    "manageAssets": "管理你的资产",
+    "viewAllHoldings": "查看全部持仓",
+    "manageAccounts": "管理账户",
+    "addAsset": "添加资产",
+    "addLiability": "添加负债",
+    "stale": {
+      "title": "更新估值",
+      "tooltipTitle": "估值过期（90 天以上）：",
+      "daysAgo": "{{days}} 天前",
+      "descriptionSingular": "{{count}} 项资产已超过 90 天未更新。",
+      "descriptionPlural": "{{count}} 项资产已超过 90 天未更新。"
+    },
+    "chart": {
+      "netWorth": "净资产",
+      "netWorthLabel": "净资产：",
+      "assetsLabel": "资产：",
+      "liabilitiesLabel": "负债："
+    }
+  },
+  "account": {
+    "fallbackName": "账户",
+    "switchAccount": "切换账户",
+    "switchAccountDescription": "选择要查看的账户",
+    "switchAccountAria": "切换账户",
+    "searchAccounts": "搜索账户…",
+    "noAccountsFound": "未找到账户。",
+    "showSnapshotMarkers": "显示快照标记",
+    "hideSnapshotMarkers": "隐藏快照标记",
+    "showMarkersTooltip": "显示快照标记",
+    "hideMarkersTooltip": "隐藏快照标记",
+    "holdingsTitle": "持仓",
+    "updateHoldingsTooltip": "更新持仓",
+    "actionPalette": {
+      "holdings": "持仓",
+      "manage": "管理",
+      "transactions": "交易",
+      "updateHoldings": "更新持仓",
+      "importCSV": "导入 CSV",
+      "recalculate": "重算历史",
+      "recordTransaction": "记录交易",
+      "transferHoldings": "转移持仓"
+    },
+    "editHoldings": {
+      "title": "更新持仓",
+      "description": "编辑 {{accountName}} 的持仓与现金余额"
+    },
+    "activitiesSheet": {
+      "title": "{{date}} 的交易",
+      "description": "该日期共有 {{count}} 笔交易"
+    },
+    "empty": {
+      "holdingsTitle": "暂无持仓",
+      "holdingsManualDescription": "添加当前持仓快照，或从 CSV 文件导入即可开始。",
+      "holdingsConnectedDescription": "持仓将由你连接的账户自动同步。",
+      "transactionsDescription": "添加第一笔交易，或快速从 CSV 导入已有持仓。",
+      "addHoldings": "添加持仓",
+      "addTransaction": "添加交易",
+      "importFromCSV": "从 CSV 导入"
+    },
+    "metrics": {
+      "cashBalance": "现金余额",
+      "investments": "投资",
+      "netContribution": "净投入",
+      "costBasis": "成本基础",
+      "unrealizedPnl": "浮动盈亏",
+      "cashBalanceEditTooltip": "点击更新现金余额",
+      "holdingsModeNote": "无法计算 TWR/MWR，需要交易记录才能计算。",
+      "lastUpdated": "上次更新：{{date}}",
+      "dateRange": "时间范围：{{start}} 至 {{end}}",
+      "timeWeightedReturn": "时间加权收益率",
+      "moneyWeightedReturn": "资金加权收益率",
+      "volatility": "波动率",
+      "maxDrawdown": "最大回撤"
+    },
+    "contributionLimit": {
+      "notSet": "该账户暂未设置缴款上限。",
+      "setLimit": "设置上限",
+      "contributedOver": "{{year}} 年你已向该账户缴款 <contributed/>。累计缴款 <total/>，已超过上限 <limit/>。",
+      "contributedTowards": "{{year}} 年你已向该账户缴款 <contributed/>。{{groupName}} 上限为 <limit/>，累计缴款 <total/>。"
+    }
   }
 }
+

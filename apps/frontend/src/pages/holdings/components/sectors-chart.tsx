@@ -56,8 +56,8 @@ export function SectorsChart({
             <div className="flex h-[330px] items-center justify-center">
               <EmptyPlaceholder
                 icon={<Icons.BarChart className="h-10 w-10" />}
-                title="No sectors data"
-                description="There is no sector data available for your holdings."
+                title="暂无行业数据"
+                description="当前持仓没有可用的行业分布数据。"
               />
             </div>
           ) : (

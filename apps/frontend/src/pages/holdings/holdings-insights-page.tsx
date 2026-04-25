@@ -2,6 +2,7 @@ import { EmptyPlaceholder } from "@wealthfolio/ui";
 import { Button } from "@wealthfolio/ui/components/ui/button";
 import { Icons } from "@wealthfolio/ui/components/ui/icons";
 import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useHoldings } from "@/hooks/use-holdings";
 import { usePortfolioAllocations } from "@/hooks/use-portfolio-allocations";
@@ -24,6 +25,7 @@ interface HoldingsInsightsPageProps {
 }
 
 export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsightsPageProps) => {
+  const { t } = useTranslation("dashboard");
   const navigate = useNavigate();
   const { settings } = useSettingsContext();
   const baseCurrency = settings?.baseCurrency ?? "USD";
@@ -119,17 +121,17 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
     <div className="flex items-center justify-center py-16">
       <EmptyPlaceholder
         icon={<Icons.TrendingUp className="text-muted-foreground h-10 w-10" />}
-        title="No holdings yet"
-        description="Get started by adding your first transaction or quickly import your existing holdings from a CSV file."
+        title={t("holdings.insights.noHoldingsTitle")}
+        description={t("holdings.insights.noHoldingsDescription")}
       >
         <div className="flex flex-col items-center gap-3 sm:flex-row">
           <Button size="default" onClick={() => navigate("/activities/manage")}>
             <Icons.Plus className="mr-2 h-4 w-4" />
-            Add Transaction
+            {t("holdings.actions.addTransaction")}
           </Button>
           <Button size="default" variant="outline" onClick={() => navigate("/import")}>
             <Icons.Import className="mr-2 h-4 w-4" />
-            Import from CSV
+            {t("holdings.actions.importFromCSV")}
           </Button>
         </div>
       </EmptyPlaceholder>
@@ -153,14 +155,18 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
             baseCurrency={baseCurrency}
             isLoading={isLoading}
             onCurrencySectionClick={(currencyName) =>
-              handleChartSectionClick("currency", currencyName, `Holdings in ${currencyName}`)
+              handleChartSectionClick(
+                "currency",
+                currencyName,
+                t("holdings.insights.section.holdingsIn", { name: currencyName }),
+              )
             }
           />
 
           <DrillableAccountChart isLoading={isLoading} />
 
           <DrillableDonutChart
-            title="Classes"
+            title={t("holdings.insights.cards.classes")}
             allocation={allocations?.assetClasses}
             baseCurrency={baseCurrency}
             isLoading={isLoading}
@@ -168,7 +174,7 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
               handleChartSectionClick(
                 "class",
                 categoryName,
-                `Asset Class: ${categoryName}`,
+                t("holdings.insights.section.assetClass", { name: categoryName }),
                 categoryId,
               )
             }
@@ -176,7 +182,7 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
           />
 
           <DrillableDonutChart
-            title="Regions"
+            title={t("holdings.insights.cards.regions")}
             allocation={allocations?.regions}
             baseCurrency={baseCurrency}
             isLoading={isLoading}
@@ -184,7 +190,7 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
               handleChartSectionClick(
                 "country",
                 categoryName,
-                `Holdings in ${categoryName}`,
+                t("holdings.insights.section.holdingsIn", { name: categoryName }),
                 categoryId,
               )
             }
@@ -201,7 +207,7 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
           <div className="col-span-1 space-y-4">
             {hasRiskAllocations && (
               <CompactAllocationStrip
-                title="Risk Composition"
+                title={t("holdings.insights.cards.riskComposition")}
                 allocation={allocations?.riskCategory}
                 baseCurrency={baseCurrency}
                 isLoading={isLoading}
@@ -210,7 +216,7 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
                   handleChartSectionClick(
                     "risk",
                     categoryName,
-                    `Risk Category: ${categoryName}`,
+                    t("holdings.insights.section.riskCategory", { name: categoryName }),
                     categoryId,
                   )
                 }
@@ -218,7 +224,7 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
             )}
 
             <CompactAllocationStrip
-              title="Security Types"
+              title={t("holdings.insights.cards.securityTypes")}
               allocation={allocations?.securityTypes}
               baseCurrency={baseCurrency}
               isLoading={isLoading}
@@ -227,7 +233,7 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
                 handleChartSectionClick(
                   "securityType",
                   categoryName,
-                  `Type: ${categoryName}`,
+                  t("holdings.insights.section.type", { name: categoryName }),
                   categoryId,
                 )
               }
@@ -241,7 +247,7 @@ export const HoldingsInsightsPage = ({ accountId: accountIdProp }: HoldingsInsig
                 handleChartSectionClick(
                   "sector",
                   categoryName,
-                  `Holdings in Sector: ${categoryName}`,
+                  t("holdings.insights.section.holdingsInSector", { name: categoryName }),
                   categoryId,
                 )
               }

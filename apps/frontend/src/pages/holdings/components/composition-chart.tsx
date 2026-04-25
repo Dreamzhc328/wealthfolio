@@ -362,14 +362,14 @@ export function PortfolioComposition({ holdings, isLoading }: PortfolioCompositi
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <div className="flex items-center space-x-2">
             <Icons.LayoutDashboard className="text-muted-foreground h-4 w-4" />
-            <CardTitle className="text-md font-medium">Composition</CardTitle>
+            <CardTitle className="text-md font-medium">持仓构成</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="flex h-[500px] items-center justify-center">
           <EmptyPlaceholder
             icon={<Icons.BarChart className="h-10 w-10" />}
-            title="No holdings data"
-            description="There is no holdings data available for your portfolio."
+            title="暂无持仓数据"
+            description="当前组合没有可用的持仓数据。"
           />
         </CardContent>
       </Card>
