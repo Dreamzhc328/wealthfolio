@@ -529,6 +529,146 @@
         "profiles": "资料"
       }
     },
+    "providerForm": {
+      "editTitle": "编辑自定义数据源",
+      "addTitle": "添加自定义数据源",
+      "dialogDescription": "配置自定义数据源，用于抓取行情数据。",
+      "docs": "文档",
+      "close": "关闭",
+      "providerMode": "数据源模式",
+      "modes": {
+        "datedTitle": "时间序列",
+        "datedSubtitle": "最新一行即最新价",
+        "latestTitle": "仅当前价",
+        "latestSubtitle": "单一接口",
+        "bothTitle": "两者都要",
+        "bothSubtitle": "序列 + 覆盖"
+      },
+      "subPill": {
+        "latest": "当前价",
+        "historical": "历史价"
+      },
+      "identity": {
+        "heading": "数据源信息",
+        "name": "数据源名称",
+        "fromUrl": "（来自 URL）",
+        "namePlaceholder": "如 我的数据源",
+        "code": "代码",
+        "auto": "（自动）",
+        "codePlaceholder": "my-provider",
+        "priority": "优先级",
+        "description": "说明",
+        "optional": "· 可选",
+        "descriptionPlaceholder": "简短说明 —— 这个数据源覆盖什么、注意事项等"
+      },
+      "checklist": {
+        "urlTemplate": "URL 模板",
+        "fetchSucceeds": "请求成功",
+        "requiredFieldsMapped": "必填字段已映射",
+        "providerName": "数据源名称"
+      },
+      "actions": {
+        "cancel": "取消",
+        "saving": "保存中",
+        "saveChanges": "保存更改",
+        "createProvider": "创建数据源"
+      },
+      "toast": {
+        "errorTitle": "表单存在错误",
+        "errorFallback": "有一个或多个字段无效。"
+      },
+      "validation": {
+        "nameRequired": "请填写名称",
+        "codeRequired": "请填写代码",
+        "codeFormat": "仅支持小写字母、数字和短横线",
+        "enableAtLeastOne": "请至少启用一种价格数据源",
+        "urlRequired": "请填写 URL",
+        "urlProtocol": "URL 必须以 http:// 或 https:// 开头",
+        "pricePathRequired": "请填写价格路径",
+        "headersInvalidJson": "请求头必须是有效的 JSON"
+      }
+    },
+    "sourceConfig": {
+      "step1": {
+        "titleHistorical": "配置历史数据接口",
+        "titleLatest": "配置最新行情接口",
+        "requiredBadge": "必填"
+      },
+      "sourceType": {
+        "label": "数据源类型",
+        "json": {
+          "label": "JSON API",
+          "desc": "返回 JSON 的 REST 接口"
+        },
+        "html": {
+          "label": "网页（HTML 抓取）",
+          "desc": "CSS 选择器提取"
+        },
+        "htmlTable": {
+          "label": "HTML 表格",
+          "desc": "按行列读取"
+        },
+        "csv": {
+          "label": "CSV 文件",
+          "desc": "逗号或分号分隔"
+        }
+      },
+      "quickStart": "快速开始",
+      "url": {
+        "label": "URL 模板",
+        "hint": "· 用占位符表示可变部分",
+        "placeholderJson": "https://api.example.com/v1/price/{SYMBOL}",
+        "placeholderOther": "https://www.example.com/quote/{SYMBOL}",
+        "placeholdersLabel": "占位符："
+      },
+      "cssSelector": {
+        "label": "CSS 选择器",
+        "placeholder": ".price-value, [data-field='last']",
+        "hint": "定位包含价格的元素，数字会自动解析。"
+      },
+      "headers": {
+        "toggle": "请求头与鉴权（可选）",
+        "placeholder": "{\"Authorization\": \"Bearer token\"}",
+        "secretHint": "在敏感字段值前加 __SECRET__ 前缀即可加密保存。"
+      },
+      "step2": {
+        "title": "映射响应字段",
+        "hintAuto": "自动",
+        "hintClickColumn": "点击列名",
+        "hintClickValue": "点击数值",
+        "helperHtml": "价格直接来自选择器，无需字段映射。",
+        "helperCsv": "我们会按表头自动匹配 CSV 列，如需调整请在右侧面板覆盖。",
+        "helperHtmlTable": "Fetch 之后，点击右侧表格的列名即可自动映射。",
+        "helperJson": "点击右侧响应中的数值，把它映射到下面的字段。"
+      },
+      "mappingFields": {
+        "price": "价格",
+        "asOf": "截止日期",
+        "currency": "币种",
+        "open": "开盘",
+        "high": "最高",
+        "low": "最低",
+        "volume": "成交量"
+      },
+      "mappingRow": {
+        "armTitle": "点击锁定 — 然后在响应中点击对应值",
+        "unarmTitle": "点击解锁"
+      },
+      "advanced": {
+        "toggle": "更多映射与选项",
+        "dateFormatLabel": "日期格式",
+        "dateFormatPlaceholder": "如 %Y-%m-%d",
+        "currencyPathLabel": "币种字段路径",
+        "currencyPathPlaceholder": "如 $.currency",
+        "factorLabel": "倍率",
+        "localeLabel": "语言区域",
+        "invertLabel": "取倒数",
+        "defaultPriceLabel": "默认价格",
+        "defaultPricePlaceholder": "静态备用值",
+        "defaultPriceHint": "URL 为空或抓取失败时使用。",
+        "dateTimezoneLabel": "日期时区"
+      }
+    },
     "import_": {
       "heading": "导入历史行情",
       "description": "通过 CSV 文件回填行情数据。",
@@ -618,6 +758,87 @@
         ],
         "importantLabel": "⚠️ 重要提示：",
         "importantText": "大批量导入可能耗时较长，系统会显示进度并妥善处理错误。"
+      }
+    },
+    "preview": {
+      "header": "实时请求与响应",
+      "headerHint": "每次修改都会立即反映在这里。点击下方任意值即可完成映射。",
+      "status": {
+        "fetching": "请求中",
+        "error": "错误",
+        "ok": "{{code}} OK",
+        "idle": "空闲"
+      },
+      "urlLabel": "请求 URL（预览）",
+      "modeHistorical": "GET · 历史数据",
+      "modeLatest": "GET · 最新数据",
+      "urlPlaceholder": "请输入 URL 模板以预览请求…",
+      "copyUrlTitle": "复制 URL",
+      "copiedTitle": "已复制！",
+      "fields": {
+        "testSymbol": "测试代码",
+        "testSymbolPlaceholder": "如 AAPL",
+        "isin": "ISIN",
+        "mic": "MIC",
+        "currency": "币种",
+        "from": "起始日期",
+        "to": "结束日期"
+      },
+      "fetch": "Fetch",
+      "responseLabel": "响应 · {{format}}",
+      "responseStats_one": "{{count}} 行 · {{cols}} 列",
+      "responseStats_other": "{{count}} 行 · {{cols}} 列",
+      "errorHintForbidden": "该网站可能拦截自动化请求，可尝试添加自定义请求头。",
+      "empty": {
+        "instructionPrefix": "填写 URL 后点击",
+        "instructionSuffix": "即可测试。",
+        "hint": "响应预览会显示在这里，点击任意值即可完成映射。"
+      },
+      "table": {
+        "label": "表格",
+        "tabTitle": "{{cols}} 列 · {{rows}} 行",
+        "headerHint_one": "{{count}} 行 · 点击列标题进行映射",
+        "headerHint_other": "{{count}} 行 · 点击列标题进行映射",
+        "headerHintArmed_one": "{{count}} 行 · 点击列标题映射到 {{field}}",
+        "headerHintArmed_other": "{{count}} 行 · 点击列标题映射到 {{field}}",
+        "columnFallback": "列 {{index}}"
+      },
+      "csv": {
+        "hint_one": "检测到 {{count}} 行数据，点击列标题进行映射。",
+        "hint_other": "检测到 {{count}} 行数据，点击列标题进行映射。",
+        "hintArmed_one": "检测到 {{count}} 行数据，点击列标题映射到 {{field}}。",
+        "hintArmed_other": "检测到 {{count}} 行数据，点击列标题映射到 {{field}}。"
+      },
+      "elements": {
+        "hint_one": "检测到 {{count}} 个元素，点击其中之一可分配选择器。",
+        "hint_other": "检测到 {{count}} 个元素，点击其中之一可分配选择器。",
+        "hintArmed_one": "检测到 {{count}} 个元素，点击其中之一可将选择器分配给 {{field}}。",
+        "hintArmed_other": "检测到 {{count}} 个元素，点击其中之一可将选择器分配给 {{field}}。",
+        "showMore_one": "显示其余 {{count}} 个元素",
+        "showMore_other": "显示其余 {{count}} 个元素"
+      },
+      "extracted": {
+        "title": "提取结果",
+        "notReturned": "— 未返回",
+        "extractFailed": "当前映射无法提取到有效值。"
+      },
+      "mapping": {
+        "fields": {
+          "price": "价格",
+          "asOf": "截止日期",
+          "currency": "币种",
+          "open": "开盘",
+          "high": "最高",
+          "low": "最低",
+          "volume": "成交量"
+        },
+        "titleHistorical": "字段映射（历史数据）",
+        "titleLatest": "字段映射（最新数据）",
+        "hint": "点击某一行将其锁定，然后点击响应中的对应值",
+        "unassigned": "未指定 — 点击进行选择",
+        "required": "必填",
+        "optional": "可选",
+        "moreFields": "更多映射字段"
       }
     }
   },

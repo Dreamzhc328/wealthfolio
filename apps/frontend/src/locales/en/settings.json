@@ -529,6 +529,146 @@
         "profiles": "Profiles"
       }
     },
+    "providerForm": {
+      "editTitle": "Edit custom provider",
+      "addTitle": "Add custom provider",
+      "dialogDescription": "Configure a custom data source to fetch market prices.",
+      "docs": "Docs",
+      "close": "Close",
+      "providerMode": "Provider mode",
+      "modes": {
+        "datedTitle": "Dated series",
+        "datedSubtitle": "newest row = latest",
+        "latestTitle": "Latest only",
+        "latestSubtitle": "one endpoint",
+        "bothTitle": "Both",
+        "bothSubtitle": "series + override"
+      },
+      "subPill": {
+        "latest": "Latest price",
+        "historical": "Historical"
+      },
+      "identity": {
+        "heading": "Provider identity",
+        "name": "Provider name",
+        "fromUrl": "(from URL)",
+        "namePlaceholder": "e.g. My Provider",
+        "code": "Code",
+        "auto": "(auto)",
+        "codePlaceholder": "my-provider",
+        "priority": "Priority",
+        "description": "Description",
+        "optional": "· optional",
+        "descriptionPlaceholder": "Short note — what this provider covers, caveats, etc."
+      },
+      "checklist": {
+        "urlTemplate": "URL template",
+        "fetchSucceeds": "Fetch succeeds",
+        "requiredFieldsMapped": "Required fields mapped",
+        "providerName": "Provider name"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "saving": "Saving",
+        "saveChanges": "Save changes",
+        "createProvider": "Create provider"
+      },
+      "toast": {
+        "errorTitle": "Form has errors",
+        "errorFallback": "One or more fields are invalid."
+      },
+      "validation": {
+        "nameRequired": "Name is required",
+        "codeRequired": "Code is required",
+        "codeFormat": "Lowercase alphanumeric and hyphens only",
+        "enableAtLeastOne": "Enable at least one price source",
+        "urlRequired": "URL is required",
+        "urlProtocol": "URL must start with http:// or https://",
+        "pricePathRequired": "Price path is required",
+        "headersInvalidJson": "Headers must be valid JSON"
+      }
+    },
+    "sourceConfig": {
+      "step1": {
+        "titleHistorical": "Configure Historical endpoint",
+        "titleLatest": "Configure Latest endpoint",
+        "requiredBadge": "Required"
+      },
+      "sourceType": {
+        "label": "Source type",
+        "json": {
+          "label": "JSON API",
+          "desc": "REST returning JSON"
+        },
+        "html": {
+          "label": "Web Page",
+          "desc": "CSS selector extraction"
+        },
+        "htmlTable": {
+          "label": "HTML Table",
+          "desc": "Rows & columns"
+        },
+        "csv": {
+          "label": "CSV",
+          "desc": "Comma/semi separated"
+        }
+      },
+      "quickStart": "Quick start",
+      "url": {
+        "label": "URL template",
+        "hint": "· use placeholders for variable parts",
+        "placeholderJson": "https://api.example.com/v1/price/{SYMBOL}",
+        "placeholderOther": "https://www.example.com/quote/{SYMBOL}",
+        "placeholdersLabel": "Placeholders:"
+      },
+      "cssSelector": {
+        "label": "CSS Selector",
+        "placeholder": ".price-value, [data-field='last']",
+        "hint": "Target the element containing the price. Numbers are auto-parsed."
+      },
+      "headers": {
+        "toggle": "Headers & auth (optional)",
+        "placeholder": "{\"Authorization\": \"Bearer token\"}",
+        "secretHint": "Prefix secret values with __SECRET__ to encrypt them."
+      },
+      "step2": {
+        "title": "Map response fields",
+        "hintAuto": "AUTO",
+        "hintClickColumn": "CLICK A COLUMN",
+        "hintClickValue": "CLICK A VALUE",
+        "helperHtml": "Price comes directly from the selector — no field mapping needed.",
+        "helperCsv": "We'll auto-map CSV columns by header. Override in the right pane if needed.",
+        "helperHtmlTable": "After fetch, click a table column in the right pane to auto-map it.",
+        "helperJson": "Click a numeric value in the right pane to map it to a field below."
+      },
+      "mappingFields": {
+        "price": "Price",
+        "asOf": "As of",
+        "currency": "Currency",
+        "open": "Open",
+        "high": "High",
+        "low": "Low",
+        "volume": "Volume"
+      },
+      "mappingRow": {
+        "armTitle": "Click to arm — then click a value in the response",
+        "unarmTitle": "Click to unarm"
+      },
+      "advanced": {
+        "toggle": "More mappings & options",
+        "dateFormatLabel": "Date format",
+        "dateFormatPlaceholder": "e.g. %Y-%m-%d",
+        "currencyPathLabel": "Currency path",
+        "currencyPathPlaceholder": "e.g. $.currency",
+        "factorLabel": "Factor",
+        "localeLabel": "Locale",
+        "invertLabel": "Invert",
+        "defaultPriceLabel": "Default price",
+        "defaultPricePlaceholder": "Static fallback",
+        "defaultPriceHint": "Used when URL is empty or fetch fails.",
+        "dateTimezoneLabel": "Date timezone"
+      }
+    },
     "import_": {
       "heading": "Import Historical Quotes",
       "description": "Backfill market data from CSV files.",
@@ -618,6 +758,87 @@
         ],
         "importantLabel": "⚠️ Important:",
         "importantText": "Large imports may take time. The system will show progress and handle errors gracefully."
+      }
+    },
+    "preview": {
+      "header": "Live request & response",
+      "headerHint": "Every change reflects here instantly. Click any value below to map it.",
+      "status": {
+        "fetching": "Fetching",
+        "error": "Error",
+        "ok": "{{code}} OK",
+        "idle": "Idle"
+      },
+      "urlLabel": "Request URL (preview)",
+      "modeHistorical": "GET · historical",
+      "modeLatest": "GET · latest",
+      "urlPlaceholder": "Enter a URL template to preview the request…",
+      "copyUrlTitle": "Copy URL",
+      "copiedTitle": "Copied!",
+      "fields": {
+        "testSymbol": "Test symbol",
+        "testSymbolPlaceholder": "e.g. AAPL",
+        "isin": "ISIN",
+        "mic": "MIC",
+        "currency": "Currency",
+        "from": "From",
+        "to": "To"
+      },
+      "fetch": "Fetch",
+      "responseLabel": "Response · {{format}}",
+      "responseStats_one": "{{count}} row · {{cols}} cols",
+      "responseStats_other": "{{count}} rows · {{cols}} cols",
+      "errorHintForbidden": "This site may block automated requests. Try adding custom headers.",
+      "empty": {
+        "instructionPrefix": "Fill in the URL, then press",
+        "instructionSuffix": "to test.",
+        "hint": "Response previews appear here, and you can click any value to map it."
+      },
+      "table": {
+        "label": "Table",
+        "tabTitle": "{{cols}} cols · {{rows}} rows",
+        "headerHint_one": "{{count}} row · click a column header to map",
+        "headerHint_other": "{{count}} rows · click a column header to map",
+        "headerHintArmed_one": "{{count}} row · click a column header to map to {{field}}",
+        "headerHintArmed_other": "{{count}} rows · click a column header to map to {{field}}",
+        "columnFallback": "Col {{index}}"
+      },
+      "csv": {
+        "hint_one": "{{count}} row detected. Click a column header to map it.",
+        "hint_other": "{{count}} rows detected. Click a column header to map it.",
+        "hintArmed_one": "{{count}} row detected. Click a column header to map it to {{field}}.",
+        "hintArmed_other": "{{count}} rows detected. Click a column header to map it to {{field}}."
+      },
+      "elements": {
+        "hint_one": "{{count}} element detected. Click one to assign its selector.",
+        "hint_other": "{{count}} elements detected. Click one to assign its selector.",
+        "hintArmed_one": "{{count}} element detected. Click one to assign its selector to {{field}}.",
+        "hintArmed_other": "{{count}} elements detected. Click one to assign its selector to {{field}}.",
+        "showMore_one": "Show {{count}} more element",
+        "showMore_other": "Show {{count}} more elements"
+      },
+      "extracted": {
+        "title": "Extracted",
+        "notReturned": "— not returned",
+        "extractFailed": "Could not extract a value with the current mapping."
+      },
+      "mapping": {
+        "fields": {
+          "price": "Price",
+          "asOf": "As of",
+          "currency": "Currency",
+          "open": "Open",
+          "high": "High",
+          "low": "Low",
+          "volume": "Volume"
+        },
+        "titleHistorical": "Field mapping (historical)",
+        "titleLatest": "Field mapping (latest)",
+        "hint": "click a row to arm it, then click a value in the response",
+        "unassigned": "unassigned — click to pick",
+        "required": "Required",
+        "optional": "Optional",
+        "moreFields": "More mapping fields"
       }
     }
   },
