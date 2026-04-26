@@ -135,7 +135,8 @@
         "cannotEditTitle": "Cannot edit this rate",
         "cannotEditDescription": "Only manual rates can be edited.",
         "invalidTitle": "Invalid rate",
-        "invalidDescription": "Please enter a valid positive number."
+        "invalidDescription": "Please enter a valid positive number.",
+        "pendingSync": "Pending sync…"
       }
     }
   },

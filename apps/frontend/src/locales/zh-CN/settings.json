@@ -135,7 +135,8 @@
         "cannotEditTitle": "无法编辑此汇率",
         "cannotEditDescription": "只有手动汇率可以编辑。",
         "invalidTitle": "汇率无效",
-        "invalidDescription": "请输入有效的正数。"
+        "invalidDescription": "请输入有效的正数。",
+        "pendingSync": "等待同步…"
       }
     }
   },

@@ -59,6 +59,8 @@ export function RateCell({ rate, onUpdate }: RateCellProps) {
             onChange={(e) => setEditedRate(e.target.value)}
             className="w-full"
           />
+        ) : !isManual && Number(rate.rate) === 1 ? (
+          <span className="text-muted-foreground italic">{t("general.exchangeRates.rateCell.pendingSync")}</span>
         ) : (
           <span>{rate.rate ? Number(rate.rate).toFixed(4) : "-"}</span>
         )}
